@@ -10,14 +10,14 @@ namespace AngularClientGenerator
 {
     public class Generator : IGeneratorConfig
     {
-        private IApiExplorer ApiExplorer;
+        private DescriptionCollector DescriptionCollector;
 
         public Generator(IApiExplorer explorer)
         {
-            this.ApiExplorer = explorer;
-
             ExportPath = "angular-generated-client.ts";
             Language = Language.TypeScript;
+            
+            this.DescriptionCollector = new DescriptionCollector(explorer);
         }
 
         public string ExportPath { get; set; }
@@ -26,11 +26,9 @@ namespace AngularClientGenerator
 
         public void Generate()
         {
-            var controllers = this.ApiExplorer.ApiDescriptions
-                .Select(d => d.ActionDescriptor.ControllerDescriptor)
-                .Distinct();
+            var controllerDescription = DescriptionCollector.GetControllerDescriptions();
 
-            var names = controllers.Select(c => c.ControllerName);
+            var names = controllerDescription.Select(c => c.Name);
             var content = String.Concat(names);
 
             File.WriteAllText(this.ExportPath, content);

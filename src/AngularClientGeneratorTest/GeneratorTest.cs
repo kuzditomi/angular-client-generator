@@ -15,17 +15,8 @@ using Owin;
 namespace AngularClientGeneratorTest
 {
     [TestClass]
-    public class GeneratorTest
+    public class GeneratorTest : TestBase
     {
-        private HttpConfiguration HttpConfiguration { get; set; }
-        private IApiExplorer ApiExplorer { get; set; }
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            CustomHttpControllerTypeResolver.ClearTypesToDiscover();
-        }
-
         [TestMethod]
         public void CreateGeneratorDefaultParams()
         {
@@ -65,8 +56,8 @@ namespace AngularClientGeneratorTest
         [TestMethod]
         public void GenerateAllRegisteredControllers()
         {
-            CustomHttpControllerTypeResolver.RegisterTypeToDiscover(typeof(TestController));
-            CustomHttpControllerTypeResolver.RegisterTypeToDiscover(typeof(SimpleController));
+            RegisterController<TestController>();
+            RegisterController<SimpleController>();
 
             this.RunInScope(() =>
             {
@@ -80,29 +71,6 @@ namespace AngularClientGeneratorTest
                 Assert.IsTrue(containsTestControllerDefinition, "Generator doesnt include registered TestController");
                 Assert.IsTrue(containsSimpleControllerDefinition, "Generator doesnt include registered SimpleController");
             });
-        }
-
-        private void RunInScope(Action action)
-        {
-            string baseAddress = "http://localhost:9874/bar";
-            using (var server = WebApp.Start(url: baseAddress, startup: app =>
-            {
-                this.HttpConfiguration = new HttpConfiguration();
-                this.HttpConfiguration.Services.Replace(typeof(IHttpControllerTypeResolver), new CustomHttpControllerTypeResolver());
-                this.HttpConfiguration.MapHttpAttributeRoutes();
-                this.HttpConfiguration.Routes.MapHttpRoute(
-                    name: "DefaultApi",
-                    routeTemplate: "api/{controller}/{id}",
-                    defaults: new { id = RouteParameter.Optional }
-                );
-
-                app.UseWebApi(this.HttpConfiguration);
-                this.HttpConfiguration.EnsureInitialized();
-                this.ApiExplorer = this.HttpConfiguration.Services.GetApiExplorer();
-            }))
-            {
-                action();
-            };
         }
     }
 }

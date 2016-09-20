@@ -52,6 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DescriptionCollector.cs" />
+    <Compile Include="DescriptionParts\ActionDescriptionPart.cs" />
+    <Compile Include="DescriptionParts\ControllerDescriptionPart.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="IGeneratorConfig.cs" />
