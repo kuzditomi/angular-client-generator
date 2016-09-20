@@ -55,10 +55,13 @@
     <Compile Include="DescriptionCollector.cs" />
     <Compile Include="DescriptionParts\ActionDescriptionPart.cs" />
     <Compile Include="DescriptionParts\ControllerDescriptionPart.cs" />
+    <Compile Include="DescriptionParts\IDescriptionPart.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="IGeneratorConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visitor\IApiVisitor.cs" />
+    <Compile Include="Visitor\TsApiVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Description;
+using AngularClientGenerator.Visitor;
 
 namespace AngularClientGenerator
 {
     public class Generator : IGeneratorConfig
     {
         private DescriptionCollector DescriptionCollector;
+        private IApiVisitor Visitor;
 
         public Generator(IApiExplorer explorer)
         {
