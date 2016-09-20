@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AngularClientGenerator;
 using System.Web.Http.Description;
@@ -6,10 +7,9 @@ using System.Web.Http;
 using System.IO;
 using AngularClientGeneratorTest.TestControllers;
 using System.Web.Http.Dependencies;
-using Unity.WebApi;
-using Microsoft.Practices.Unity;
+using System.Web.Http.Dispatcher;
+using AngularClientGeneratorTest.Util;
 using Microsoft.Owin.Hosting;
-using AngularClientGeneratorTest.TestStartups;
 using Owin;
 
 namespace AngularClientGeneratorTest
@@ -19,17 +19,11 @@ namespace AngularClientGeneratorTest
     {
         private HttpConfiguration HttpConfiguration { get; set; }
         private IApiExplorer ApiExplorer { get; set; }
-        private IDependencyResolver DependencyResolver { get; set; }
-        private IUnityContainer Container { get; set; }
 
         [TestInitialize]
-        public void Startup()
+        public void Initialize()
         {
-            this.HttpConfiguration = new HttpConfiguration();
-            this.Container = new UnityContainer();
-            this.DependencyResolver = new UnityDependencyResolver(this.Container);
-            this.HttpConfiguration.DependencyResolver = this.DependencyResolver;
-            this.ApiExplorer = new ApiExplorer(this.HttpConfiguration);
+            CustomHttpControllerTypeResolver.ClearTypesToDiscover();
         }
 
         [TestMethod]
@@ -57,6 +51,9 @@ namespace AngularClientGeneratorTest
         [TestMethod]
         public void GenerateCode()
         {
+            this.HttpConfiguration = new HttpConfiguration();
+            this.ApiExplorer = new ApiExplorer(this.HttpConfiguration);
+
             var generator = new Generator(this.ApiExplorer);
             generator.Generate();
 
@@ -64,57 +61,25 @@ namespace AngularClientGeneratorTest
 
             Assert.IsTrue(fileExists);
         }
-
+        
         [TestMethod]
-        public void GenerateEmptyController()
+        public void GenerateAllRegisteredControllers()
         {
-            this.Container.RegisterType<EmptyController>();
-            this.RegisterResolver();
+            CustomHttpControllerTypeResolver.RegisterTypeToDiscover(typeof(TestController));
+            CustomHttpControllerTypeResolver.RegisterTypeToDiscover(typeof(SimpleController));
 
             this.RunInScope(() =>
             {
-                var controllerName = "Empty";
-
                 var generator = new Generator(this.ApiExplorer);
                 generator.Generate();
 
                 var content = File.ReadAllText(generator.ExportPath);
-                var containsControllerDefinition = content.Contains(controllerName);
+                var containsTestControllerDefinition = content.Contains("Test");
+                var containsSimpleControllerDefinition = content.Contains("Simple");
 
-                Assert.IsTrue(containsControllerDefinition, "Generator doesnt include registered controllers");
+                Assert.IsTrue(containsTestControllerDefinition, "Generator doesnt include registered TestController");
+                Assert.IsTrue(containsSimpleControllerDefinition, "Generator doesnt include registered SimpleController");
             });
-        }
-
-        [TestMethod]
-        public void GenerateRegisteredControllers()
-        {
-            this.Container.RegisterType<EmptyController>();
-            this.RegisterResolver();
-
-            this.RunInScope(() =>
-            {
-                var controllerName = "Test";
-
-                var generator = new Generator(this.ApiExplorer);
-                generator.Generate();
-
-                var content = File.ReadAllText(generator.ExportPath);
-                var containsControllerDefinition = content.Contains(controllerName);
-
-                Assert.IsFalse(containsControllerDefinition, "Generator adds more controller than registered");
-            });
-        }
-
-        private void RegisterResolver()
-        {
-            this.DependencyResolver = new UnityDependencyResolver(this.Container);
-            this.HttpConfiguration.DependencyResolver = this.DependencyResolver;
-            this.HttpConfiguration.MapHttpAttributeRoutes();
-            this.HttpConfiguration.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
         }
 
         private void RunInScope(Action action)
@@ -122,6 +87,15 @@ namespace AngularClientGeneratorTest
             string baseAddress = "http://localhost:9874/bar";
             using (var server = WebApp.Start(url: baseAddress, startup: app =>
             {
+                this.HttpConfiguration = new HttpConfiguration();
+                this.HttpConfiguration.Services.Replace(typeof(IHttpControllerTypeResolver), new CustomHttpControllerTypeResolver());
+                this.HttpConfiguration.MapHttpAttributeRoutes();
+                this.HttpConfiguration.Routes.MapHttpRoute(
+                    name: "DefaultApi",
+                    routeTemplate: "api/{controller}/{id}",
+                    defaults: new { id = RouteParameter.Optional }
+                );
+
                 app.UseWebApi(this.HttpConfiguration);
                 this.HttpConfiguration.EnsureInitialized();
                 this.ApiExplorer = this.HttpConfiguration.Services.GetApiExplorer();

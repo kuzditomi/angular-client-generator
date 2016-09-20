@@ -9,5 +9,14 @@ namespace AngularClientGeneratorTest.TestControllers
 {
     public class TestController: ApiController
     {
+        public TestController()
+        {
+            
+        }
+
+        public IHttpActionResult Lofasz()
+        {
+            return Ok();
+        }
     }
 }

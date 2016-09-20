@@ -7,9 +7,9 @@ using System.Web.Http;
 
 namespace AngularClientGeneratorTest.TestControllers
 {
-    public class EmptyController: ApiController
+    public class SimpleController: ApiController
     {
-        public EmptyController()
+        public SimpleController()
         {
 
         }
