@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\IClientBuilderConfig.cs" />
+    <Compile Include="Config\IVisitorConfig.cs" />
     <Compile Include="DescriptionCollector.cs" />
     <Compile Include="DescriptionParts\ActionDescriptionPart.cs" />
     <Compile Include="DescriptionParts\ModuleDescriptionPart.cs" />

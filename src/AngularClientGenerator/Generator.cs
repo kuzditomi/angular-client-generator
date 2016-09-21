@@ -27,10 +27,12 @@ namespace AngularClientGenerator
         
         public void Generate()
         {
+            var builder = new ClientBuilder(this.Config);
+
             switch (this.Config.Language)
             {
                 case Language.TypeScript:
-                    this.Visitor = new TsApiVisitor(this.Config);
+                    this.Visitor = new TsApiVisitor(this.Config, builder);
                     break;
             }
 

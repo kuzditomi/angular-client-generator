@@ -11,12 +11,12 @@ namespace AngularClientGenerator.Visitor
     public abstract class ApiVisitor : IApiVisitor
     {
         protected ClientBuilder ClientBuilder;
-        protected IClientBuilderConfig Config;
+        protected IVisitorConfig Config;
 
-        protected ApiVisitor(IClientBuilderConfig config)
+        protected ApiVisitor(IVisitorConfig config, ClientBuilder builder)
         {
             this.Config = config;
-            this.ClientBuilder = new ClientBuilder(config);
+            this.ClientBuilder = builder;
         }
 
         public string GetContent()

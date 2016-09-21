@@ -93,6 +93,7 @@
   <ItemGroup>
     <Compile Include="ClientBuilderTest.cs" />
     <Compile Include="DescriptionCollectorTest.cs" />
+    <Compile Include="TsApiVisitorTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="GeneratorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

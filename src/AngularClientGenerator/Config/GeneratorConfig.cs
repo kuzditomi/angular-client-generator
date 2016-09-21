@@ -7,7 +7,7 @@ using AngularClientGenerator.Visitor;
 
 namespace AngularClientGenerator.Config
 {
-    public class GeneratorConfig : IGeneratorConfig, IClientBuilderConfig
+    public class GeneratorConfig : IGeneratorConfig, IClientBuilderConfig, IVisitorConfig
     {
         public string ExportPath { get; set; }
         public Language Language { get; set; }

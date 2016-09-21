@@ -57,29 +57,18 @@ namespace AngularClientGenerator.Visitor
 
             this.IndentCounter--;
         }
-
-        public void Write(string line = "")
+        
+        public void Write(string pattern = "", params object[] parameters)
         {
             this.Builder.Append(Indent);
-            this.Builder.Append(line);
+            this.Builder.AppendFormat(pattern, parameters);
         }
 
-        public void WriteLine(string line = "")
+        public void WriteLine(string pattern = "", params object[] parameters)
         {
             this.Builder.Append(Indent);
-            this.Builder.AppendLine(line);
-        }
-
-        public void Write(string pattern, params object[] parameters)
-        {
-            this.Builder.Append(Indent);
-            this.Builder.Append(String.Format(pattern, parameters));
-        }
-
-        public void WriteLine(string pattern, params object[] parameters)
-        {
-            this.Builder.Append(Indent);
-            this.Builder.AppendLine(String.Format(pattern, parameters));
+            this.Builder.AppendFormat(pattern, parameters);
+            this.Builder.AppendLine();
         }
 
         public string GetContent()
