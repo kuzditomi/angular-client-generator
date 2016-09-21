@@ -14,7 +14,7 @@ namespace AngularClientGeneratorTest.TestControllers
             
         }
 
-        public IHttpActionResult Lofasz()
+        public IHttpActionResult TestAction()
         {
             return Ok();
         }

@@ -23,7 +23,7 @@ namespace AngularClientGeneratorTest
     public class TsApiVisitorTest : TestBase
     {
         [TestMethod]
-        public void ControllerDescriptionPart_TestControllerHeader()
+        public void ControllerDescriptionPart_TestController()
         {
             RegisterController<TestController>();
 
@@ -58,6 +58,51 @@ namespace AngularClientGeneratorTest
                     "static $inject = ['$http', '$q']",
                     "constructor(private http, private q)"
                 };
+
+                foreach (var expectedContent in expectedContents)
+                {
+                    Assert.IsTrue(content.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
+                }
+            });
+        }
+
+        [TestMethod]
+        public void ActionDescriptionPart_TestController_()
+        {
+            RegisterController<TestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    IndentType = IndentType.Tab,
+                    Language = Language.TypeScript
+                };
+                var builder = new ClientBuilder(config);
+                var apiVisitor = new TsApiVisitor(config, builder);
+
+                var apiDescriptions = ApiExplorer
+                    .ApiDescriptions
+                    .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
+                    .Select(a => a.ActionDescriptor);
+
+                foreach (var httpActionDescriptor in apiDescriptions)
+                {
+                    var actionDescriptorPart = new ActionDescriptionPart(httpActionDescriptor);
+                    actionDescriptorPart.Accept(apiVisitor);    
+                }
+
+                var content = apiVisitor.GetContent();
+
+                var expectedContents = new List<string>();
+
+                foreach (var apiDescription in apiDescriptions)
+                {
+                    var methodName = apiDescription.ActionName;
+                    expectedContents.Add(String.Format("public {0}", methodName));
+                    expectedContents.Add("{");
+                    expectedContents.Add("}");
+                }
 
                 foreach (var expectedContent in expectedContents)
                 {

@@ -41,6 +41,8 @@ namespace AngularClientGenerator.Visitor
 
         public override void Visit(ActionDescriptionPart actionDescription)
         {
+            this.ClientBuilder.WriteLine("public {0} () {{", actionDescription.Name);
+            this.ClientBuilder.WriteLine("}}");
         }
 
         public override void Visit(ModuleDescriptionPart moduleDescription)
