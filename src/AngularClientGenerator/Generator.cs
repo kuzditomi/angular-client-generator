@@ -12,19 +12,20 @@ using Microsoft.Win32.SafeHandles;
 
 namespace AngularClientGenerator
 {
-    public class Generator {
+    public class Generator
+    {
 
         private DescriptionCollector DescriptionCollector;
         private IApiVisitor Visitor;
 
         public GeneratorConfig Config { get; set; }
-        
+
         public Generator(IApiExplorer explorer)
         {
             this.Config = new GeneratorConfig();
             this.DescriptionCollector = new DescriptionCollector(explorer);
         }
-        
+
         public void Generate()
         {
             var builder = new ClientBuilder(this.Config);
@@ -36,28 +37,18 @@ namespace AngularClientGenerator
                     break;
             }
 
-            var moduleDescription = new ModuleDescriptionPart
-            {
-                Name = this.Config.ModuleName
-            };
-
             var controllerDescriptions = DescriptionCollector.GetControllerDescriptions();
-
-            moduleDescription.Accept(this.Visitor);
             foreach (var controllerDescription in controllerDescriptions)
             {
-                controllerDescription.Accept(this.Visitor);
-
-                var actionDescriptions =
-                    DescriptionCollector.GetActionDescriptionsForController(controllerDescription.Name);
-
-                foreach (var actionDescriptionPart in actionDescriptions)
-                {
-                    actionDescriptionPart.Accept(this.Visitor);
-                }
-
-                controllerDescription.Accept(this.Visitor);
+                controllerDescription.ActionDescriptionParts = DescriptionCollector.GetActionDescriptionsForController(controllerDescription.Name);
             }
+
+            var moduleDescription = new ModuleDescriptionPart
+            {
+                Name = this.Config.ModuleName,
+                ControllerDescriptionParts = controllerDescriptions
+            };
+
             moduleDescription.Accept(this.Visitor);
 
             var content = this.Visitor.GetContent();

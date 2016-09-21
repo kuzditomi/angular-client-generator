@@ -12,6 +12,8 @@ namespace AngularClientGenerator.DescriptionParts
     {
         public string Name { get; set; }
 
+        public IEnumerable<ControllerDescriptionPart> ControllerDescriptionParts { get; set; }
+
         public void Accept(IApiVisitor visitor)
         {
             visitor.Visit(this);

@@ -38,14 +38,22 @@ namespace AngularClientGeneratorTest
                 var apiVisitor = new TsApiVisitor(config, builder);
 
                 var controllerDescription = ApiExplorer
-                        .ApiDescriptions
-                        .First(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
-                        .ActionDescriptor
-                        .ControllerDescriptor;
+                    .ApiDescriptions
+                    .First(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
+                    .ActionDescriptor
+                    .ControllerDescriptor;
 
-                var controllerDesciptionPart = new ControllerDescriptionPart(controllerDescription);
+                var actionDescriptions = ApiExplorer
+                    .ApiDescriptions
+                    .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
+                    .Select(a => new ActionDescriptionPart(a.ActionDescriptor))
+                    .ToList();
 
-                apiVisitor.Visit(controllerDesciptionPart);
+                var controllerDesciptionPart = new ControllerDescriptionPart(controllerDescription)
+                {
+                    ActionDescriptionParts = actionDescriptions
+                };
+
                 apiVisitor.Visit(controllerDesciptionPart);
 
                 var content = apiVisitor.GetContent();
@@ -89,7 +97,7 @@ namespace AngularClientGeneratorTest
                 foreach (var httpActionDescriptor in apiDescriptions)
                 {
                     var actionDescriptorPart = new ActionDescriptionPart(httpActionDescriptor);
-                    actionDescriptorPart.Accept(apiVisitor);    
+                    actionDescriptorPart.Accept(apiVisitor);
                 }
 
                 var content = apiVisitor.GetContent();
@@ -100,8 +108,6 @@ namespace AngularClientGeneratorTest
                 {
                     var methodName = apiDescription.ActionName;
                     expectedContents.Add(String.Format("public {0}", methodName));
-                    expectedContents.Add("{");
-                    expectedContents.Add("}");
                 }
 
                 foreach (var expectedContent in expectedContents)
