@@ -9,6 +9,7 @@ using System.Linq;
 using AngularClientGeneratorTest.TestControllers;
 using System.Web.Http.Dependencies;
 using System.Web.Http.Dispatcher;
+using AngularClientGenerator.Config;
 using AngularClientGenerator.Visitor;
 using AngularClientGeneratorTest.Util;
 using Microsoft.Owin.Hosting;

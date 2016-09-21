@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Description;
+using AngularClientGenerator.Config;
 using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitor;
 using Microsoft.Win32.SafeHandles;
 
 namespace AngularClientGenerator
 {
-    public class Generator{
+    public class Generator {
 
         private DescriptionCollector DescriptionCollector;
         private IApiVisitor Visitor;
@@ -33,7 +34,7 @@ namespace AngularClientGenerator
                     break;
             }
 
-            var moduleDescription = new ModuleDescriptionPart()
+            var moduleDescription = new ModuleDescriptionPart
             {
                 Name = this.Config.ModuleName
             };

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AngularClientGenerator.Config;
 using AngularClientGenerator.DescriptionParts;
 
 namespace AngularClientGenerator.Visitor
@@ -10,9 +11,9 @@ namespace AngularClientGenerator.Visitor
     public abstract class ApiVisitor : IApiVisitor
     {
         protected ClientBuilder ClientBuilder;
-        protected GeneratorConfig Config;
+        protected IClientBuilderConfig Config;
 
-        protected ApiVisitor(GeneratorConfig config)
+        protected ApiVisitor(IClientBuilderConfig config)
         {
             this.Config = config;
             this.ClientBuilder = new ClientBuilder(config);

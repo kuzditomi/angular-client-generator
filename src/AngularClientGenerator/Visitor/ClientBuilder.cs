@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AngularClientGenerator.Config;
 
 namespace AngularClientGenerator.Visitor
 {
@@ -10,7 +11,7 @@ namespace AngularClientGenerator.Visitor
     {
         private int IndentCounter;
         private StringBuilder Builder;
-        private GeneratorConfig Config { get; set; }
+        private IClientBuilderConfig Config { get; }
 
         private string Indent
         {
@@ -37,7 +38,7 @@ namespace AngularClientGenerator.Visitor
         {
         }
 
-        public ClientBuilder(GeneratorConfig config)
+        public ClientBuilder(IClientBuilderConfig config)
         {
             this.IndentCounter = 0;
             this.Builder = new StringBuilder();

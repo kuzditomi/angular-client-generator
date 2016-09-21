@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using AngularClientGenerator.Visitor;
 
-namespace AngularClientGenerator
+namespace AngularClientGenerator.Config
 {
-    public class GeneratorConfig
+    public class GeneratorConfig : IGeneratorConfig, IClientBuilderConfig
     {
         public string ExportPath { get; set; }
         public Language Language { get; set; }
