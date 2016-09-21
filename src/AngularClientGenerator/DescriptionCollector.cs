@@ -23,14 +23,14 @@ namespace AngularClientGenerator
             return this.ApiExplorer.ApiDescriptions
                 .Select(d => d.ActionDescriptor.ControllerDescriptor)
                 .Distinct()
-                .Select(cd =>
-                {
-                    var actionDescriptions = this.ApiExplorer.ApiDescriptions
-                            .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == cd.ControllerName)
-                            .Select(a => a.ActionDescriptor);
+                .Select(cd => new ControllerDescriptionPart(cd)).ToList();
+        }
 
-                    return new ControllerDescriptionPart(cd, actionDescriptions);
-                }).ToList();
+        public IEnumerable<ActionDescriptionPart> GetActionDescriptionsForController(string controllerName)
+        {
+            return this.ApiExplorer.ApiDescriptions
+                .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == controllerName)
+                .Select(a => new ActionDescriptionPart(a.ActionDescriptor));
         }
     }
 }

@@ -10,13 +10,9 @@ namespace AngularClientGenerator.DescriptionParts
 {
     public class ControllerDescriptionPart : IDescriptionPart
     {
-        public IEnumerable<ActionDescriptionPart> ActionDescriptions { get; private set; }
-
-        public ControllerDescriptionPart(HttpControllerDescriptor controllerDescriptor, IEnumerable<HttpActionDescriptor> actionDescriptions)
+        public ControllerDescriptionPart(HttpControllerDescriptor controllerDescriptor)
         {
             this.Name = controllerDescriptor.ControllerName;
-            this.ActionDescriptions = actionDescriptions
-                .Select(a => new ActionDescriptionPart(a));
         }
 
         public string Name { get; set; }
@@ -24,11 +20,6 @@ namespace AngularClientGenerator.DescriptionParts
         public void Accept(IApiVisitor visitor)
         {
             visitor.Visit(this);
-
-            foreach (var actionDescriptionPart in this.ActionDescriptions)
-            {
-                actionDescriptionPart.Accept(visitor);
-            }
         }
     }
 }

@@ -47,7 +47,18 @@ namespace AngularClientGenerator
             foreach (var controllerDescription in controllerDescriptions)
             {
                 controllerDescription.Accept(this.Visitor);
+
+                var actionDescriptions =
+                    DescriptionCollector.GetActionDescriptionsForController(controllerDescription.Name);
+
+                foreach (var actionDescriptionPart in actionDescriptions)
+                {
+                    actionDescriptionPart.Accept(this.Visitor);
+                }
+
+                controllerDescription.Accept(this.Visitor);
             }
+            moduleDescription.Accept(this.Visitor);
 
             var content = this.Visitor.GetContent();
 

@@ -59,7 +59,7 @@ namespace AngularClientGeneratorTest
             {
                 var descriptionCollector = new DescriptionCollector(this.ApiExplorer);
                 var controllerDescription = descriptionCollector.GetControllerDescriptions().First();
-                var actionDescriptions = controllerDescription.ActionDescriptions;
+                var actionDescriptions = descriptionCollector.GetActionDescriptionsForController(controllerDescription.Name);
 
                 Assert.AreEqual(3, actionDescriptions.Count());
             });

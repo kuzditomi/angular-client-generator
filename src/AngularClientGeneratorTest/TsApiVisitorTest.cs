@@ -35,7 +35,6 @@ namespace AngularClientGeneratorTest
                     Language = Language.TypeScript
                 };
                 var builder = new ClientBuilder(config);
-
                 var apiVisitor = new TsApiVisitor(config, builder);
 
                 var controllerDescription = ApiExplorer
@@ -44,16 +43,20 @@ namespace AngularClientGeneratorTest
                         .ActionDescriptor
                         .ControllerDescriptor;
 
-                var controllerDesciptionPart = new ControllerDescriptionPart(controllerDescription, new List<HttpActionDescriptor>());
+                var controllerDesciptionPart = new ControllerDescriptionPart(controllerDescription);
 
+                apiVisitor.Visit(controllerDesciptionPart);
                 apiVisitor.Visit(controllerDesciptionPart);
 
                 var content = apiVisitor.GetContent();
 
                 var expectedContents = new List<string>
                 {
-                    "export class ApiTestService",
-                    ".factory(ApiTestService)"
+                    "export class ApiTestService {",
+                    "}",
+                    ".factory(ApiTestService)",
+                    "static $inject = ['$http', '$q']",
+                    "constructor(private http, private q)"
                 };
 
                 foreach (var expectedContent in expectedContents)
