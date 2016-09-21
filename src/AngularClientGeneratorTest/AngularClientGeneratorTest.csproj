@@ -91,6 +91,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ClientBuilderTest.cs" />
     <Compile Include="DescriptionCollectorTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="GeneratorTest.cs" />

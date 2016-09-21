@@ -22,8 +22,8 @@ namespace AngularClientGeneratorTest
         {
             var generator = new Generator(this.ApiExplorer);
 
-            Assert.AreEqual("angular-generated-client.ts", generator.ExportPath);
-            Assert.AreEqual(Language.TypeScript, generator.Language);
+            Assert.AreEqual("angular-generated-client.ts", generator.Config.ExportPath);
+            Assert.AreEqual(Language.TypeScript, generator.Config.Language);
         }
 
         [TestMethod]
@@ -31,12 +31,17 @@ namespace AngularClientGeneratorTest
         {
             var path = "generate/here/the/code";
 
-            var generator = new Generator(this.ApiExplorer)
+            var config = new GeneratorConfig
             {
                 ExportPath = path
             };
 
-            Assert.AreEqual(path, generator.ExportPath);
+            var generator = new Generator(this.ApiExplorer)
+            {
+                Config = config
+            };
+
+            Assert.AreEqual(path, generator.Config.ExportPath);
         }
 
         [TestMethod]
@@ -48,7 +53,7 @@ namespace AngularClientGeneratorTest
             var generator = new Generator(this.ApiExplorer);
             generator.Generate();
 
-            var fileExists = File.Exists(generator.ExportPath);
+            var fileExists = File.Exists(generator.Config.ExportPath);
 
             Assert.IsTrue(fileExists);
         }
@@ -64,7 +69,7 @@ namespace AngularClientGeneratorTest
                 var generator = new Generator(this.ApiExplorer);
                 generator.Generate();
 
-                var content = File.ReadAllText(generator.ExportPath);
+                var content = File.ReadAllText(generator.Config.ExportPath);
                 var containsTestControllerDefinition = content.Contains("Test");
                 var containsSimpleControllerDefinition = content.Contains("Simple");
 

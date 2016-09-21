@@ -5,35 +5,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Description;
+using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitor;
+using Microsoft.Win32.SafeHandles;
 
 namespace AngularClientGenerator
 {
-    public class Generator : IGeneratorConfig
-    {
+    public class Generator{
+
         private DescriptionCollector DescriptionCollector;
         private IApiVisitor Visitor;
 
+        public GeneratorConfig Config { get; set; }
+        
         public Generator(IApiExplorer explorer)
         {
-            ExportPath = "angular-generated-client.ts";
-            Language = Language.TypeScript;
-            
+            this.Config = new GeneratorConfig();
             this.DescriptionCollector = new DescriptionCollector(explorer);
         }
-
-        public string ExportPath { get; set; }
-
-        public Language Language { get; set; }
-
+        
         public void Generate()
         {
-            var controllerDescription = DescriptionCollector.GetControllerDescriptions();
+            switch (this.Config.Language)
+            {
+                case Language.TypeScript:
+                    this.Visitor = new TsApiVisitor(this.Config);
+                    break;
+            }
 
-            var names = controllerDescription.Select(c => c.Name);
-            var content = String.Concat(names);
+            var moduleDescription = new ModuleDescriptionPart()
+            {
+                Name = this.Config.ModuleName
+            };
 
-            File.WriteAllText(this.ExportPath, content);
+            var controllerDescriptions = DescriptionCollector.GetControllerDescriptions();
+
+            moduleDescription.Accept(this.Visitor);
+            foreach (var controllerDescription in controllerDescriptions)
+            {
+                controllerDescription.Accept(this.Visitor);
+            }
+
+            var content = this.Visitor.GetContent();
+
+            File.WriteAllText(this.Config.ExportPath, content);
         }
     }
 }

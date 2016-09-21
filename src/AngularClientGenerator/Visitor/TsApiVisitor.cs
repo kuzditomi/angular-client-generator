@@ -7,16 +7,23 @@ using AngularClientGenerator.DescriptionParts;
 
 namespace AngularClientGenerator.Visitor
 {
-    public class TsApiVisitor : IApiVisitor
+    public class TsApiVisitor : ApiVisitor
     {
-        public void Visit(ControllerDescriptionPart controllerDescription)
+        public TsApiVisitor(GeneratorConfig config) :base(config)
         {
-            throw new NotImplementedException();
         }
 
-        public void Visit(ActionDescriptionPart actionDescription)
+        public override void Visit(ControllerDescriptionPart controllerDescription)
         {
-            throw new NotImplementedException();
+            this.ClientBuilder.Write(controllerDescription.Name);   
+        }
+
+        public override void Visit(ActionDescriptionPart actionDescription)
+        {
+        }
+
+        public override void Visit(ModuleDescriptionPart moduleDescription)
+        {
         }
     }
 }

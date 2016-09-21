@@ -11,5 +11,7 @@ namespace AngularClientGenerator.Visitor
     {
         void Visit(ControllerDescriptionPart controllerDescription);
         void Visit(ActionDescriptionPart actionDescription);
+        void Visit(ModuleDescriptionPart moduleDescription);
+        string GetContent();
     }
 }
