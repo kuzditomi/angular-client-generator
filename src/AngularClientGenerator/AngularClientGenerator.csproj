@@ -59,6 +59,8 @@
     <Compile Include="DescriptionParts\ModuleDescriptionPart.cs" />
     <Compile Include="DescriptionParts\ControllerDescriptionPart.cs" />
     <Compile Include="DescriptionParts\IDescriptionPart.cs" />
+    <Compile Include="DescriptionParts\ParameterDescription.cs" />
+    <Compile Include="DescriptionParts\TypeDescription.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Config\IGeneratorConfig.cs" />
     <Compile Include="IndentType.cs" />
