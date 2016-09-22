@@ -53,5 +53,11 @@ namespace AngularClientGeneratorTest.TestControllers
         public void VoidReplaceNumberAction(int id)
         {
         }
+
+        [Route("voidreplacemoreparams/{id}/more/{second}")]
+        [HttpGet]
+        public void VoidReplaceMoreParamsAction(int id, string second)
+        {
+        }
     }
 }

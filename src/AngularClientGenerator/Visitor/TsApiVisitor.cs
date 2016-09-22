@@ -162,7 +162,7 @@ namespace AngularClientGenerator.Visitor
         }
 
 
-        private static Type[] numberTypes = new Type[] { typeof(int), typeof(double), typeof(float), typeof(decimal) };
+        private static Type[] numberTypes = { typeof(int), typeof(double), typeof(float), typeof(decimal) };
 
         private string GetNameForType(TypeDescriptionPart typeDescriptionPart)
         {
