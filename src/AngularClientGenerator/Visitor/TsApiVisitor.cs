@@ -107,16 +107,16 @@ namespace AngularClientGenerator.Visitor
 
             if (needsReplace)
             {
-                this.ClientBuilder.WriteLine("url: urlReplace.replace('{0}', {", actionDescription.UrlTemplate);
+                this.ClientBuilder.WriteLine("url: urlReplace.Replace('{0}', {{", actionDescription.UrlTemplate);
                 this.ClientBuilder.IncreaseIndent();
 
                 foreach (var actionDescriptionParameterDescription in actionDescription.ParameterDescriptions)
                 {
-                    this.ClientBuilder.WriteLine("'{0}': {0},", actionDescriptionParameterDescription.ParameterName);
+                    this.ClientBuilder.WriteLine("{0}: {0},", actionDescriptionParameterDescription.ParameterName);
                 }
 
                 this.ClientBuilder.DecreaseIndent();
-                this.ClientBuilder.WriteLine("),", actionDescription.UrlTemplate);
+                this.ClientBuilder.WriteLine("}}),", actionDescription.UrlTemplate);
             }
             else
             {

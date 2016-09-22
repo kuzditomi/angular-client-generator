@@ -175,6 +175,32 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             });
         }
 
+        [TestMethod]
+        public void VoidReplaceNumberParametersActionConfig()
+        {
+            RegisterController<ConfigTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModule();
+                var expectedLines = new List<string>
+                {
+                    "public VoidReplaceNumberActionConfig(id: number) : ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: urlReplace.Replace('api/configtest/voidreplaceparams/{id}', {",
+                    "\t\t\tid: id,",
+                    "\t\t}),",
+                    "\t\tmethod: 'GET'",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+            });
+        }
+
         private string VisitModule()
         {
             var config = new GeneratorConfig
