@@ -17,6 +17,10 @@ namespace AngularClientGenerator.DescriptionParts
             {
                 TypeName = "void";
                 return;
+            } else if (type == typeof(string))
+            {
+                TypeName = "string";
+                return;
             }
 
             TypeName = type.Name;

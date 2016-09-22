@@ -77,16 +77,69 @@ namespace AngularClientGenerator.Visitor
 
         private void GenerateConfigFor(ActionDescriptionPart actionDescription)
         {
+            var hasParameter = actionDescription.ParameterDescriptions.Any();
+
             // method header
-            this.ClientBuilder.WriteLine("public {0}Config() : ng.IRequestConfig {{", actionDescription.Name, actionDescription.ReturnValueDescription.TypeName);
+            if (hasParameter)
+            {
+                var parameters = string.Join(",", actionDescription.ParameterDescriptions.Select(p =>
+                {
+                    return String.Format("{0}: {1}", p.ParameterName, p.TypeName);
+                }));
+
+                this.ClientBuilder.WriteLine("public {0}Config({1}) : ng.IRequestConfig {{",
+                    actionDescription.Name,
+                    parameters);
+            }
+            else
+            {
+                this.ClientBuilder.WriteLine("public {0}Config() : ng.IRequestConfig {{",
+                    actionDescription.Name);
+            }
             this.ClientBuilder.IncreaseIndent();
 
             // method body
             this.ClientBuilder.WriteLine("return {{");
             this.ClientBuilder.IncreaseIndent();
 
-            this.ClientBuilder.WriteLine("url: '{0}',", actionDescription.UrlTemplate);
+            var needsReplace = actionDescription.UrlTemplate.Contains("{");
+            if (needsReplace && !hasParameter)
+                throw new InvalidOperationException(String.Format("Needs to replace in url, but no parameters given:{0}", actionDescription.Name));
+
+            if (needsReplace)
+            {
+                this.ClientBuilder.WriteLine("url: urlReplace.replace('{0}', {", actionDescription.UrlTemplate);
+                this.ClientBuilder.IncreaseIndent();
+
+                foreach (var actionDescriptionParameterDescription in actionDescription.ParameterDescriptions)
+                {
+                    this.ClientBuilder.WriteLine("'{0}': {0},", actionDescriptionParameterDescription.ParameterName);
+                }
+
+                this.ClientBuilder.DecreaseIndent();
+                this.ClientBuilder.WriteLine("),", actionDescription.UrlTemplate);
+            }
+            else
+            {
+                this.ClientBuilder.WriteLine("url: '{0}',", actionDescription.UrlTemplate);
+            }
+
             this.ClientBuilder.WriteLine("method: '{0}'", actionDescription.HttpMethod.ToString().ToUpper());
+
+            if (!needsReplace && hasParameter)
+            {
+                this.ClientBuilder.WriteLine("params: {{" );
+                this.ClientBuilder.IncreaseIndent();
+
+                foreach (var actionDescriptionParameterDescription in actionDescription.ParameterDescriptions)
+                {
+
+                    this.ClientBuilder.WriteLine("{0}: {0}", actionDescriptionParameterDescription.ParameterName);
+                }
+
+                this.ClientBuilder.DecreaseIndent();
+                this.ClientBuilder.WriteLine("}}" );
+            }
 
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}};");

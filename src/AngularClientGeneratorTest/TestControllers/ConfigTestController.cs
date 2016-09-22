@@ -17,5 +17,11 @@ namespace AngularClientGeneratorTest.TestControllers
         public void VoidParameterlessGetAction()
         {
         }
+
+        [Route("voidstring")]
+        [HttpGet]
+        public void VoidStringParameterAction(string stringparam)
+        {
+        }
     }
 }
