@@ -12,15 +12,15 @@ namespace AngularClientGenerator.DescriptionParts
     {
         public string Name { get; set; }
         public IEnumerable<ParameterDescription> ParameterDescriptions { get; set; }
-        public TypeDescription ReturnValueDescription { get; set; }
+        public TypeDescriptionPart ReturnValueDescription { get; set; }
 
         public ActionDescriptionPart(HttpActionDescriptor actionDescriptor)
         {
             this.Name = actionDescriptor.ActionName;
-            this.ReturnValueDescription = new TypeDescription
-            {
-                TypeName = actionDescriptor.ReturnType.Name
-            };
+            this.ReturnValueDescription = new TypeDescriptionPart(actionDescriptor.ReturnType);
+
+            this.ParameterDescriptions = actionDescriptor.GetParameters()
+                .Select(p => new ParameterDescription(p)).ToList();
         }
 
         public void Accept(IApiVisitor visitor)

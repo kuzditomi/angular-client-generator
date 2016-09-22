@@ -116,5 +116,57 @@ namespace AngularClientGeneratorTest
                 }
             });
         }
+
+        [TestMethod]
+        public void TypeDescriptionPart_TestController_()
+        {
+            RegisterController<TestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    IndentType = IndentType.Tab,
+                    Language = Language.TypeScript
+                };
+                var builder = new ClientBuilder(config);
+                var apiVisitor = new TsApiVisitor(config, builder);
+
+                var controllerDescription = ApiExplorer
+                    .ApiDescriptions
+                    .First(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
+                    .ActionDescriptor.ControllerDescriptor;
+
+                var actionDescriptions = ApiExplorer
+                    .ApiDescriptions
+                    .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
+                    .Select(a => a.ActionDescriptor);
+
+                var moduleDescription = new ModuleDescriptionPart();
+
+                moduleDescription.ControllerDescriptionParts = new List<ControllerDescriptionPart>
+                {
+                    new ControllerDescriptionPart(controllerDescription)
+                    {
+                        ActionDescriptionParts = actionDescriptions.Select(a => new ActionDescriptionPart(a))
+                    }
+                };
+
+                moduleDescription.Accept(apiVisitor);
+
+                var content = apiVisitor.GetContent();
+
+                var expectedContents = new List<string>
+                {
+                    "export interface TestModelA {",
+                    "export interface TestModelB {",
+                };
+
+                foreach (var expectedContent in expectedContents)
+                {
+                    Assert.IsTrue(content.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
+                }
+            });
+        }
     }
 }

@@ -60,7 +60,7 @@
     <Compile Include="DescriptionParts\ControllerDescriptionPart.cs" />
     <Compile Include="DescriptionParts\IDescriptionPart.cs" />
     <Compile Include="DescriptionParts\ParameterDescription.cs" />
-    <Compile Include="DescriptionParts\TypeDescription.cs" />
+    <Compile Include="DescriptionParts\TypeDescriptionPart.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Config\IGeneratorConfig.cs" />
     <Compile Include="IndentType.cs" />

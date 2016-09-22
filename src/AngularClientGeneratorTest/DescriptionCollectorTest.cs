@@ -58,7 +58,7 @@ namespace AngularClientGeneratorTest
             this.RunInScope(() =>
             {
                 var descriptionCollector = new DescriptionCollector(this.ApiExplorer);
-                var controllerDescription = descriptionCollector.GetControllerDescriptions().First();
+                var controllerDescription = descriptionCollector.GetControllerDescriptions().First(c => c.Name == "Simple");
                 var actionDescriptions = descriptionCollector.GetActionDescriptionsForController(controllerDescription.Name);
 
                 Assert.AreEqual(3, actionDescriptions.Count());

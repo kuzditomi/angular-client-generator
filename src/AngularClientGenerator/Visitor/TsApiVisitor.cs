@@ -10,8 +10,11 @@ namespace AngularClientGenerator.Visitor
 {
     public class TsApiVisitor : ApiVisitor
     {
+        private Dictionary<string, TypeDescriptionPart> Types { get; }
+
         public TsApiVisitor(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
         {
+            this.Types = new Dictionary<string, TypeDescriptionPart>();
         }
 
         public override void Visit(ControllerDescriptionPart controllerDescription)
@@ -35,6 +38,12 @@ namespace AngularClientGenerator.Visitor
 
         public override void Visit(ActionDescriptionPart actionDescription)
         {
+            actionDescription.ReturnValueDescription.Accept(this);
+            foreach (var actionDescriptionParameterDescription in actionDescription.ParameterDescriptions)
+            {
+                actionDescriptionParameterDescription.Accept(this);
+            }
+
             this.ClientBuilder.WriteLine("public {0} () {{", actionDescription.Name);
             this.ClientBuilder.WriteLine("}}");
         }
@@ -45,6 +54,27 @@ namespace AngularClientGenerator.Visitor
             {
                 controllerDescriptionPart.Accept(this);
             }
+
+            this.WriteTypes();
+        }
+
+        public override void Visit(TypeDescriptionPart typeDescriptionPart)
+        {
+            if (!this.Types.ContainsKey(typeDescriptionPart.TypeName))
+                this.Types.Add(typeDescriptionPart.TypeName, typeDescriptionPart);
+        }
+
+        private void WriteTypes()
+        {
+            foreach (var type in Types)
+            {
+                this.WriteType(type.Value);
+            }
+        }
+
+        private void WriteType(TypeDescriptionPart type)
+        {
+            this.ClientBuilder.WriteLine("export interface {0} {{ }}", type.TypeName);
         }
     }
 }

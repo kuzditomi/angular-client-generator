@@ -27,5 +27,6 @@ namespace AngularClientGenerator.Visitor
         public abstract void Visit(ControllerDescriptionPart controllerDescription);
         public abstract void Visit(ActionDescriptionPart actionDescription);
         public abstract void Visit(ModuleDescriptionPart moduleDescription);
+        public abstract void Visit(TypeDescriptionPart typeDescriptionPart);
     }
 }
