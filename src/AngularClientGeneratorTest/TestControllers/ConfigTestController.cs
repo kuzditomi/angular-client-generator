@@ -13,7 +13,8 @@ namespace AngularClientGeneratorTest.TestControllers
     public class ConfigTestController: ApiController
     {
         [Route("void")]
-        public void VoidAction()
+        [HttpGet]
+        public void VoidParameterlessGetAction()
         {
         }
     }

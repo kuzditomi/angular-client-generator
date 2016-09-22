@@ -38,14 +38,17 @@ namespace AngularClientGenerator.Visitor
 
         public override void Visit(ActionDescriptionPart actionDescription)
         {
+            // collect return value type for later
             actionDescription.ReturnValueDescription.Accept(this);
+
+            // collect parameter types for later
             foreach (var actionDescriptionParameterDescription in actionDescription.ParameterDescriptions)
             {
                 actionDescriptionParameterDescription.Accept(this);
             }
 
-            this.ClientBuilder.WriteLine("public {0}() : ng.IPromise<{1}> {{", actionDescription.Name, actionDescription.ReturnValueDescription.TypeName);
-            this.ClientBuilder.WriteLine("}}");
+            GenerateConfigFor(actionDescription);
+            GenerateMethodFor(actionDescription);
         }
 
         public override void Visit(ModuleDescriptionPart moduleDescription)
@@ -62,6 +65,35 @@ namespace AngularClientGenerator.Visitor
         {
             if (!this.Types.ContainsKey(typeDescriptionPart.TypeName))
                 this.Types.Add(typeDescriptionPart.TypeName, typeDescriptionPart);
+        }
+
+        private void GenerateMethodFor(ActionDescriptionPart actionDescription)
+        {
+            // method header
+            this.ClientBuilder.WriteLine("public {0}() : ng.IPromise<{1}> {{", actionDescription.Name, actionDescription.ReturnValueDescription.TypeName);
+            // method footer
+            this.ClientBuilder.WriteLine("}}");
+        }
+
+        private void GenerateConfigFor(ActionDescriptionPart actionDescription)
+        {
+            // method header
+            this.ClientBuilder.WriteLine("public {0}Config() : ng.IRequestConfig {{", actionDescription.Name, actionDescription.ReturnValueDescription.TypeName);
+            this.ClientBuilder.IncreaseIndent();
+
+            // method body
+            this.ClientBuilder.WriteLine("return {{");
+            this.ClientBuilder.IncreaseIndent();
+
+            this.ClientBuilder.WriteLine("url: '{0}',", actionDescription.UrlTemplate);
+            this.ClientBuilder.WriteLine("method: '{0}'", actionDescription.HttpMethod.ToString().ToUpper());
+
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}};");
+
+            // method footer
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}}");
         }
 
         private void WriteTypes()

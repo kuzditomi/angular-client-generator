@@ -24,13 +24,17 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitModule();
                 var expectedLines = new List<string>
                 {
-                    "public VoidAction() : ng.IPromise<void> {",
+                    "public VoidParameterlessGetActionConfig() : ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: 'api/configtest/void',",
+                    "\t\tmethod: 'GET'",
+                    "\t};",
                     "}"
                 };
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
-
-                Assert.IsTrue(content.Contains(expectedContent));
+                
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
             });
         }
 
@@ -46,8 +50,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             var apiDescriptions = ApiExplorer
                 .ApiDescriptions
-                .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "ConfigTest")
-                .Select(a => a.ActionDescriptor);
+                .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "ConfigTest");
 
             foreach (var httpActionDescriptor in apiDescriptions)
             {

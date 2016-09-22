@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
+using System.Web.Http.Description;
 
 namespace AngularClientGenerator.DescriptionParts
 {
@@ -11,9 +12,9 @@ namespace AngularClientGenerator.DescriptionParts
     {
         public string ParameterName { get; set; }
 
-        public ParameterDescription(HttpParameterDescriptor parameterDescriptor): base(parameterDescriptor.ParameterType)
+        public ParameterDescription(ApiParameterDescription parameterDescriptor): base(parameterDescriptor.ParameterDescriptor.ParameterType)
         {
-            this.ParameterName = parameterDescriptor.ParameterName;
+            this.ParameterName = parameterDescriptor.Name;
         }
     }
 }

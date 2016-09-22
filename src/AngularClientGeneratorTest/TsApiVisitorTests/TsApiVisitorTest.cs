@@ -46,7 +46,7 @@ namespace AngularClientGeneratorTest
                 var actionDescriptions = ApiExplorer
                     .ApiDescriptions
                     .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
-                    .Select(a => new ActionDescriptionPart(a.ActionDescriptor))
+                    .Select(a => new ActionDescriptionPart(a))
                     .ToList();
 
                 var controllerDesciptionPart = new ControllerDescriptionPart(controllerDescription)
@@ -91,8 +91,7 @@ namespace AngularClientGeneratorTest
 
                 var apiDescriptions = ApiExplorer
                     .ApiDescriptions
-                    .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
-                    .Select(a => a.ActionDescriptor);
+                    .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test");
 
                 foreach (var httpActionDescriptor in apiDescriptions)
                 {
@@ -106,7 +105,7 @@ namespace AngularClientGeneratorTest
 
                 foreach (var apiDescription in apiDescriptions)
                 {
-                    var methodName = apiDescription.ActionName;
+                    var methodName = apiDescription.ActionDescriptor.ActionName;
                     expectedContents.Add(String.Format("public {0}", methodName));
                 }
 
@@ -139,18 +138,19 @@ namespace AngularClientGeneratorTest
 
                 var actionDescriptions = ApiExplorer
                     .ApiDescriptions
-                    .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
-                    .Select(a => a.ActionDescriptor);
+                    .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test");
 
-                var moduleDescription = new ModuleDescriptionPart();
-
-                moduleDescription.ControllerDescriptionParts = new List<ControllerDescriptionPart>
+                var moduleDescription = new ModuleDescriptionPart
                 {
-                    new ControllerDescriptionPart(controllerDescription)
+                    ControllerDescriptionParts = new List<ControllerDescriptionPart>
                     {
-                        ActionDescriptionParts = actionDescriptions.Select(a => new ActionDescriptionPart(a))
+                        new ControllerDescriptionPart(controllerDescription)
+                        {
+                            ActionDescriptionParts = actionDescriptions.Select(a => new ActionDescriptionPart(a))
+                        }
                     }
                 };
+
 
                 moduleDescription.Accept(apiVisitor);
 

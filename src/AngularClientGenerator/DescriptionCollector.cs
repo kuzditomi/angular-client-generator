@@ -30,7 +30,7 @@ namespace AngularClientGenerator
         {
             return this.ApiExplorer.ApiDescriptions
                 .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == controllerName)
-                .Select(a => new ActionDescriptionPart(a.ActionDescriptor));
+                .Select(a => new ActionDescriptionPart(a));
         }
     }
 }
