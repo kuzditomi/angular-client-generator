@@ -81,7 +81,7 @@ namespace AngularClientGenerator.Visitor
             // method header
             if (hasParameter)
             {
-                var parameters = string.Join(",", actionDescription.ParameterDescriptions.Select(p =>
+                var parameters = string.Join(", ", actionDescription.ParameterDescriptions.Select(p =>
                 {
                     return String.Format("{0}: {1}", p.ParameterName, GetNameForType(p));
                 }));

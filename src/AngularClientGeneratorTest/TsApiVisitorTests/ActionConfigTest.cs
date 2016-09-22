@@ -146,6 +146,34 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             });
         }
 
+        [TestMethod]
+        public void VoidSimpleParametersActionConfig()
+        {
+            RegisterController<ConfigTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModule();
+                var expectedLines = new List<string>
+                {
+                    "public VoidSimpleParametersActionConfig(a: string, b: number, c: number) : ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: 'api/configtest/voidsimpleparams',",
+                    "\t\tmethod: 'GET'",
+                    "\t\tparams: {",
+                    "\t\t\ta: a",
+                    "\t\t\tb: b",
+                    "\t\t\tc: c",
+                    "\t\t}",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+            });
+        }
 
         private string VisitModule()
         {

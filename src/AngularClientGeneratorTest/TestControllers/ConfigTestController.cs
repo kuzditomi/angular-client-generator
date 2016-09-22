@@ -41,5 +41,11 @@ namespace AngularClientGeneratorTest.TestControllers
         public void VoidDecimalParameterAction(decimal decimalparam)
         {
         }
+
+        [Route("voidsimpleparams")]
+        [HttpGet]
+        public void VoidSimpleParametersAction(string a, int b, decimal c)
+        {
+        }
     }
 }
