@@ -23,5 +23,23 @@ namespace AngularClientGeneratorTest.TestControllers
         public void VoidStringParameterAction(string stringparam)
         {
         }
+
+        [Route("voidint")]
+        [HttpGet]
+        public void VoidIntParameterAction(int intparam)
+        {
+        }
+
+        [Route("voiddouble")]
+        [HttpGet]
+        public void VoidDoubleParameterAction(double doubleparam)
+        {
+        }
+
+        [Route("voiddecimal")]
+        [HttpGet]
+        public void VoidDecimalParameterAction(decimal decimalparam)
+        {
+        }
     }
 }

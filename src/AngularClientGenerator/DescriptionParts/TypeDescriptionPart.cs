@@ -9,21 +9,11 @@ namespace AngularClientGenerator.DescriptionParts
 {
     public class TypeDescriptionPart : IDescriptionPart
     {
-        public string TypeName { get; set; }
+        public Type Type { get; }
 
         public TypeDescriptionPart(Type type)
         {
-            if (type == typeof(void))
-            {
-                TypeName = "void";
-                return;
-            } else if (type == typeof(string))
-            {
-                TypeName = "string";
-                return;
-            }
-
-            TypeName = type.Name;
+            this.Type = type;
         }
 
         public void Accept(IApiVisitor visitor)

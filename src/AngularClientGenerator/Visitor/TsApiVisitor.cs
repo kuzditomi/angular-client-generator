@@ -10,11 +10,11 @@ namespace AngularClientGenerator.Visitor
 {
     public class TsApiVisitor : ApiVisitor
     {
-        private Dictionary<string, TypeDescriptionPart> Types { get; }
+        private HashSet<TypeDescriptionPart> Types { get; }
 
         public TsApiVisitor(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
         {
-            this.Types = new Dictionary<string, TypeDescriptionPart>();
+            this.Types = new HashSet<TypeDescriptionPart>();
         }
 
         public override void Visit(ControllerDescriptionPart controllerDescription)
@@ -63,14 +63,13 @@ namespace AngularClientGenerator.Visitor
 
         public override void Visit(TypeDescriptionPart typeDescriptionPart)
         {
-            if (!this.Types.ContainsKey(typeDescriptionPart.TypeName))
-                this.Types.Add(typeDescriptionPart.TypeName, typeDescriptionPart);
+            this.Types.Add(typeDescriptionPart);
         }
 
         private void GenerateMethodFor(ActionDescriptionPart actionDescription)
         {
             // method header
-            this.ClientBuilder.WriteLine("public {0}() : ng.IPromise<{1}> {{", actionDescription.Name, actionDescription.ReturnValueDescription.TypeName);
+            this.ClientBuilder.WriteLine("public {0}() : ng.IPromise<{1}> {{", actionDescription.Name, GetNameForType(actionDescription.ReturnValueDescription));
             // method footer
             this.ClientBuilder.WriteLine("}}");
         }
@@ -84,7 +83,7 @@ namespace AngularClientGenerator.Visitor
             {
                 var parameters = string.Join(",", actionDescription.ParameterDescriptions.Select(p =>
                 {
-                    return String.Format("{0}: {1}", p.ParameterName, p.TypeName);
+                    return String.Format("{0}: {1}", p.ParameterName, GetNameForType(p));
                 }));
 
                 this.ClientBuilder.WriteLine("public {0}Config({1}) : ng.IRequestConfig {{",
@@ -128,7 +127,7 @@ namespace AngularClientGenerator.Visitor
 
             if (!needsReplace && hasParameter)
             {
-                this.ClientBuilder.WriteLine("params: {{" );
+                this.ClientBuilder.WriteLine("params: {{");
                 this.ClientBuilder.IncreaseIndent();
 
                 foreach (var actionDescriptionParameterDescription in actionDescription.ParameterDescriptions)
@@ -138,7 +137,7 @@ namespace AngularClientGenerator.Visitor
                 }
 
                 this.ClientBuilder.DecreaseIndent();
-                this.ClientBuilder.WriteLine("}}" );
+                this.ClientBuilder.WriteLine("}}");
             }
 
             this.ClientBuilder.DecreaseIndent();
@@ -153,13 +152,41 @@ namespace AngularClientGenerator.Visitor
         {
             foreach (var type in Types)
             {
-                this.WriteType(type.Value);
+                this.WriteType(type);
             }
         }
 
         private void WriteType(TypeDescriptionPart type)
         {
-            this.ClientBuilder.WriteLine("export interface {0} {{ }}", type.TypeName);
+            this.ClientBuilder.WriteLine("export interface {0} {{ }}", GetNameForType(type));
+        }
+
+
+        private static Type[] numberTypes = new Type[] { typeof(int), typeof(double), typeof(float), typeof(decimal) };
+
+        private string GetNameForType(TypeDescriptionPart typeDescriptionPart)
+        {
+            if (typeDescriptionPart.Type == typeof(void))
+            {
+                return "void";
+            }
+
+            if (typeDescriptionPart.Type.IsEnum)
+            {
+                return typeDescriptionPart.Type.Name;
+            }
+
+            if (typeDescriptionPart.Type == typeof(string))
+            {
+                return "string";
+            }
+
+            if (numberTypes.Contains(typeDescriptionPart.Type))
+            {
+                return "number";
+            }
+
+            return typeDescriptionPart.Type.Name;
         }
     }
 }

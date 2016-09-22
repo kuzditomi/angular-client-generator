@@ -65,6 +65,88 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             });
         }
 
+        [TestMethod]
+        public void VoidIntParameterActionConfig()
+        {
+            RegisterController<ConfigTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModule();
+                var expectedLines = new List<string>
+                {
+                    "public VoidIntParameterActionConfig(intparam: number) : ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: 'api/configtest/voidint',",
+                    "\t\tmethod: 'GET'",
+                    "\t\tparams: {",
+                    "\t\t\tintparam: intparam",
+                    "\t\t}",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+            });
+        }
+
+        [TestMethod]
+        public void VoidDoubleParameterActionConfig()
+        {
+            RegisterController<ConfigTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModule();
+                var expectedLines = new List<string>
+                {
+                    "public VoidDoubleParameterActionConfig(doubleparam: number) : ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: 'api/configtest/voiddouble',",
+                    "\t\tmethod: 'GET'",
+                    "\t\tparams: {",
+                    "\t\t\tdoubleparam: doubleparam",
+                    "\t\t}",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+            });
+        }
+
+        [TestMethod]
+        public void VoidDecimalParameterActionConfig()
+        {
+            RegisterController<ConfigTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModule();
+                var expectedLines = new List<string>
+                {
+                    "public VoidDecimalParameterActionConfig(decimalparam: number) : ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: 'api/configtest/voiddecimal',",
+                    "\t\tmethod: 'GET'",
+                    "\t\tparams: {",
+                    "\t\t\tdecimalparam: decimalparam",
+                    "\t\t}",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+            });
+        }
+
+
         private string VisitModule()
         {
             var config = new GeneratorConfig
