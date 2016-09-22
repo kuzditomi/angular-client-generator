@@ -93,9 +93,11 @@
   <ItemGroup>
     <Compile Include="ClientBuilderTest.cs" />
     <Compile Include="DescriptionCollectorTest.cs" />
+    <Compile Include="TestControllers\ConfigTestController.cs" />
     <Compile Include="TestModels\TestModelB.cs" />
     <Compile Include="TestModels\TestModelA.cs" />
-    <Compile Include="TsApiVisitorTest.cs" />
+    <Compile Include="TsApiVisitorTests\ActionConfigTest.cs" />
+    <Compile Include="TsApiVisitorTests\TsApiVisitorTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="GeneratorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

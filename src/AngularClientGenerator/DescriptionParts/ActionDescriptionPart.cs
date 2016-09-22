@@ -16,8 +16,13 @@ namespace AngularClientGenerator.DescriptionParts
 
         public ActionDescriptionPart(HttpActionDescriptor actionDescriptor)
         {
-            this.Name = actionDescriptor.ActionName;
-            this.ReturnValueDescription = new TypeDescriptionPart(actionDescriptor.ReturnType);
+            var descriptor = actionDescriptor as ReflectedHttpActionDescriptor;
+
+            if (descriptor == null)
+                return;
+
+            this.Name = descriptor.ActionName;
+            this.ReturnValueDescription = new TypeDescriptionPart(descriptor.MethodInfo.ReturnType);
 
             this.ParameterDescriptions = actionDescriptor.GetParameters()
                 .Select(p => new ParameterDescription(p)).ToList();

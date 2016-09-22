@@ -13,6 +13,12 @@ namespace AngularClientGenerator.DescriptionParts
 
         public TypeDescriptionPart(Type type)
         {
+            if (type == typeof(void))
+            {
+                TypeName = "void";
+                return;
+            }
+
             TypeName = type.Name;
         }
 

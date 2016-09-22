@@ -44,7 +44,7 @@ namespace AngularClientGenerator.Visitor
                 actionDescriptionParameterDescription.Accept(this);
             }
 
-            this.ClientBuilder.WriteLine("public {0} () {{", actionDescription.Name);
+            this.ClientBuilder.WriteLine("public {0}() : ng.IPromise<{1}> {{", actionDescription.Name, actionDescription.ReturnValueDescription.TypeName);
             this.ClientBuilder.WriteLine("}}");
         }
 
