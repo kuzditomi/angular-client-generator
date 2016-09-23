@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using AngularClientGenerator.Config;
@@ -76,7 +78,17 @@ namespace AngularClientGenerator.Visitor
 
         private void GenerateConfigFor(ActionDescriptionPart actionDescription)
         {
+            var needsUrlReplace = actionDescription.UrlTemplate.Contains("{");
             var hasParameter = actionDescription.ParameterDescriptions.Any();
+            var isPostOrPut = actionDescription.HttpMethod == HttpMethod.Post ||
+                              actionDescription.HttpMethod == HttpMethod.Put;
+
+            var paramsToReplace = actionDescription.ParameterDescriptions
+                .Where(a => actionDescription.UrlTemplate.Contains("{" + a.ParameterName + "}"))
+                .ToList();
+            var paramsToNotReplace = actionDescription.ParameterDescriptions
+                .Where(a => !actionDescription.UrlTemplate.Contains("{" + a.ParameterName + "}"))
+                .ToList();
 
             // method header
             if (hasParameter)
@@ -101,16 +113,15 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("return {{");
             this.ClientBuilder.IncreaseIndent();
 
-            var needsReplace = actionDescription.UrlTemplate.Contains("{");
-            if (needsReplace && !hasParameter)
+            if (needsUrlReplace && !hasParameter)
                 throw new InvalidOperationException(String.Format("Needs to replace in url, but no parameters given:{0}", actionDescription.Name));
 
-            if (needsReplace)
+            if (needsUrlReplace)
             {
                 this.ClientBuilder.WriteLine("url: urlReplace.Replace('{0}', {{", actionDescription.UrlTemplate);
                 this.ClientBuilder.IncreaseIndent();
 
-                foreach (var actionDescriptionParameterDescription in actionDescription.ParameterDescriptions)
+                foreach (var actionDescriptionParameterDescription in paramsToReplace)
                 {
                     this.ClientBuilder.WriteLine("{0}: {0},", actionDescriptionParameterDescription.ParameterName);
                 }
@@ -123,21 +134,32 @@ namespace AngularClientGenerator.Visitor
                 this.ClientBuilder.WriteLine("url: '{0}',", actionDescription.UrlTemplate);
             }
 
-            this.ClientBuilder.WriteLine("method: '{0}'", actionDescription.HttpMethod.ToString().ToUpper());
+            this.ClientBuilder.WriteLine("method: '{0}',", actionDescription.HttpMethod.ToString().ToUpper());
 
-            if (!needsReplace && hasParameter)
+            if (hasParameter)
             {
-                this.ClientBuilder.WriteLine("params: {{");
-                this.ClientBuilder.IncreaseIndent();
 
-                foreach (var actionDescriptionParameterDescription in actionDescription.ParameterDescriptions)
+                if (isPostOrPut)
                 {
+                    if (paramsToNotReplace.Count > 1)
+                        throw new ArgumentException(String.Format("Error with {0} : More complex type to add, please wrap them.", actionDescription.UrlTemplate));
 
-                    this.ClientBuilder.WriteLine("{0}: {0}", actionDescriptionParameterDescription.ParameterName);
+                    if (paramsToNotReplace.Count == 1)
+                        this.ClientBuilder.WriteLine("data: {0},", paramsToNotReplace.First().ParameterName);
                 }
+                else if(paramsToNotReplace.Any())
+                {
+                    this.ClientBuilder.WriteLine("params: {{");
+                    this.ClientBuilder.IncreaseIndent();
 
-                this.ClientBuilder.DecreaseIndent();
-                this.ClientBuilder.WriteLine("}}");
+                    foreach (var actionDescriptionParameterDescription in paramsToNotReplace)
+                    {
+                        this.ClientBuilder.WriteLine("{0}: {0},", actionDescriptionParameterDescription.ParameterName);
+                    }
+
+                    this.ClientBuilder.DecreaseIndent();
+                    this.ClientBuilder.WriteLine("}},");
+                }
             }
 
             this.ClientBuilder.DecreaseIndent();
@@ -160,7 +182,6 @@ namespace AngularClientGenerator.Visitor
         {
             this.ClientBuilder.WriteLine("export interface {0} {{ }}", GetNameForType(type));
         }
-
 
         private static Type[] numberTypes = { typeof(int), typeof(double), typeof(float), typeof(decimal) };
 
@@ -186,7 +207,7 @@ namespace AngularClientGenerator.Visitor
                 return "number";
             }
 
-            return typeDescriptionPart.Type.Name;
+            return "I" + typeDescriptionPart.Type.Name;
         }
     }
 }

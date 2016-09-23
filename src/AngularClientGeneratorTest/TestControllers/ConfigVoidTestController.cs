@@ -10,7 +10,7 @@ using AngularClientGeneratorTest.TestModels;
 namespace AngularClientGeneratorTest.TestControllers
 {
     [RoutePrefix("api/configtest")]
-    public class ConfigTestController: ApiController
+    public class ConfigVoidTestController: ApiController
     {
         [Route("void")]
         [HttpGet]
@@ -57,6 +57,25 @@ namespace AngularClientGeneratorTest.TestControllers
         [Route("voidreplacemoreparams/{id}/more/{second}")]
         [HttpGet]
         public void VoidReplaceMoreParamsAction(int id, string second)
+        {
+        }
+
+
+        [Route("voidcomplexparampost")]
+        [HttpPost]
+        public void VoidComplexParamPostAction(MyEmptyTestClass complex)
+        {
+        }
+
+        [Route("voidcomplexparamput")]
+        [HttpPut]
+        public void VoidComplexParamPutAction(MyEmptyTestClass complex)
+        {
+        }
+
+        [Route("voidcomplexparamandreplace/{id}")]
+        [HttpPut]
+        public void VoidComplexParamAndReplaceAction(string id, MyEmptyTestClass complex)
         {
         }
     }

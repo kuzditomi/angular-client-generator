@@ -93,7 +93,8 @@
   <ItemGroup>
     <Compile Include="ClientBuilderTest.cs" />
     <Compile Include="DescriptionCollectorTest.cs" />
-    <Compile Include="TestControllers\ConfigTestController.cs" />
+    <Compile Include="TestControllers\ConfigVoidTestController.cs" />
+    <Compile Include="TestModels\MyEmptyTestClass.cs" />
     <Compile Include="TestModels\TestModelB.cs" />
     <Compile Include="TestModels\TestModelA.cs" />
     <Compile Include="TsApiVisitorTests\ActionConfigTest.cs" />

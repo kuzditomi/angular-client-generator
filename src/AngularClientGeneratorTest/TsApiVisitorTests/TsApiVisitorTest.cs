@@ -17,7 +17,7 @@ using AngularClientGeneratorTest.Util;
 using Microsoft.Owin.Hosting;
 using Owin;
 
-namespace AngularClientGeneratorTest
+namespace AngularClientGeneratorTest.TsApiVisitorTests
 {
     [TestClass]
     public class TsApiVisitorTest : TestBase
@@ -158,8 +158,8 @@ namespace AngularClientGeneratorTest
 
                 var expectedContents = new List<string>
                 {
-                    "export interface TestModelA {",
-                    "export interface TestModelB {",
+                    "export interface ITestModelA {",
+                    "export interface ITestModelB {",
                 };
 
                 foreach (var expectedContent in expectedContents)
