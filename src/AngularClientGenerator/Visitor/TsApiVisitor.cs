@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -70,8 +71,29 @@ namespace AngularClientGenerator.Visitor
 
         private void GenerateMethodFor(ActionDescriptionPart actionDescription)
         {
+            var parametersWithTypes = String.Join(", ",
+                actionDescription.ParameterDescriptions.Select(
+                    p => String.Format("{0}: {1}", p.ParameterName, GetNameForType(p))));
+
+            var parameters = String.Join(", ",
+                actionDescription.ParameterDescriptions.Select(
+                    p => p.ParameterName));
+
             // method header
-            this.ClientBuilder.WriteLine("public {0}() : ng.IPromise<{1}> {{", actionDescription.Name, GetNameForType(actionDescription.ReturnValueDescription));
+            this.ClientBuilder.WriteLine("public {0}({1}) : ng.IPromise<{2}> {{", actionDescription.Name, parametersWithTypes, GetNameForType(actionDescription.ReturnValueDescription));
+
+            // call config
+            this.ClientBuilder.IncreaseIndent();
+            this.ClientBuilder.WriteLine("return http(this.{0}Config({1}))", actionDescription.Name, parameters);
+            this.ClientBuilder.IncreaseIndent();
+            this.ClientBuilder.WriteLine(".then(function(resp) {{");
+            this.ClientBuilder.IncreaseIndent();
+            this.ClientBuilder.WriteLine("return resp.data;");
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}});");
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.DecreaseIndent();
+
             // method footer
             this.ClientBuilder.WriteLine("}}");
         }
@@ -147,7 +169,7 @@ namespace AngularClientGenerator.Visitor
                     if (paramsToNotReplace.Count == 1)
                         this.ClientBuilder.WriteLine("data: {0},", paramsToNotReplace.First().ParameterName);
                 }
-                else if(paramsToNotReplace.Any())
+                else if (paramsToNotReplace.Any())
                 {
                     this.ClientBuilder.WriteLine("params: {{");
                     this.ClientBuilder.IncreaseIndent();
@@ -183,8 +205,7 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("export interface {0} {{ }}", GetNameForType(type));
         }
 
-        private static Type[] numberTypes = { typeof(int), typeof(double), typeof(float), typeof(decimal) };
-
+        private static readonly Type[] numberTypes = { typeof(int), typeof(double), typeof(float), typeof(decimal) };
         private string GetNameForType(TypeDescriptionPart typeDescriptionPart)
         {
             if (typeDescriptionPart.Type == typeof(void))
@@ -205,6 +226,14 @@ namespace AngularClientGenerator.Visitor
             if (numberTypes.Contains(typeDescriptionPart.Type))
             {
                 return "number";
+            }
+            
+            var isIEnumerable = typeDescriptionPart.Type.GetInterfaces()
+                    .Any(ti => ti == typeof(IEnumerable));
+            if (typeDescriptionPart.Type.BaseType != typeof(System.Array) && isIEnumerable)
+            {
+                var genericType = typeDescriptionPart.Type.GetGenericArguments()[0];
+                return GetNameForType(new TypeDescriptionPart(genericType)) + "[]";
             }
 
             return "I" + typeDescriptionPart.Type.Name;

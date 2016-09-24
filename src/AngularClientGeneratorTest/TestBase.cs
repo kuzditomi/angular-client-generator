@@ -5,9 +5,13 @@ using AngularClientGenerator;
 using System.Web.Http.Description;
 using System.Web.Http;
 using System.IO;
+using System.Linq;
 using AngularClientGeneratorTest.TestControllers;
 using System.Web.Http.Dependencies;
 using System.Web.Http.Dispatcher;
+using AngularClientGenerator.Config;
+using AngularClientGenerator.DescriptionParts;
+using AngularClientGenerator.Visitor;
 using AngularClientGeneratorTest.Util;
 using Microsoft.Owin.Hosting;
 using Owin;
@@ -51,7 +55,31 @@ namespace AngularClientGeneratorTest
             }))
             {
                 action();
+            }
+        }
+
+
+        protected string VisitActionsFromController(string controllerName)
+        {
+            var config = new GeneratorConfig
+            {
+                IndentType = IndentType.Tab,
+                Language = Language.TypeScript
             };
+            var builder = new ClientBuilder(config);
+            var apiVisitor = new TsApiVisitor(config, builder);
+
+            var apiDescriptions = ApiExplorer
+                .ApiDescriptions
+                .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == controllerName);
+
+            foreach (var httpActionDescriptor in apiDescriptions)
+            {
+                var actionDescriptorPart = new ActionDescriptionPart(httpActionDescriptor);
+                actionDescriptorPart.Accept(apiVisitor);
+            }
+
+            return apiVisitor.GetContent();
         }
     }
 }

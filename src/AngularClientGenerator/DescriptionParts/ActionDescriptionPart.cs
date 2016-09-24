@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
@@ -29,7 +30,16 @@ namespace AngularClientGenerator.DescriptionParts
             this.Name = apiDescription.ActionDescriptor.ActionName;
             this.UrlTemplate = apiDescription.Route.RouteTemplate;
 
-            this.ReturnValueDescription = new TypeDescriptionPart(reflectedDescriptor.MethodInfo.ReturnType);
+            var responseTypeAttribute = reflectedDescriptor.MethodInfo.GetCustomAttribute(typeof(ResponseTypeAttribute));
+            if (responseTypeAttribute == null)
+            {
+                this.ReturnValueDescription = new TypeDescriptionPart(reflectedDescriptor.MethodInfo.ReturnType);
+            }
+            else
+            {
+                this.ReturnValueDescription = new TypeDescriptionPart(((ResponseTypeAttribute)responseTypeAttribute).ResponseType);
+            }
+            
             this.HttpMethod = apiDescription.HttpMethod;
 
             this.ParameterDescriptions = apiDescription.ParameterDescriptions
