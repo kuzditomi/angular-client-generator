@@ -34,7 +34,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var expectedLines = new List<string>
                 {
                     "public VoidParameterlessGetAction() : ng.IPromise<void> {",
-                    "\treturn http(this.VoidParameterlessGetActionConfig())",
+                    "\treturn this.http(this.VoidParameterlessGetActionConfig())",
                 }.Concat(httpThenPart);
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
@@ -54,7 +54,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var expectedLines = new List<string>
                 {
                     "public VoidStringParamGetAction(stringparameter: string) : ng.IPromise<void> {",
-                    "\treturn http(this.VoidStringParamGetActionConfig(stringparameter))",
+                    "\treturn this.http(this.VoidStringParamGetActionConfig(stringparameter))",
                 }.Concat(httpThenPart);
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
@@ -74,7 +74,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var expectedLines = new List<string>
                 {
                     "public VoidComplexparamAction(complex: IMyEmptyTestClass) : ng.IPromise<void> {",
-                    "\treturn http(this.VoidComplexparamActionConfig(complex))",
+                    "\treturn this.http(this.VoidComplexparamActionConfig(complex))",
                 }.Concat(httpThenPart);
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
@@ -94,7 +94,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var expectedLines = new List<string>
                 {
                     "public StringReturnAction() : ng.IPromise<string> {",
-                    "\treturn http(this.StringReturnActionConfig())",
+                    "\treturn this.http(this.StringReturnActionConfig())",
                 }.Concat(httpThenPart);
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
@@ -114,7 +114,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var expectedLines = new List<string>
                 {
                     "public ResponseTypeReturnAction() : ng.IPromise<IMyEmptyTestClass> {",
-                    "\treturn http(this.ResponseTypeReturnActionConfig())",
+                    "\treturn this.http(this.ResponseTypeReturnActionConfig())",
                 }.Concat(httpThenPart);
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
@@ -134,7 +134,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var expectedLines = new List<string>
                 {
                     "public ArrayReturnAction() : ng.IPromise<IMyEmptyTestClass[]> {",
-                    "\treturn http(this.ArrayReturnActionConfig())",
+                    "\treturn this.http(this.ArrayReturnActionConfig())",
                 }.Concat(httpThenPart);
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
@@ -154,7 +154,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var expectedLines = new List<string>
                 {
                     "public IEnumerableReturnAction() : ng.IPromise<IMyEmptyTestClass[]> {",
-                    "\treturn http(this.IEnumerableReturnActionConfig())",
+                    "\treturn this.http(this.IEnumerableReturnActionConfig())",
                 }.Concat(httpThenPart);
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);

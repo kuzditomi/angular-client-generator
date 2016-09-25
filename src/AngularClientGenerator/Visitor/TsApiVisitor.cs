@@ -35,7 +35,7 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}}", controllerDescription.Name);
             this.ClientBuilder.WriteLine();
-            this.ClientBuilder.WriteLine("angular.module('{0}').factory(Api{1}Service);", Config.ModuleName, controllerDescription.Name);
+            this.ClientBuilder.WriteLine("GeneratedClient.factory('Api{0}Service', Api{0}Service);", controllerDescription.Name);
             this.ClientBuilder.WriteLine();
         }
 
@@ -56,6 +56,10 @@ namespace AngularClientGenerator.Visitor
 
         public override void Visit(ModuleDescriptionPart moduleDescription)
         {
+            this.ClientBuilder.WriteLine("import {{module}} from 'angular';");
+            this.ClientBuilder.WriteLine("export let GeneratedClient = module('{0}', []);", moduleDescription.Name);
+            this.ClientBuilder.WriteLine();
+
             foreach (var controllerDescriptionPart in moduleDescription.ControllerDescriptionParts)
             {
                 controllerDescriptionPart.Accept(this);
@@ -84,7 +88,7 @@ namespace AngularClientGenerator.Visitor
 
             // call config
             this.ClientBuilder.IncreaseIndent();
-            this.ClientBuilder.WriteLine("return http(this.{0}Config({1}))", actionDescription.Name, parameters);
+            this.ClientBuilder.WriteLine("return this.http(this.{0}Config({1}))", actionDescription.Name, parameters);
             this.ClientBuilder.IncreaseIndent();
             this.ClientBuilder.WriteLine(".then(function(resp) {{");
             this.ClientBuilder.IncreaseIndent();

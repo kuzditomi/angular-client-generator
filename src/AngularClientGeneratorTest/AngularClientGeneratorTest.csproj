@@ -116,6 +116,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="tsconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="angular.d.ts" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
