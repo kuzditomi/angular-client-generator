@@ -187,7 +187,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 {
                     "public VoidReplaceNumberActionConfig(id: number) : ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: urlReplace.Replace('api/configtest/voidreplaceparams/{id}', {",
+                    "\t\turl: replaceUrl('api/configtest/voidreplaceparams/{id}', {",
                     "\t\t\tid: id,",
                     "\t\t}),",
                     "\t\tmethod: 'GET',",
@@ -213,7 +213,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 {
                     "public VoidReplaceMoreParamsActionConfig(id: number, second: string) : ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: urlReplace.Replace('api/configtest/voidreplacemoreparams/{id}/more/{second}', {",
+                    "\t\turl: replaceUrl('api/configtest/voidreplacemoreparams/{id}/more/{second}', {",
                     "\t\t\tid: id,",
                     "\t\t\tsecond: second,",
                     "\t\t}),",
@@ -290,7 +290,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 {
                     "public VoidComplexParamAndReplaceActionConfig(id: string, complex: IMyEmptyTestClass) : ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: urlReplace.Replace('api/configtest/voidcomplexparamandreplace/{id}', {",
+                    "\t\turl: replaceUrl('api/configtest/voidcomplexparamandreplace/{id}', {",
                     "\t\t\tid: id,",
                     "\t\t}),",
                     "\t\tmethod: 'PUT',",

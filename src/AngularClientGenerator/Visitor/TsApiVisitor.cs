@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.DescriptionParts;
@@ -26,6 +27,7 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.IncreaseIndent();
             this.ClientBuilder.WriteLine("static $inject = ['$http', '$q'];", controllerDescription.Name);
             this.ClientBuilder.WriteLine("constructor(private http, private q){{ }}", controllerDescription.Name);
+            this.ClientBuilder.WriteLine();
 
             foreach (var actionDescriptionPart in controllerDescription.ActionDescriptionParts)
             {
@@ -57,8 +59,15 @@ namespace AngularClientGenerator.Visitor
         public override void Visit(ModuleDescriptionPart moduleDescription)
         {
             this.ClientBuilder.WriteLine("import {{module}} from 'angular';");
+            this.ClientBuilder.WriteLine();
+
+            this.ClientBuilder.WriteLine("export namespace GeneratedClient {{");
+            this.ClientBuilder.IncreaseIndent();
+
             this.ClientBuilder.WriteLine("export let GeneratedClient = module('{0}', []);", moduleDescription.Name);
             this.ClientBuilder.WriteLine();
+
+            this.GenerateUrlReplaceMethod();
 
             foreach (var controllerDescriptionPart in moduleDescription.ControllerDescriptionParts)
             {
@@ -66,6 +75,9 @@ namespace AngularClientGenerator.Visitor
             }
 
             this.WriteTypes();
+
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}}");
         }
 
         public override void Visit(TypeDescriptionPart typeDescriptionPart)
@@ -144,7 +156,7 @@ namespace AngularClientGenerator.Visitor
 
             if (needsUrlReplace)
             {
-                this.ClientBuilder.WriteLine("url: urlReplace.Replace('{0}', {{", actionDescription.UrlTemplate);
+                this.ClientBuilder.WriteLine("url: replaceUrl('{0}', {{", actionDescription.UrlTemplate);
                 this.ClientBuilder.IncreaseIndent();
 
                 foreach (var actionDescriptionParameterDescription in paramsToReplace)
@@ -196,6 +208,27 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("}}");
         }
 
+        private void GenerateUrlReplaceMethod()
+        {
+            this.ClientBuilder.WriteLine("function replaceUrl(url: string, params: {{ }}) {{");
+            this.ClientBuilder.IncreaseIndent();
+            this.ClientBuilder.WriteLine("var replaced = url;");
+            this.ClientBuilder.WriteLine("for (var key in params) {{");
+            this.ClientBuilder.IncreaseIndent();
+            this.ClientBuilder.WriteLine("if (params.hasOwnProperty(key)) {{");
+            this.ClientBuilder.IncreaseIndent();
+            this.ClientBuilder.WriteLine("var param = params[key];");
+            this.ClientBuilder.WriteLine("replaced = replaced.replace('{{' + key + '}}', param);");
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}}");
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}}");
+            this.ClientBuilder.WriteLine("return replaced;");
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}}");
+            this.ClientBuilder.WriteLine();
+        }
+
         private void WriteTypes()
         {
             foreach (var type in Types)
@@ -231,7 +264,7 @@ namespace AngularClientGenerator.Visitor
             {
                 return "number";
             }
-            
+
             var isIEnumerable = typeDescriptionPart.Type.GetInterfaces()
                     .Any(ti => ti == typeof(IEnumerable));
             if (typeDescriptionPart.Type.BaseType != typeof(System.Array) && isIEnumerable)

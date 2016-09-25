@@ -64,6 +64,8 @@ namespace AngularClientGeneratorTest
         {
             RegisterController<TestController>();
             RegisterController<SimpleController>();
+            RegisterController<ConfigVoidTestController>();
+            RegisterController<GeneratedMethodTestController>();
 
             this.RunInScope(() =>
             {
@@ -71,11 +73,19 @@ namespace AngularClientGeneratorTest
                 generator.Generate();
 
                 var content = File.ReadAllText(generator.Config.ExportPath);
-                var containsTestControllerDefinition = content.Contains("Test");
-                var containsSimpleControllerDefinition = content.Contains("Simple");
 
-                Assert.IsTrue(containsTestControllerDefinition, "Generator doesnt include registered TestController");
-                Assert.IsTrue(containsSimpleControllerDefinition, "Generator doesnt include registered SimpleController");
+                var needToContain = new List<string>
+                {
+                    "ApiTestService",
+                    "ApiSimpleService",
+                    "ApiConfigVoidTestService",
+                    "ApiGeneratedMethodTestService"
+                };
+
+                foreach (var controller in needToContain)
+                {
+                    Assert.IsTrue(content.Contains(controller), "Generator doesnt include registered controller: " + controller);
+                }
             });
         }
     }
