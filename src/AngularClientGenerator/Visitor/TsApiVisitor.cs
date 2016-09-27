@@ -14,11 +14,11 @@ namespace AngularClientGenerator.Visitor
 {
     public class TsApiVisitor : ApiVisitor
     {
-        private HashSet<TypeDescriptionPart> Types { get; }
+        private HashSet<Type> Types { get; }
 
         public TsApiVisitor(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
         {
-            this.Types = new HashSet<TypeDescriptionPart>();
+            this.Types = new HashSet<Type>();
         }
 
         public override void Visit(ControllerDescriptionPart controllerDescription)
@@ -80,23 +80,32 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("}}");
         }
 
+        private static readonly Type[] ignoredTypesOnDefinition = { typeof(int), typeof(double), typeof(float), typeof(decimal), typeof(string), typeof(bool), typeof(void) };
+
         public override void Visit(TypeDescriptionPart typeDescriptionPart)
         {
-            this.Types.Add(typeDescriptionPart);
+            if (ignoredTypesOnDefinition.Contains(typeDescriptionPart.Type))
+                return;
+
+            var isArray = typeDescriptionPart.Type.GetInterfaces().Any(ti => ti == typeof(IEnumerable));
+            if (isArray)
+                return;
+
+            this.Types.Add(typeDescriptionPart.Type);
         }
 
         private void GenerateMethodFor(ActionDescriptionPart actionDescription)
         {
             var parametersWithTypes = String.Join(", ",
                 actionDescription.ParameterDescriptions.Select(
-                    p => String.Format("{0}: {1}", p.ParameterName, GetNameForType(p))));
+                    p => String.Format("{0}: {1}", p.ParameterName, GetNameForType(p.Type))));
 
             var parameters = String.Join(", ",
                 actionDescription.ParameterDescriptions.Select(
                     p => p.ParameterName));
 
             // method header
-            this.ClientBuilder.WriteLine("public {0}({1}) : ng.IPromise<{2}> {{", actionDescription.Name, parametersWithTypes, GetNameForType(actionDescription.ReturnValueDescription));
+            this.ClientBuilder.WriteLine("public {0}({1}) : ng.IPromise<{2}> {{", actionDescription.Name, parametersWithTypes, GetNameForType(actionDescription.ReturnValueDescription.Type));
 
             // call config
             this.ClientBuilder.IncreaseIndent();
@@ -133,7 +142,7 @@ namespace AngularClientGenerator.Visitor
             {
                 var parameters = string.Join(", ", actionDescription.ParameterDescriptions.Select(p =>
                 {
-                    return String.Format("{0}: {1}", p.ParameterName, GetNameForType(p));
+                    return String.Format("{0}: {1}", p.ParameterName, GetNameForType(p.Type));
                 }));
 
                 this.ClientBuilder.WriteLine("public {0}Config({1}) : ng.IRequestConfig {{",
@@ -176,11 +185,10 @@ namespace AngularClientGenerator.Visitor
 
             if (hasParameter)
             {
-
                 if (isPostOrPut)
                 {
                     if (paramsToNotReplace.Count > 1)
-                        throw new ArgumentException(String.Format("Error with {0} : More complex type to add, please wrap them.", actionDescription.UrlTemplate));
+                        throw new ArgumentException(String.Format("Error with {0} : More complex type to add in POST/PUT request, please wrap them.", actionDescription.UrlTemplate));
 
                     if (paramsToNotReplace.Count == 1)
                         this.ClientBuilder.WriteLine("data: {0},", paramsToNotReplace.First().ParameterName);
@@ -237,43 +245,73 @@ namespace AngularClientGenerator.Visitor
             }
         }
 
-        private void WriteType(TypeDescriptionPart type)
+        private void WriteType(Type type)
         {
-            this.ClientBuilder.WriteLine("export interface {0} {{ }}", GetNameForType(type));
+            if (type.IsEnum)
+            {
+                this.ClientBuilder.WriteLine("export enum {0} {{", type.Name);
+                this.ClientBuilder.IncreaseIndent();
+
+                foreach (var enumName in type.GetEnumNames())
+                {
+                    this.ClientBuilder.WriteLine("{0},", enumName);
+                }
+
+                this.ClientBuilder.DecreaseIndent();
+                this.ClientBuilder.WriteLine("}}");
+            }
+            else
+            {
+                this.ClientBuilder.WriteLine("export interface {0} {{ }}", GetNameForType(type));
+            }
         }
 
         private static readonly Type[] numberTypes = { typeof(int), typeof(double), typeof(float), typeof(decimal) };
-        private string GetNameForType(TypeDescriptionPart typeDescriptionPart)
+
+        private string GetNameForType(Type type)
         {
-            if (typeDescriptionPart.Type == typeof(void))
+            if (type == typeof(void))
             {
                 return "void";
             }
 
-            if (typeDescriptionPart.Type.IsEnum)
+            if (type.IsEnum)
             {
-                return typeDescriptionPart.Type.Name;
+                return type.Name;
             }
 
-            if (typeDescriptionPart.Type == typeof(string))
+            if (type == typeof(string))
             {
                 return "string";
             }
 
-            if (numberTypes.Contains(typeDescriptionPart.Type))
+            if (type == typeof(bool))
+            {
+                return "boolean";
+            }
+
+            if (numberTypes.Contains(type))
             {
                 return "number";
             }
 
-            var isIEnumerable = typeDescriptionPart.Type.GetInterfaces()
-                    .Any(ti => ti == typeof(IEnumerable));
-            if (typeDescriptionPart.Type.BaseType != typeof(System.Array) && isIEnumerable)
+            var isIEnumerable = type.GetInterfaces().Any(ti => ti == typeof(IEnumerable));
+            if (isIEnumerable)
             {
-                var genericType = typeDescriptionPart.Type.GetGenericArguments()[0];
-                return GetNameForType(new TypeDescriptionPart(genericType)) + "[]";
+                var isArray = type.IsArray;
+                if (isArray)
+                {
+                    var typeofArray = type.GetElementType();
+                    return GetNameForType(typeofArray) + "[]";
+                }
+                else
+                {
+                    var genericType = type.GetGenericArguments()[0];
+                    return GetNameForType(genericType) + "[]";
+                }
             }
 
-            return "I" + typeDescriptionPart.Type.Name;
+            return "I" + type.Name;
         }
     }
 }

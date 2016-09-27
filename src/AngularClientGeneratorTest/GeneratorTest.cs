@@ -66,6 +66,7 @@ namespace AngularClientGeneratorTest
             RegisterController<SimpleController>();
             RegisterController<ConfigVoidTestController>();
             RegisterController<GeneratedMethodTestController>();
+            RegisterController<TypeTestController>();
 
             this.RunInScope(() =>
             {

@@ -30,7 +30,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("GeneratedMethodTest");
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidParameterlessGetAction() : ng.IPromise<void> {",
@@ -50,7 +50,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("GeneratedMethodTest");
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidStringParamGetAction(stringparameter: string) : ng.IPromise<void> {",
@@ -70,7 +70,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("GeneratedMethodTest");
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidComplexparamAction(complex: IMyEmptyTestClass) : ng.IPromise<void> {",
@@ -90,7 +90,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("GeneratedMethodTest");
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
                     "public StringReturnAction() : ng.IPromise<string> {",
@@ -110,7 +110,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("GeneratedMethodTest");
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
                     "public ResponseTypeReturnAction() : ng.IPromise<IMyEmptyTestClass> {",
@@ -130,7 +130,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("GeneratedMethodTest");
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
                     "public ArrayReturnAction() : ng.IPromise<IMyEmptyTestClass[]> {",
@@ -150,7 +150,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("GeneratedMethodTest");
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
                     "public IEnumerableReturnAction() : ng.IPromise<IMyEmptyTestClass[]> {",

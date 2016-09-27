@@ -95,9 +95,12 @@
     <Compile Include="DescriptionCollectorTest.cs" />
     <Compile Include="TestControllers\GeneratedMethodTestController.cs" />
     <Compile Include="TestControllers\ConfigVoidTestController.cs" />
+    <Compile Include="TestControllers\TypeTestController.cs" />
     <Compile Include="TestModels\MyEmptyTestClass.cs" />
+    <Compile Include="TestModels\TestEnum.cs" />
     <Compile Include="TestModels\TestModelB.cs" />
     <Compile Include="TestModels\TestModelA.cs" />
+    <Compile Include="TsApiVisitorTests\GeneratedTypeTest.cs" />
     <Compile Include="TsApiVisitorTests\ActionConfigTest.cs" />
     <Compile Include="TsApiVisitorTests\GeneratedActionTest.cs" />
     <Compile Include="TsApiVisitorTests\TsApiVisitorTest.cs" />

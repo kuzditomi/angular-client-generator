@@ -58,20 +58,49 @@ namespace AngularClientGeneratorTest
             }
         }
 
-
-        protected string VisitActionsFromController(string controllerName)
+        protected string VisitModuleWithController<T>() where T:ApiController
         {
             var config = new GeneratorConfig
             {
                 IndentType = IndentType.Tab,
                 Language = Language.TypeScript
             };
+
             var builder = new ClientBuilder(config);
             var apiVisitor = new TsApiVisitor(config, builder);
 
             var apiDescriptions = ApiExplorer
                 .ApiDescriptions
-                .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == controllerName);
+                .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerType == typeof(T));
+
+            var module = new ModuleDescriptionPart();
+            module.ControllerDescriptionParts = new ControllerDescriptionPart[]
+            {
+               new ControllerDescriptionPart(apiDescriptions.First().ActionDescriptor.ControllerDescriptor)
+               {
+                   ActionDescriptionParts = apiDescriptions.Select(a => new ActionDescriptionPart(a))
+               }  
+            }; 
+
+            module.Accept(apiVisitor);
+
+            return apiVisitor.GetContent();
+        }
+
+        protected string VisitActionsFromController<T>() where T : ApiController
+        {
+            var config = new GeneratorConfig
+            {
+                IndentType = IndentType.Tab,
+                Language = Language.TypeScript
+            };
+
+            var builder = new ClientBuilder(config);
+            var apiVisitor = new TsApiVisitor(config, builder);
+
+            var apiDescriptions = ApiExplorer
+                .ApiDescriptions
+                .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerType == typeof(T));
 
             foreach (var httpActionDescriptor in apiDescriptions)
             {

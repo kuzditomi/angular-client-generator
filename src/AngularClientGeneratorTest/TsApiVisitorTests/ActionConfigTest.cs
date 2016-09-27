@@ -21,7 +21,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("ConfigVoidTest");
+                var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidParameterlessGetActionConfig() : ng.IRequestConfig {",
@@ -45,7 +45,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("ConfigVoidTest");
+                var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidStringParameterActionConfig(stringparam: string) : ng.IRequestConfig {",
@@ -72,7 +72,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("ConfigVoidTest");
+                var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidIntParameterActionConfig(intparam: number) : ng.IRequestConfig {",
@@ -99,7 +99,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("ConfigVoidTest");
+                var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidDoubleParameterActionConfig(doubleparam: number) : ng.IRequestConfig {",
@@ -126,7 +126,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("ConfigVoidTest");
+                var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidDecimalParameterActionConfig(decimalparam: number) : ng.IRequestConfig {",
@@ -153,7 +153,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("ConfigVoidTest");
+                var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidSimpleParametersActionConfig(a: string, b: number, c: number) : ng.IRequestConfig {",
@@ -182,7 +182,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("ConfigVoidTest");
+                var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidReplaceNumberActionConfig(id: number) : ng.IRequestConfig {",
@@ -208,7 +208,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("ConfigVoidTest");
+                var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidReplaceMoreParamsActionConfig(id: number, second: string) : ng.IRequestConfig {",
@@ -235,7 +235,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("ConfigVoidTest");
+                var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidComplexParamPostActionConfig(complex: IMyEmptyTestClass) : ng.IRequestConfig {",
@@ -260,7 +260,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("ConfigVoidTest");
+                var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidComplexParamPutActionConfig(complex: IMyEmptyTestClass) : ng.IRequestConfig {",
@@ -285,7 +285,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
             RunInScope(() =>
             {
-                var content = VisitActionsFromController("ConfigVoidTest");
+                var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
                     "public VoidComplexParamAndReplaceActionConfig(id: string, complex: IMyEmptyTestClass) : ng.IRequestConfig {",
