@@ -92,6 +92,34 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             });
         }
 
+        public void VoidDateParameterActionConfig()
+        {
+            RegisterController<ConfigVoidTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitActionsFromController<ConfigVoidTestController>();
+                var expectedLines = new List<string>
+                {
+                    "public VoidDateParametersActionConfig(from: number, to: number) : ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: 'api/configtest/voiddates',",
+                    "\t\tmethod: 'GET',",
+                    "\t\tparams: {",
+                    "\t\t\tfrom: from,",
+                    "\t\t\tto: to,",
+                    "\t\t},",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+            });
+        }
+
+
         [TestMethod]
         public void VoidDoubleParameterActionConfig()
         {

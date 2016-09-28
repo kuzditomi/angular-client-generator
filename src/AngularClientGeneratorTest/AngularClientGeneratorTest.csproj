@@ -97,6 +97,8 @@
     <Compile Include="TestControllers\ConfigVoidTestController.cs" />
     <Compile Include="TestControllers\TypeTestController.cs" />
     <Compile Include="TestModels\ArrayOnlyType.cs" />
+    <Compile Include="TestModels\AsOptionalParamOnly.cs" />
+    <Compile Include="TestModels\ContainsNullableProperty.cs" />
     <Compile Include="TestModels\EnumerableOnlyType.cs" />
     <Compile Include="TestModels\TestComplexType.cs" />
     <Compile Include="TestModels\MyEmptyTestClass.cs" />

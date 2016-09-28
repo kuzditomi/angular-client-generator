@@ -64,5 +64,26 @@ namespace AngularClientGeneratorTest.TestControllers
         {
 
         }
+
+        [HttpPost]
+        [Route("optionalparam")]
+        public void OptionalParam(int? optional = 3)
+        {
+
+        }
+
+        [HttpPost]
+        [Route("nullableprop")]
+        public void NullableProperty(ContainsNullableProperty hasnullable)
+        {
+
+        }
+
+        [HttpPost]
+        [Route("asoptionalparamonly")]
+        public void OnlyAsOptionalParam(AsOptionalParamOnly model = null)
+        {
+
+        }
     }
 }

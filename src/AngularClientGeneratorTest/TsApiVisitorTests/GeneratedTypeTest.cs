@@ -54,7 +54,8 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedLines = new List<string>
                 {
-                    "\texport interface IMyEmptyTestClass { }",
+                    "\texport interface IMyEmptyTestClass {",
+                    "\t}",
                 };
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
@@ -145,6 +146,23 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
         }
 
         [TestMethod]
+        public void DiscoveredIfOptionalOnly()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public OnlyAsOptionalParam(model?: IAsOptionalParamOnly) : ng.IPromise<void> {";
+
+                Assert.IsTrue(content.Contains(methodHeader), "OnlyAsOptionalParam method header is not present, or incorrect.");
+
+                Assert.IsTrue(content.Contains("export interface IAsOptionalParamOnly {"), "IAsOptionalParamOnly should be defined as new type");
+            });
+        }
+
+        [TestMethod]
         public void DiscoveredIfGenericOnly()
         {
             RegisterController<TypeTestController>();
@@ -164,19 +182,46 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
         [TestMethod]
         public void NullablePropertyTypeTest()
         {
-            Assert.Fail("Not implemented");
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public NullableProperty(hasnullable: IContainsNullableProperty) : ng.IPromise<void> {";
+
+                Assert.IsTrue(content.Contains(methodHeader), "NullableProperty method header is not present, or incorrect.");
+
+                var expectedLines = new List<string>
+                {
+                    "\texport interface IContainsNullableProperty {",
+                    "\t\tIntableNull?: number;",
+                    "\t}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nNullable property is not generated or wrong. Expected: {0}\nGenerated: {1}", expectedContent, content));
+            });
         }
 
         [TestMethod]
-        public void NullableParameterTest()
+        public void OptionalParamTest()
         {
-            Assert.Fail("Not implemented");
-        }
+            RegisterController<TypeTestController>();
 
-        [TestMethod]
-        public void DictionaryTypeTest()
-        {
-            Assert.Fail("Not implemented");
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public OptionalParam(optional?: number) : ng.IPromise<void> {";
+                Assert.IsTrue(content.Contains(methodHeader), "OptionalParam method header is not present, or incorrect.");
+
+                var configHeader = "public OptionalParamConfig(optional?: number) : ng.IRequestConfig {";
+                Assert.IsTrue(content.Contains(configHeader), "OptionalParamConfig method header is not present, or incorrect.");
+
+                Assert.IsFalse(content.Contains("export interface INullable"), "optional parameters should not create nullable types");
+            });
         }
 
         [TestMethod]

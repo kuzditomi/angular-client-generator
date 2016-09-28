@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -43,10 +44,10 @@ namespace AngularClientGenerator.Visitor
 
         public override void Visit(ActionDescriptionPart actionDescription)
         {
-            // collect return value type for later
+            // visit return value type
             actionDescription.ReturnValueDescription.Accept(this);
 
-            // collect parameter types for later
+            // visit parameter types
             foreach (var actionDescriptionParameterDescription in actionDescription.ParameterDescriptions)
             {
                 actionDescriptionParameterDescription.Accept(this);
@@ -80,14 +81,14 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("}}");
         }
 
-        private static readonly Type[] ignoredTypesOnDefinition = { typeof(int), typeof(double), typeof(float), typeof(decimal), typeof(string), typeof(bool), typeof(void) };
+        private static readonly Type[] IgnoredTypesOnDefinition = { typeof(int), typeof(double), typeof(float), typeof(decimal), typeof(string), typeof(bool), typeof(void) };
 
         public override void Visit(TypeDescriptionPart typeDescriptionPart)
         {
             if (this.Types.Contains(typeDescriptionPart.Type))
                 return;
 
-            if (ignoredTypesOnDefinition.Contains(typeDescriptionPart.Type))
+            if (IgnoredTypesOnDefinition.Contains(typeDescriptionPart.Type))
                 return;
 
             if (typeDescriptionPart.Type.IsArray)
@@ -98,13 +99,14 @@ namespace AngularClientGenerator.Visitor
             }
 
             var isEnumerable = typeDescriptionPart.Type.GetInterfaces().Any(ti => ti == typeof(IEnumerable));
-            if (isEnumerable)
+            var isNullable = typeDescriptionPart.Type.IsGenericType && typeDescriptionPart.Type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            if (isEnumerable || isNullable)
             {
                 var genericType = typeDescriptionPart.Type.GetGenericArguments()[0];
                 this.Visit(new TypeDescriptionPart(genericType));
                 return;
-            }   
-
+            }
+            
             this.Types.Add(typeDescriptionPart.Type);
 
             // visit properties
@@ -118,7 +120,11 @@ namespace AngularClientGenerator.Visitor
         {
             var parametersWithTypes = String.Join(", ",
                 actionDescription.ParameterDescriptions.Select(
-                    p => String.Format("{0}: {1}", p.ParameterName, GetNameForType(p.Type))));
+                    p =>
+                    {
+                        var optionalPrefix = p.IsOptional ? "?" : string.Empty;
+                        return $"{p.ParameterName}{optionalPrefix}: {GetNameForType(p.Type)}";
+                    }));
 
             var parameters = String.Join(", ",
                 actionDescription.ParameterDescriptions.Select(
@@ -162,7 +168,9 @@ namespace AngularClientGenerator.Visitor
             {
                 var parameters = string.Join(", ", actionDescription.ParameterDescriptions.Select(p =>
                 {
-                    return String.Format("{0}: {1}", p.ParameterName, GetNameForType(p.Type));
+                    var optionalPrefix = p.IsOptional ? "?" : string.Empty;
+
+                    return $"{p.ParameterName}{optionalPrefix}: {GetNameForType(p.Type)}";
                 }));
 
                 this.ClientBuilder.WriteLine("public {0}Config({1}) : ng.IRequestConfig {{",
@@ -181,7 +189,7 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.IncreaseIndent();
 
             if (needsUrlReplace && !hasParameter)
-                throw new InvalidOperationException(String.Format("Needs to replace in url, but no parameters given:{0}", actionDescription.Name));
+                throw new InvalidOperationException($"Needs to replace in url, but no parameters given:{actionDescription.Name}");
 
             if (needsUrlReplace)
             {
@@ -208,7 +216,7 @@ namespace AngularClientGenerator.Visitor
                 if (isPostOrPut)
                 {
                     if (paramsToNotReplace.Count > 1)
-                        throw new ArgumentException(String.Format("Error with {0} : More complex type to add in POST/PUT request, please wrap them.", actionDescription.UrlTemplate));
+                        throw new ArgumentException($"Error with {actionDescription.UrlTemplate} : More complex type to add in POST/PUT request, please wrap them.");
 
                     if (paramsToNotReplace.Count == 1)
                         this.ClientBuilder.WriteLine("data: {0},", paramsToNotReplace.First().ParameterName);
@@ -287,7 +295,9 @@ namespace AngularClientGenerator.Visitor
 
                 foreach (var propertyInfo in type.GetProperties())
                 {
-                    this.ClientBuilder.WriteLine("{0}: {1};", propertyInfo.Name, GetNameForType(propertyInfo.PropertyType));
+                    var isPropertyNullable = propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
+                    var nullablePrefix = isPropertyNullable ? "?" : string.Empty;
+                    this.ClientBuilder.WriteLine("{0}{1}: {2};", propertyInfo.Name, nullablePrefix, GetNameForType(propertyInfo.PropertyType));
                 }
 
                 this.ClientBuilder.DecreaseIndent();
@@ -296,7 +306,7 @@ namespace AngularClientGenerator.Visitor
             }
         }
 
-        private static readonly Type[] numberTypes = { typeof(int), typeof(double), typeof(float), typeof(decimal) };
+        private static readonly Type[] NumberTypes = { typeof(int), typeof(double), typeof(float), typeof(decimal) };
 
         private string GetNameForType(Type type)
         {
@@ -320,7 +330,7 @@ namespace AngularClientGenerator.Visitor
                 return "boolean";
             }
 
-            if (numberTypes.Contains(type))
+            if (NumberTypes.Contains(type))
             {
                 return "number";
             }
@@ -339,6 +349,13 @@ namespace AngularClientGenerator.Visitor
                     var genericType = type.GetGenericArguments()[0];
                     return GetNameForType(genericType) + "[]";
                 }
+            }
+
+            var isNullable = type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            if (isNullable)
+            {
+                var genericType = type.GetGenericArguments()[0];
+                return GetNameForType(genericType);
             }
 
             return "I" + type.Name;
