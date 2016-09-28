@@ -247,5 +247,62 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             });
         }
 
+        [TestMethod]
+        public void ActionResultToAny()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public ActionResultWithoutAttribute() : ng.IPromise<any> {";
+                Assert.IsTrue(content.Contains(methodHeader), "ActionResultWithoutAttribute method header is not present, or incorrect.");
+                
+                var interfaceDeclaration = "export interface IIHttpActionResult";
+                var interfaceDeclaration2 = "export interface any";
+
+                Assert.IsFalse(content.Contains(interfaceDeclaration), "IHttpActionResult shouldnt be declared as type");
+                Assert.IsFalse(content.Contains(interfaceDeclaration2), "any shouldnt be declared as type");
+            });
+        }
+
+        [TestMethod]
+        public void UnWrapTaskGeneric()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public UnWrapTaskGeneric() : ng.IPromise<any> {";
+                Assert.IsTrue(content.Contains(methodHeader), "UnWrapTaskGeneric method header is not present, or incorrect.");
+
+                var interfaceDeclaration = "export interface ITask";
+
+                Assert.IsFalse(content.Contains(interfaceDeclaration), "ITask shouldnt be declared as type");
+            });
+        }
+
+        [TestMethod]
+        public void TaskToVoid()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public TaskToVoid() : ng.IPromise<void> {";
+                Assert.IsTrue(content.Contains(methodHeader), "TaskToVoid method header is not present, or incorrect.");
+
+                var interfaceDeclaration = "export interface ITask";
+                var interfaceDeclaration2 = "export interface void";
+
+                Assert.IsFalse(content.Contains(interfaceDeclaration), "ITask shouldnt be declared as type");
+                Assert.IsFalse(content.Contains(interfaceDeclaration2), "void shouldnt be declared as type");
+            });
+        }
     }
 }

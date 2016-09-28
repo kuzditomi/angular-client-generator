@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Http;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.DescriptionParts;
 
@@ -81,7 +82,7 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("}}");
         }
 
-        private static readonly Type[] IgnoredTypesOnDefinition = { typeof(int), typeof(double), typeof(float), typeof(decimal), typeof(string), typeof(bool), typeof(void) };
+        private static readonly Type[] IgnoredTypesOnDefinition = { typeof(int), typeof(double), typeof(float), typeof(decimal), typeof(string), typeof(bool), typeof(void), typeof(IHttpActionResult) };
 
         public override void Visit(TypeDescriptionPart typeDescriptionPart)
         {
@@ -95,6 +96,12 @@ namespace AngularClientGenerator.Visitor
             {
                 var elementType = typeDescriptionPart.Type.GetElementType();
                 this.Visit(new TypeDescriptionPart(elementType));
+                return;
+            }
+
+            var isTask = typeDescriptionPart.Type == typeof(Task) || typeDescriptionPart.Type.BaseType == typeof(Task);
+            if (isTask)
+            {
                 return;
             }
 
@@ -335,6 +342,19 @@ namespace AngularClientGenerator.Visitor
                 return "number";
             }
 
+            var isTask = type == typeof(Task) || type.BaseType == typeof(Task);
+            if (isTask)
+            {
+                if (type.IsGenericType)
+                {
+                    return GetNameForType(type.GetGenericArguments()[0]);
+                }
+                else
+                {
+                    return "void";
+                }
+            }
+
             var isIEnumerable = type.GetInterfaces().Any(ti => ti == typeof(IEnumerable));
             if (isIEnumerable)
             {
@@ -356,6 +376,11 @@ namespace AngularClientGenerator.Visitor
             {
                 var genericType = type.GetGenericArguments()[0];
                 return GetNameForType(genericType);
+            }
+
+            if (type == typeof(IHttpActionResult))
+            {
+                return "any";
             }
 
             return "I" + type.Name;

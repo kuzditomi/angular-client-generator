@@ -85,5 +85,25 @@ namespace AngularClientGeneratorTest.TestControllers
         {
 
         }
+
+        [HttpPost]
+        [Route("actionresult")]
+        public IHttpActionResult ActionResultWithoutAttribute()
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("unwraptask")]
+        public async Task<IHttpActionResult> UnWrapTaskGeneric()
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("tasktovoid")]
+        public async Task TaskToVoid()
+        {
+        }
     }
 }
