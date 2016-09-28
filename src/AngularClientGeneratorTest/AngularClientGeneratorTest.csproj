@@ -96,6 +96,9 @@
     <Compile Include="TestControllers\GeneratedMethodTestController.cs" />
     <Compile Include="TestControllers\ConfigVoidTestController.cs" />
     <Compile Include="TestControllers\TypeTestController.cs" />
+    <Compile Include="TestModels\ArrayOnlyType.cs" />
+    <Compile Include="TestModels\EnumerableOnlyType.cs" />
+    <Compile Include="TestModels\TestComplexType.cs" />
     <Compile Include="TestModels\MyEmptyTestClass.cs" />
     <Compile Include="TestModels\TestEnum.cs" />
     <Compile Include="TestModels\TestModelB.cs" />

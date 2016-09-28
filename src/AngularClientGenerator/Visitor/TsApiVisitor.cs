@@ -84,14 +84,34 @@ namespace AngularClientGenerator.Visitor
 
         public override void Visit(TypeDescriptionPart typeDescriptionPart)
         {
+            if (this.Types.Contains(typeDescriptionPart.Type))
+                return;
+
             if (ignoredTypesOnDefinition.Contains(typeDescriptionPart.Type))
                 return;
 
-            var isArray = typeDescriptionPart.Type.GetInterfaces().Any(ti => ti == typeof(IEnumerable));
-            if (isArray)
+            if (typeDescriptionPart.Type.IsArray)
+            {
+                var elementType = typeDescriptionPart.Type.GetElementType();
+                this.Visit(new TypeDescriptionPart(elementType));
                 return;
+            }
+
+            var isEnumerable = typeDescriptionPart.Type.GetInterfaces().Any(ti => ti == typeof(IEnumerable));
+            if (isEnumerable)
+            {
+                var genericType = typeDescriptionPart.Type.GetGenericArguments()[0];
+                this.Visit(new TypeDescriptionPart(genericType));
+                return;
+            }   
 
             this.Types.Add(typeDescriptionPart.Type);
+
+            // visit properties
+            foreach (var propertyInfo in typeDescriptionPart.Type.GetProperties())
+            {
+                this.Visit(new TypeDescriptionPart(propertyInfo.PropertyType));
+            }
         }
 
         private void GenerateMethodFor(ActionDescriptionPart actionDescription)
@@ -262,7 +282,17 @@ namespace AngularClientGenerator.Visitor
             }
             else
             {
-                this.ClientBuilder.WriteLine("export interface {0} {{ }}", GetNameForType(type));
+                this.ClientBuilder.WriteLine("export interface {0} {{", GetNameForType(type));
+                this.ClientBuilder.IncreaseIndent();
+
+                foreach (var propertyInfo in type.GetProperties())
+                {
+                    this.ClientBuilder.WriteLine("{0}: {1};", propertyInfo.Name, GetNameForType(propertyInfo.PropertyType));
+                }
+
+                this.ClientBuilder.DecreaseIndent();
+                this.ClientBuilder.WriteLine("}}");
+                this.ClientBuilder.WriteLine();
             }
         }
 

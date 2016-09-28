@@ -108,5 +108,99 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 Assert.IsFalse(content.Contains("public interface string[]"), "Array types should not be defined as new type");
             });
         }
+
+        [TestMethod]
+        public void TypesDiscoveredRescursively()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public TestRecursiveDiscovery(model: ITestComplexType) : ng.IPromise<void> {";
+
+                Assert.IsTrue(content.Contains(methodHeader), "TestRecursiveDiscovery method header is not present, or incorrect.");
+
+                Assert.IsTrue(content.Contains("export interface ITestComplexType"), "ITestComplexType should be defined as new type");
+                Assert.IsTrue(content.Contains("export interface ITestComplexInnerProperty"), "ITestComplexInnerProperty should be defined as new type, recursive discovery is not working");
+            });
+        }
+
+        [TestMethod]
+        public void DiscoveredIfElementOnly()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public ArrayTypesAction(model: IArrayOnlyType[]) : ng.IPromise<void> {";
+
+                Assert.IsTrue(content.Contains(methodHeader), "ArrayTypesAction method header is not present, or incorrect.");
+
+                Assert.IsTrue(content.Contains("export interface IArrayOnlyType {"), "IArrayOnlyType should be defined as new type");
+            });
+        }
+
+        [TestMethod]
+        public void DiscoveredIfGenericOnly()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public EnumerableTypeAction(model: IEnumerableOnlyType[]) : ng.IPromise<void> {";
+
+                Assert.IsTrue(content.Contains(methodHeader), "EnumerableTypeAction method header is not present, or incorrect.");
+
+                Assert.IsTrue(content.Contains("export interface IEnumerableOnlyType {"), "IEnumerableOnlyType should be defined as new type");
+            });
+        }
+
+        [TestMethod]
+        public void NullablePropertyTypeTest()
+        {
+            Assert.Fail("Not implemented");
+        }
+
+        [TestMethod]
+        public void NullableParameterTest()
+        {
+            Assert.Fail("Not implemented");
+        }
+
+        [TestMethod]
+        public void DictionaryTypeTest()
+        {
+            Assert.Fail("Not implemented");
+        }
+
+        [TestMethod]
+        public void TestComplexTypeFullyDeclared()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var interfaceDeclaration = string.Join(Environment.NewLine, new []
+                {
+                    "\texport interface ITestComplexType {",
+                    "\t\tNormalProperty: string;",
+                    "\t\tComplexProperty: ITestComplexInnerProperty;",
+                    "\t\tNumberProperty: number;",
+                    "\t\tEnum: TestEnum;",
+                    "\t}"
+                });
+
+                Assert.IsTrue(content.Contains(interfaceDeclaration), "ITestComplexType should be defined fully");
+            });
+        }
+
     }
 }

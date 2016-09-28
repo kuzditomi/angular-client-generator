@@ -44,5 +44,25 @@ namespace AngularClientGeneratorTest.TestControllers
         {
 
         }
+
+        [HttpGet]
+        [Route("recursivediscover")]
+        public void TestRecursiveDiscovery(TestComplexType model)
+        {
+
+        }
+
+        [HttpPost]
+        [Route("arrayonly")]
+        public void ArrayTypesAction(ArrayOnlyType[] model)
+        {
+        }
+
+        [HttpPost]
+        [Route("enumerablevalue")]
+        public void EnumerableTypeAction(IEnumerable<EnumerableOnlyType> model)
+        {
+
+        }
     }
 }
