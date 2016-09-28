@@ -62,7 +62,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 {
                     "export class ApiTestService {",
                     "}",
-                    ".factory('ApiTestService', ApiTestService)",
+                    ".service('ApiTestService', ApiTestService)",
                     "static $inject = ['$http', '$q']",
                     "constructor(private http, private q)"
                 };

@@ -39,7 +39,7 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}}", controllerDescription.Name);
             this.ClientBuilder.WriteLine();
-            this.ClientBuilder.WriteLine("GeneratedClient.factory('Api{0}Service', Api{0}Service);", controllerDescription.Name);
+            this.ClientBuilder.WriteLine("Module.service('Api{0}Service', Api{0}Service);", controllerDescription.Name);
             this.ClientBuilder.WriteLine();
         }
 
@@ -60,13 +60,10 @@ namespace AngularClientGenerator.Visitor
 
         public override void Visit(ModuleDescriptionPart moduleDescription)
         {
-            this.ClientBuilder.WriteLine("import {{module}} from 'angular';");
-            this.ClientBuilder.WriteLine();
-
             this.ClientBuilder.WriteLine("export namespace GeneratedClient {{");
             this.ClientBuilder.IncreaseIndent();
 
-            this.ClientBuilder.WriteLine("export let GeneratedClient = module('{0}', []);", moduleDescription.Name);
+            this.ClientBuilder.WriteLine("export let Module = angular.module('{0}', []);", moduleDescription.Name);
             this.ClientBuilder.WriteLine();
 
             this.GenerateUrlReplaceMethod();

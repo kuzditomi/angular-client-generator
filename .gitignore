@@ -1,5 +1,5 @@
 ﻿.vs
-.user
+*.user
 packages
 bin
 obj
