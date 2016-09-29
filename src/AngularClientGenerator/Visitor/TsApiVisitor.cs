@@ -79,14 +79,13 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("}}");
         }
 
-        private static readonly Type[] IgnoredTypesOnDefinition = { typeof(int), typeof(double), typeof(float), typeof(decimal), typeof(string), typeof(bool), typeof(void), typeof(IHttpActionResult) };
-
+        
         public override void Visit(TypeDescriptionPart typeDescriptionPart)
         {
             if (this.Types.Contains(typeDescriptionPart.Type))
                 return;
 
-            if (IgnoredTypesOnDefinition.Contains(typeDescriptionPart.Type))
+            if (typeDescriptionPart.IsIgnoredType())
                 return;
 
             if (typeDescriptionPart.Type.IsArray)
@@ -96,15 +95,12 @@ namespace AngularClientGenerator.Visitor
                 return;
             }
 
-            var isTask = typeDescriptionPart.Type == typeof(Task) || typeDescriptionPart.Type.BaseType == typeof(Task);
-            if (isTask)
+            if (typeDescriptionPart.IsTask())
             {
                 return;
             }
 
-            var isEnumerable = typeDescriptionPart.Type.GetInterfaces().Any(ti => ti == typeof(IEnumerable));
-            var isNullable = typeDescriptionPart.Type.IsGenericType && typeDescriptionPart.Type.GetGenericTypeDefinition() == typeof(Nullable<>);
-            if (isEnumerable || isNullable)
+            if (typeDescriptionPart.IsEnumerable() || typeDescriptionPart.IsNullable())
             {
                 var genericType = typeDescriptionPart.Type.GetGenericArguments()[0];
                 this.Visit(new TypeDescriptionPart(genericType));
@@ -310,10 +306,10 @@ namespace AngularClientGenerator.Visitor
             }
         }
 
-        private static readonly Type[] NumberTypes = { typeof(int), typeof(double), typeof(float), typeof(decimal) };
-
         private string GetNameForType(Type type)
         {
+            var typeDescPart = new TypeDescriptionPart(type);
+
             if (type == typeof(void))
             {
                 return "void";
@@ -334,13 +330,12 @@ namespace AngularClientGenerator.Visitor
                 return "boolean";
             }
 
-            if (NumberTypes.Contains(type))
+            if (typeDescPart.IsNumberType())
             {
                 return "number";
             }
-
-            var isTask = type == typeof(Task) || type.BaseType == typeof(Task);
-            if (isTask)
+            
+            if (typeDescPart.IsTask())
             {
                 if (type.IsGenericType)
                 {
@@ -352,8 +347,7 @@ namespace AngularClientGenerator.Visitor
                 }
             }
 
-            var isIEnumerable = type.GetInterfaces().Any(ti => ti == typeof(IEnumerable));
-            if (isIEnumerable)
+            if (typeDescPart.IsEnumerable())
             {
                 var isArray = type.IsArray;
                 if (isArray)
@@ -368,8 +362,7 @@ namespace AngularClientGenerator.Visitor
                 }
             }
 
-            var isNullable = type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
-            if (isNullable)
+            if (typeDescPart.IsNullable())
             {
                 var genericType = type.GetGenericArguments()[0];
                 return GetNameForType(genericType);

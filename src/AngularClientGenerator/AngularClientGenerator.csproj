@@ -71,6 +71,7 @@
     <Compile Include="Visitor\ClientBuilder.cs" />
     <Compile Include="Visitor\IApiVisitor.cs" />
     <Compile Include="Visitor\TsApiVisitor.cs" />
+    <Compile Include="Visitor\TsTypeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
