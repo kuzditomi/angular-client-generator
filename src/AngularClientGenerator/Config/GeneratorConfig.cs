@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AngularClientGenerator.Visitor;
+using AngularClientGenerator.Contracts;
+using AngularClientGenerator.Contracts.Config;
 
 namespace AngularClientGenerator.Config
 {
@@ -13,6 +10,8 @@ namespace AngularClientGenerator.Config
         public Language Language { get; set; }
         public string ModuleName { get; set; }
         public IndentType IndentType { get; set; }
+        public bool UseNamespaces { get; set; }
+        public Func<Type, string> NamespaceNamingRule { get; set; }
 
         public GeneratorConfig()
         {
@@ -20,6 +19,7 @@ namespace AngularClientGenerator.Config
             this.Language = Language.TypeScript;
             this.ModuleName = "mymodule";
             this.IndentType = IndentType.Tab;
+            this.UseNamespaces = false;
         }
     }
 }

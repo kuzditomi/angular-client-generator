@@ -93,18 +93,27 @@
   <ItemGroup>
     <Compile Include="ClientBuilderTest.cs" />
     <Compile Include="DescriptionCollectorTest.cs" />
+    <Compile Include="TestControllers\ConfigBigintErrorTestController.cs" />
+    <Compile Include="TestControllers\ConfigComplexParamGerErrorTestController.cs" />
+    <Compile Include="TestControllers\DictionaryKeyTypeMismatchTestController.cs" />
     <Compile Include="TestControllers\GeneratedMethodTestController.cs" />
     <Compile Include="TestControllers\ConfigVoidTestController.cs" />
+    <Compile Include="TestControllers\NamespaceTestController.cs" />
     <Compile Include="TestControllers\TypeTestController.cs" />
     <Compile Include="TestModels\ArrayOnlyType.cs" />
     <Compile Include="TestModels\AsOptionalParamOnly.cs" />
     <Compile Include="TestModels\ContainsNullableProperty.cs" />
+    <Compile Include="TestModels\DictionaryReturnType.cs" />
     <Compile Include="TestModels\EnumerableOnlyType.cs" />
+    <Compile Include="TestModels\HasNameSpacedProperties.cs" />
+    <Compile Include="TestModels\EnumNameSpace\OnlyEnumInNamespace.cs" />
+    <Compile Include="TestModels\SameNameDifferentNameSpace.cs" />
     <Compile Include="TestModels\TestComplexType.cs" />
     <Compile Include="TestModels\MyEmptyTestClass.cs" />
     <Compile Include="TestModels\TestEnum.cs" />
     <Compile Include="TestModels\TestModelB.cs" />
     <Compile Include="TestModels\TestModelA.cs" />
+    <Compile Include="TestModels\TestNumberedEnum.cs" />
     <Compile Include="TsApiVisitorTests\GeneratedTypeTest.cs" />
     <Compile Include="TsApiVisitorTests\ActionConfigTest.cs" />
     <Compile Include="TsApiVisitorTests\GeneratedActionTest.cs" />
@@ -117,6 +126,10 @@
     <Compile Include="Util\CustomHttpControllerTypeResolver.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AngularClientGenerator.Contracts\AngularClientGenerator.Contracts.csproj">
+      <Project>{5cf1b966-6109-431d-acd4-3cb3a0ee68f9}</Project>
+      <Name>AngularClientGenerator.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AngularClientGenerator\AngularClientGenerator.csproj">
       <Project>{426dff27-c270-4ae3-abdf-b150056e645b}</Project>
       <Name>AngularClientGenerator</Name>

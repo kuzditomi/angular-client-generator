@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using AngularClientGenerator;
-using AngularClientGenerator.Config;
-using AngularClientGenerator.DescriptionParts;
-using AngularClientGenerator.Visitor;
 using AngularClientGeneratorTest.TestControllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -175,6 +169,34 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
         }
 
         [TestMethod]
+        public void VoidGuidToIntParameterActionConfig()
+        {
+            RegisterController<ConfigVoidTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitActionsFromController<ConfigVoidTestController>();
+                var expectedLines = new List<string>
+                {
+                    "public VoidGuidParameterActionConfig(guidparam: string) : ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: 'api/configtest/voidguid',",
+                    "\t\tmethod: 'GET',",
+                    "\t\tparams: {",
+                    "\t\t\tguidparam: guidparam,",
+                    "\t\t},",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsFalse(content.Contains("public interface IGuid[]"), "Guid type should not be defined as new type");
+            });
+        }
+
+        [TestMethod]
         public void VoidSimpleParametersActionConfig()
         {
             RegisterController<ConfigVoidTestController>();
@@ -330,6 +352,57 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
                 Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+            });
+        }
+
+        [TestMethod]
+        public void VoidComplexParamAndReplaceGetActionTest()
+        {
+            RegisterController<ConfigVoidTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitActionsFromController<ConfigVoidTestController>();
+                var expectedLines = new List<string>
+                {
+                    "public VoidComplexParamAndReplaceGetActionConfig(id: string, complex: IMyEmptyTestClass) : ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: replaceUrl('api/configtest/voidcomplexparamandreplaceget/{id}', {",
+                    "\t\t\tid: id,",
+                    "\t\t}),",
+                    "\t\tmethod: 'GET',",
+                    "\t\tparams: complex,",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+            });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void ComplexParamAndReplaceGetActionErrorTest()
+        {
+            RegisterController<ConfigComplexParamGerErrorTestController>();
+
+            RunInScope(() =>
+            {
+                VisitActionsFromController<ConfigComplexParamGerErrorTestController>();
+            });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void BigintParamErrorTest()
+        {
+            RegisterController<ConfigBigintErrorTestController>();
+
+            RunInScope(() =>
+            {
+                VisitActionsFromController<ConfigBigintErrorTestController>();
             });
         }
     }

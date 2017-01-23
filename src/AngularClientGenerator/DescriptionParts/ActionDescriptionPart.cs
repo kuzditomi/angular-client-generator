@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
-using System.Web.Http.Routing;
 using AngularClientGenerator.Visitor;
 
 namespace AngularClientGenerator.DescriptionParts
@@ -25,7 +22,7 @@ namespace AngularClientGenerator.DescriptionParts
         {
             var reflectedDescriptor = apiDescription.ActionDescriptor as ReflectedHttpActionDescriptor;
             if(reflectedDescriptor == null)
-                throw new ArgumentException("Unexpected descriptor type", nameof(apiDescription));
+                throw new ArgumentNullException(nameof(apiDescription), "Unexpected descriptor type");
 
             this.Name = apiDescription.ActionDescriptor.ActionName;
             this.UrlTemplate = apiDescription.Route.RouteTemplate;

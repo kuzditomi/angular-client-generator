@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AngularClientGeneratorTest.TestModels;
+using SB.TradingTools.AngularClientGeneratorTest.TestModels;
 
 namespace AngularClientGeneratorTest.TestControllers
 {

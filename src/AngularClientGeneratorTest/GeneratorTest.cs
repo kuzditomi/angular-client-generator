@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AngularClientGenerator;
-using System.Web.Http.Description;
-using System.Web.Http;
+﻿using System.Collections.Generic;
 using System.IO;
-using AngularClientGeneratorTest.TestControllers;
-using System.Web.Http.Dependencies;
-using System.Web.Http.Dispatcher;
+using System.Web.Http;
+using System.Web.Http.Description;
+using AngularClientGenerator;
 using AngularClientGenerator.Config;
-using AngularClientGeneratorTest.Util;
-using Microsoft.Owin.Hosting;
-using Owin;
+using AngularClientGenerator.Contracts;
+using AngularClientGeneratorTest.TestControllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SB.TradingTools.AngularClientGeneratorTest;
 
 namespace AngularClientGeneratorTest
 {
@@ -25,6 +21,9 @@ namespace AngularClientGeneratorTest
 
             Assert.AreEqual("angular-generated-client.ts", generator.Config.ExportPath);
             Assert.AreEqual(Language.TypeScript, generator.Config.Language);
+            Assert.AreEqual(false, generator.Config.UseNamespaces);
+            Assert.AreEqual(IndentType.Tab, generator.Config.IndentType);
+            Assert.AreEqual("mymodule", generator.Config.ModuleName);
         }
 
         [TestMethod]
@@ -80,7 +79,8 @@ namespace AngularClientGeneratorTest
                     "ApiTestService",
                     "ApiSimpleService",
                     "ApiConfigVoidTestService",
-                    "ApiGeneratedMethodTestService"
+                    "ApiGeneratedMethodTestService",
+                    "ApiTypeTestService"
                 };
 
                 foreach (var controller in needToContain)

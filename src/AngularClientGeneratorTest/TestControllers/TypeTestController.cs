@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AngularClientGeneratorTest.TestModels;
@@ -27,6 +25,13 @@ namespace AngularClientGeneratorTest.TestControllers
         [HttpGet]
         [Route("enumtype")]
         public void EnumTypeAction(TestEnum enumvalue)
+        {
+
+        }
+        
+        [HttpGet]
+        [Route("numberenumtype")]
+        public void NumberedEnumTypeAction(TestNumberedEnum enumvalue)
         {
 
         }
@@ -103,6 +108,30 @@ namespace AngularClientGeneratorTest.TestControllers
         [HttpPost]
         [Route("tasktovoid")]
         public async Task TaskToVoid()
+        {
+        }
+
+        [HttpPost]
+        [Route("datetimereplace")]
+        public void DateTimeReplaced(DateTime date)
+        {
+        }
+
+        [HttpPost]
+        [Route("dictionarywithstringkey")]
+        public void DictionaryWithStringKey(Dictionary<string, string> dictionary)
+        {
+        }
+
+        [HttpPost]
+        [Route("dictionarywithnumberkey")]
+        public void DictionaryWithNumberKey(Dictionary<int, string> dictionary)
+        {
+        }
+
+        [HttpPost]
+        [Route("dictionarywithcomplexvalue")]
+        public void DictionaryWithComplexValue(Dictionary<int, DictionaryReturnType> dictionary)
         {
         }
     }

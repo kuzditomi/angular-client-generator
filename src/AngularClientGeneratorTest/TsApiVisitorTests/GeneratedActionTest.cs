@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AngularClientGeneratorTest.TestControllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,12 +15,33 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
         {
             httpThenPart = new List<string>
             {
-                "\t\t.then(function(resp) {",
+                "\t\t.then(resp => {",
                 "\t\t\treturn resp.data;",
-                "\t\t});",
-                "}",
+                "\t\t}, resp => {",
+                "\t\t\treturn this.q.reject({",
+                "\t\t\t\tStatus: resp.status,",
+                "\t\t\t\tMessage: (resp.data && resp.data.Message) || resp.statusText",
+                "\t\t\t});",
+                "\t\t});"
             };
         }
+
+        [TestMethod]
+        public void HttpThenPart()
+        {
+            RegisterController<GeneratedMethodTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
+                var expectedLines = httpThenPart;
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+            });
+
+        }
+
         [TestMethod]
         public void GeneratedVoidParameterlessActionTest()
         {
@@ -33,7 +52,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidParameterlessGetAction() : ng.IPromise<void> {",
+                    "public VoidParameterlessGetAction = () : ng.IPromise<void> => {",
                     "\treturn this.http(this.VoidParameterlessGetActionConfig())",
                 }.Concat(httpThenPart);
 
@@ -53,7 +72,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidStringParamGetAction(stringparameter: string) : ng.IPromise<void> {",
+                    "public VoidStringParamGetAction = (stringparameter: string) : ng.IPromise<void> => {",
                     "\treturn this.http(this.VoidStringParamGetActionConfig(stringparameter))",
                 }.Concat(httpThenPart);
 
@@ -73,7 +92,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidComplexparamAction(complex: IMyEmptyTestClass) : ng.IPromise<void> {",
+                    "public VoidComplexparamAction = (complex: IMyEmptyTestClass) : ng.IPromise<void> => {",
                     "\treturn this.http(this.VoidComplexparamActionConfig(complex))",
                 }.Concat(httpThenPart);
 
@@ -93,7 +112,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public StringReturnAction() : ng.IPromise<string> {",
+                    "public StringReturnAction = () : ng.IPromise<string> => {",
                     "\treturn this.http(this.StringReturnActionConfig())",
                 }.Concat(httpThenPart);
 
@@ -113,7 +132,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public ResponseTypeReturnAction() : ng.IPromise<IMyEmptyTestClass> {",
+                    "public ResponseTypeReturnAction = () : ng.IPromise<IMyEmptyTestClass> => {",
                     "\treturn this.http(this.ResponseTypeReturnActionConfig())",
                 }.Concat(httpThenPart);
 
@@ -133,7 +152,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public ArrayReturnAction() : ng.IPromise<IMyEmptyTestClass[]> {",
+                    "public ArrayReturnAction = () : ng.IPromise<IMyEmptyTestClass[]> => {",
                     "\treturn this.http(this.ArrayReturnActionConfig())",
                 }.Concat(httpThenPart);
 
@@ -153,7 +172,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<GeneratedMethodTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public IEnumerableReturnAction() : ng.IPromise<IMyEmptyTestClass[]> {",
+                    "public IEnumerableReturnAction = () : ng.IPromise<IMyEmptyTestClass[]> => {",
                     "\treturn this.http(this.IEnumerableReturnActionConfig())",
                 }.Concat(httpThenPart);
 
@@ -162,6 +181,6 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
             });
         }
-        
+
     }
 }

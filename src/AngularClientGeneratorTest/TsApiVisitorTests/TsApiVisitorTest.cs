@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AngularClientGenerator;
-using System.Web.Http.Description;
-using System.Web.Http;
-using System.IO;
 using System.Linq;
-using System.Web.Http.Controllers;
-using AngularClientGeneratorTest.TestControllers;
-using System.Web.Http.Dependencies;
-using System.Web.Http.Dispatcher;
 using AngularClientGenerator.Config;
+using AngularClientGenerator.Contracts;
 using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitor;
-using AngularClientGeneratorTest.Util;
-using Microsoft.Owin.Hosting;
-using Owin;
+using AngularClientGeneratorTest.TestControllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AngularClientGeneratorTest.TsApiVisitorTests
 {
@@ -75,7 +66,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
         }
 
         [TestMethod]
-        public void ActionDescriptionPart_TestController_()
+        public void ActionDescriptionPart_TestController()
         {
             RegisterController<TestController>();
 
@@ -117,7 +108,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
         }
 
         [TestMethod]
-        public void TypeDescriptionPart_TestController_()
+        public void TypeDescriptionPart_TestController()
         {
             RegisterController<TestController>();
 

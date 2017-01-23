@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Web.Http.Description;
 using AngularClientGenerator.Config;
+using AngularClientGenerator.Contracts;
 using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitor;
-using Microsoft.Win32.SafeHandles;
 
 namespace AngularClientGenerator
 {
     public class Generator
     {
-
         private DescriptionCollector DescriptionCollector;
         private IApiVisitor Visitor;
 
@@ -33,6 +27,9 @@ namespace AngularClientGenerator
             switch (this.Config.Language)
             {
                 case Language.TypeScript:
+                    this.Visitor = new TsApiVisitor(this.Config, builder);
+                    break;
+                default:
                     this.Visitor = new TsApiVisitor(this.Config, builder);
                     break;
             }

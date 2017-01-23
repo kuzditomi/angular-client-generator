@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Description;
 using AngularClientGeneratorTest.TestModels;
+using SB.TradingTools.AngularClientGeneratorTest.TestModels;
 
 namespace AngularClientGeneratorTest.TestControllers
 {
@@ -39,6 +35,12 @@ namespace AngularClientGeneratorTest.TestControllers
         [Route("voiddecimal")]
         [HttpGet]
         public void VoidDecimalParameterAction(decimal decimalparam)
+        {
+        }
+
+        [Route("voidguid")]
+        [HttpGet]
+        public void VoidGuidParameterAction(Guid guidparam)
         {
         }
 
@@ -76,6 +78,12 @@ namespace AngularClientGeneratorTest.TestControllers
         [Route("voidcomplexparamandreplace/{id}")]
         [HttpPut]
         public void VoidComplexParamAndReplaceAction(string id, MyEmptyTestClass complex)
+        {
+        }
+
+        [Route("voidcomplexparamandreplaceget/{id}")]
+        [HttpGet]
+        public void VoidComplexParamAndReplaceGetAction(string id, [FromUri]MyEmptyTestClass complex)
         {
         }
     }

@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AngularClientGenerator;
-using System.Web.Http.Description;
-using System.Web.Http;
-using System.IO;
 using System.Linq;
-using AngularClientGeneratorTest.TestControllers;
-using System.Web.Http.Dependencies;
+using System.Web.Http;
+using System.Web.Http.Description;
 using System.Web.Http.Dispatcher;
 using AngularClientGenerator.Config;
+using AngularClientGenerator.Contracts;
 using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitor;
 using AngularClientGeneratorTest.Util;
 using Microsoft.Owin.Hosting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Owin;
 
 namespace AngularClientGeneratorTest
@@ -58,13 +54,16 @@ namespace AngularClientGeneratorTest
             }
         }
 
-        protected string VisitModuleWithController<T>() where T:ApiController
+        protected string VisitModuleWithController<T>(GeneratorConfig config = null) where T:ApiController
         {
-            var config = new GeneratorConfig
+            if (config == null)
             {
-                IndentType = IndentType.Tab,
-                Language = Language.TypeScript
-            };
+                config = new GeneratorConfig
+                {
+                    IndentType = IndentType.Tab,
+                    Language = Language.TypeScript
+                };
+            }
 
             var builder = new ClientBuilder(config);
             var apiVisitor = new TsApiVisitor(config, builder);

@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AngularClientGenerator;
-using System.Web.Http.Description;
-using System.Web.Http;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
+using AngularClientGenerator;
 using AngularClientGeneratorTest.TestControllers;
-using System.Web.Http.Dependencies;
-using System.Web.Http.Dispatcher;
-using AngularClientGeneratorTest.Util;
-using Microsoft.Owin.Hosting;
-using Owin;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SB.TradingTools.AngularClientGeneratorTest;
 
 namespace AngularClientGeneratorTest
 {

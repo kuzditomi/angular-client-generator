@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using AngularClientGenerator;
 using AngularClientGenerator.Config;
-using AngularClientGenerator.DescriptionParts;
-using AngularClientGenerator.Visitor;
 using AngularClientGeneratorTest.TestControllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -24,7 +20,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitModuleWithController<TypeTestController>();
 
                 var expectedHeader =
-                    "public BasicTypesAction(s: string, a: number, b: number, c: number, d: number, f: boolean) : ng.IPromise<void> {";
+                    "public BasicTypesAction = (s: string, a: number, b: number, c: number, d: number, f: boolean) : ng.IPromise<void> => {";
 
                 Assert.IsTrue(content.Contains(expectedHeader), "BasicTypesAction is not generated, or it's wrong.");
 
@@ -46,8 +42,8 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader1 = "public OneMyEmptyTestClassAction(model: IMyEmptyTestClass) : ng.IPromise<void> {";
-                var methodHeader2 = "public TwoMyEmptyTestClassAction(model: IMyEmptyTestClass) : ng.IPromise<void> {";
+                var methodHeader1 = "public OneMyEmptyTestClassAction = (model: IMyEmptyTestClass) : ng.IPromise<void> => {";
+                var methodHeader2 = "public TwoMyEmptyTestClassAction = (model: IMyEmptyTestClass) : ng.IPromise<void> => {";
 
                 Assert.IsTrue(content.Contains(methodHeader1), "method header is not present, or incorrect." + "OneMyEmptyTestClassAction");
                 Assert.IsTrue(content.Contains(methodHeader2), "method header is not present, or incorrect." + "TwoMyEmptyTestClassAction");
@@ -74,22 +70,50 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader = "public EnumTypeAction(enumvalue: TestEnum) : ng.IPromise<void> {";
+                var methodHeader = "public EnumTypeAction = (enumvalue: TestEnum) : ng.IPromise<void> => {";
 
                 Assert.IsTrue(content.Contains(methodHeader), "Enum type method header is not present, or incorrect.");
 
                 var expectedLines = new List<string>
                 {
                     "\texport enum TestEnum {",
-                    "\t\tOne,",
-                    "\t\tTwo,",
-                    "\t\tThree,",
+                    "\t\tOne = 0,",
+                    "\t\tTwo = 1,",
+                    "\t\tThree = 2,",
                     "\t}"
                 };
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
                 Assert.IsTrue(content.Contains(expectedContent), String.Format("\nEnum is not generated. Expected: {0}\nGenerated: {1}", expectedContent, content));
+            });
+        }
+
+        [TestMethod]
+        public void EnumsValueGenerated()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public NumberedEnumTypeAction = (enumvalue: TestNumberedEnum) : ng.IPromise<void> => {";
+
+                Assert.IsTrue(content.Contains(methodHeader), "Enum type method header is not present, or incorrect.");
+
+                var expectedLines = new List<string>
+                {
+                    "\texport enum TestNumberedEnum {",
+                    "\t\tZero = 0,",
+                    "\t\tThree = 3,",
+                    "\t\tTen = 10,",
+                    "\t}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), String.Format("TestNumberedEnum is not generated propertly. Expected: {0}\nGenerated: {1}", expectedContent, content));
             });
         }
 
@@ -102,7 +126,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader = "public ArrayTypeAction(arr: string[]) : ng.IPromise<void> {";
+                var methodHeader = "public ArrayTypeAction = (arr: string[]) : ng.IPromise<void> => {";
 
                 Assert.IsTrue(content.Contains(methodHeader), "Array type method header is not present, or incorrect.");
 
@@ -119,7 +143,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader = "public TestRecursiveDiscovery(model: ITestComplexType) : ng.IPromise<void> {";
+                var methodHeader = "public TestRecursiveDiscovery = (model: ITestComplexType) : ng.IPromise<void> => {";
 
                 Assert.IsTrue(content.Contains(methodHeader), "TestRecursiveDiscovery method header is not present, or incorrect.");
 
@@ -137,7 +161,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader = "public ArrayTypesAction(model: IArrayOnlyType[]) : ng.IPromise<void> {";
+                var methodHeader = "public ArrayTypesAction = (model: IArrayOnlyType[]) : ng.IPromise<void> => {";
 
                 Assert.IsTrue(content.Contains(methodHeader), "ArrayTypesAction method header is not present, or incorrect.");
 
@@ -154,7 +178,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader = "public OnlyAsOptionalParam(model?: IAsOptionalParamOnly) : ng.IPromise<void> {";
+                var methodHeader = "public OnlyAsOptionalParam = (model?: IAsOptionalParamOnly) : ng.IPromise<void> => {";
 
                 Assert.IsTrue(content.Contains(methodHeader), "OnlyAsOptionalParam method header is not present, or incorrect.");
 
@@ -171,7 +195,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader = "public EnumerableTypeAction(model: IEnumerableOnlyType[]) : ng.IPromise<void> {";
+                var methodHeader = "public EnumerableTypeAction = (model: IEnumerableOnlyType[]) : ng.IPromise<void> => {";
 
                 Assert.IsTrue(content.Contains(methodHeader), "EnumerableTypeAction method header is not present, or incorrect.");
 
@@ -188,7 +212,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader = "public NullableProperty(hasnullable: IContainsNullableProperty) : ng.IPromise<void> {";
+                var methodHeader = "public NullableProperty = (hasnullable: IContainsNullableProperty) : ng.IPromise<void> => {";
 
                 Assert.IsTrue(content.Contains(methodHeader), "NullableProperty method header is not present, or incorrect.");
 
@@ -214,7 +238,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader = "public OptionalParam(optional?: number) : ng.IPromise<void> {";
+                var methodHeader = "public OptionalParam = (optional?: number) : ng.IPromise<void> => {";
                 Assert.IsTrue(content.Contains(methodHeader), "OptionalParam method header is not present, or incorrect.");
 
                 var configHeader = "public OptionalParamConfig(optional?: number) : ng.IRequestConfig {";
@@ -233,7 +257,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var interfaceDeclaration = string.Join(Environment.NewLine, new []
+                var interfaceDeclaration = string.Join(Environment.NewLine, new[]
                 {
                     "\texport interface ITestComplexType {",
                     "\t\tNormalProperty: string;",
@@ -256,9 +280,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader = "public ActionResultWithoutAttribute() : ng.IPromise<any> {";
+                var methodHeader = "public ActionResultWithoutAttribute = () : ng.IPromise<any> => {";
                 Assert.IsTrue(content.Contains(methodHeader), "ActionResultWithoutAttribute method header is not present, or incorrect.");
-                
+
                 var interfaceDeclaration = "export interface IIHttpActionResult";
                 var interfaceDeclaration2 = "export interface any";
 
@@ -276,7 +300,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader = "public UnWrapTaskGeneric() : ng.IPromise<any> {";
+                var methodHeader = "public UnWrapTaskGeneric = () : ng.IPromise<any> => {";
                 Assert.IsTrue(content.Contains(methodHeader), "UnWrapTaskGeneric method header is not present, or incorrect.");
 
                 var interfaceDeclaration = "export interface ITask";
@@ -294,7 +318,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
             {
                 var content = VisitModuleWithController<TypeTestController>();
 
-                var methodHeader = "public TaskToVoid() : ng.IPromise<void> {";
+                var methodHeader = "public TaskToVoid = () : ng.IPromise<void> => {";
                 Assert.IsTrue(content.Contains(methodHeader), "TaskToVoid method header is not present, or incorrect.");
 
                 var interfaceDeclaration = "export interface ITask";
@@ -302,6 +326,256 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 Assert.IsFalse(content.Contains(interfaceDeclaration), "ITask shouldnt be declared as type");
                 Assert.IsFalse(content.Contains(interfaceDeclaration2), "void shouldnt be declared as type");
+            });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void SameNameFromDifferentNameSpaceWithoutNamespacesEnabled()
+        {
+            RegisterController<NamespaceTestController>();
+
+            RunInScope(() =>
+            {
+                VisitModuleWithController<NamespaceTestController>();
+            });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SameNameFromDifferentNameSpaceWithNamespacesEnabledWithoutNamingAction()
+        {
+            RegisterController<NamespaceTestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    UseNamespaces = true
+                };
+
+                VisitModuleWithController<NamespaceTestController>(config);
+            });
+        }
+
+        [TestMethod]
+        public void SameNameFromDifferentNameSpaceWithNamespacesEnabledWithNamingAction()
+        {
+            RegisterController<NamespaceTestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    UseNamespaces = true,
+                    NamespaceNamingRule = type => type.Namespace.Replace("SB.TradingTools.", "")
+                };
+
+                var content = VisitModuleWithController<NamespaceTestController>(config);
+
+                var methodHeadera = "public SameNameDifferentNameSpaceA = (parameter: AngularClientGeneratorTest.TestModels.NameSpaceA.ISameNameDifferentNameSpace) : ng.IPromise<void> => {";
+                Assert.IsTrue(content.Contains(methodHeadera), "SameNameDifferentNameSpaceA method header is not present, or incorrect.");
+
+                var methodHeaderb = "public SameNameDifferentNameSpaceB = (parameter: AngularClientGeneratorTest.TestModels.NameSpaceB.ISameNameDifferentNameSpace) : ng.IPromise<void> => {";
+                Assert.IsTrue(content.Contains(methodHeaderb), "SameNameDifferentNameSpaceB method header is not present, or incorrect.");
+
+                var interfaceDeclaration = "export interface ISameNameDifferentNameSpace";
+                var occurances = content.Split(new[] { interfaceDeclaration }, StringSplitOptions.None).Count() - 1;
+
+                Assert.AreEqual(2, occurances, "SameNameDifferentNameSpace type declaration should be present exactly once.");
+
+                var namespaceADeclaration = "export namespace AngularClientGeneratorTest.TestModels.NameSpaceA";
+                var namespaceBDeclaration = "export namespace AngularClientGeneratorTest.TestModels.NameSpaceB";
+
+                Assert.IsTrue(content.Contains(namespaceADeclaration));
+                Assert.IsTrue(content.Contains(namespaceBDeclaration));
+            });
+        }
+
+        [TestMethod]
+        public void DateTimeReplaced()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public DateTimeReplaced = (date: string) : ng.IPromise<void> => {";
+                Assert.IsTrue(content.Contains(methodHeader), "DateTimeReplaced method header is not present, or incorrect.");
+
+                var interfaceDeclaration = "export interface IDateTime";
+                Assert.IsFalse(content.Contains(interfaceDeclaration), "DateTime shouldnt be declared as type");
+            });
+        }
+
+        [TestMethod]
+        public void NamespacedArrays()
+        {
+            RegisterController<NamespaceTestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    UseNamespaces = true,
+                    NamespaceNamingRule = type => type.Namespace.Replace("SB.TradingTools.", "")
+                };
+
+                var content = VisitModuleWithController<NamespaceTestController>(config);
+
+                var methodHeadera = "public NameSpacedArrays = (parameter: AngularClientGeneratorTest.TestModels.NameSpaceA.ISameNameDifferentNameSpace[]) : ng.IPromise<void> => {";
+                Assert.IsTrue(content.Contains(methodHeadera), "SameNameDifferentNameSpaceA method header is not present, or incorrect.");
+            });
+        }
+
+        [TestMethod]
+        public void NamespacedProperties()
+        {
+            RegisterController<NamespaceTestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    UseNamespaces = true,
+                    NamespaceNamingRule = type => type.Namespace.Replace("SB.TradingTools.", "")
+                };
+
+                var content = VisitModuleWithController<NamespaceTestController>(config);
+
+                var methodHeadera = "public NamespacedProperties = (parameter: AngularClientGeneratorTest.TestModels.IHasNameSpacedProperties) : ng.IPromise<void> => {";
+                Assert.IsTrue(content.Contains(methodHeadera), "NamespacedProperties method header is not present, or incorrect.");
+
+                var interfaceDeclaration = string.Join(Environment.NewLine, new[]
+                {
+                    "\t\texport interface IHasNameSpacedProperties {",
+                    "\t\t\tAProperty: AngularClientGeneratorTest.TestModels.NameSpaceA.ISameNameDifferentNameSpace;",
+                    "\t\t\tBProperty: AngularClientGeneratorTest.TestModels.NameSpaceB.ISameNameDifferentNameSpace;",
+                    "\t\t}"
+                });
+
+                Assert.IsTrue(content.Contains(interfaceDeclaration), "HasNameSpacedProperties should have namespaced properties");
+            });
+        }
+
+        [TestMethod]
+        public void NamespacedEnum()
+        {
+            RegisterController<NamespaceTestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    UseNamespaces = true,
+                    NamespaceNamingRule = type => type.Namespace.Replace("SB.TradingTools.", "")
+                };
+
+                var content = VisitModuleWithController<NamespaceTestController>(config);
+
+                var methodHeadera = "public NamespacedEnum = (enumparam: AngularClientGeneratorTest.TestModels.EnumNameSpace.OnlyEnumInNameSpace) : ng.IPromise<void> => {";
+                Assert.IsTrue(content.Contains(methodHeadera), "NamespacedEnum method header is not present, or incorrect.");
+
+                var interfaceDeclaration = string.Join(Environment.NewLine, new[]
+                {
+                    "\texport namespace AngularClientGeneratorTest.TestModels.EnumNameSpace {",
+                    "\t\texport enum OnlyEnumInNameSpace {",
+                    "\t\t\tOne = 0,",
+                    "\t\t\tTwo = 1,",
+                    "\t\t}",
+                    "\t}"
+                });
+
+                Assert.IsTrue(content.Contains(interfaceDeclaration), "HasNameSpacedProperties should have namespaced properties");
+            });
+        }
+
+        [TestMethod]
+        public void DictionaryWithStringKey()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public DictionaryWithStringKey = (dictionary: {[key: string]:string}) : ng.IPromise<void> => {";
+                Assert.IsTrue(content.Contains(methodHeader), "DictionaryWithStringKey method header is not present, or incorrect.");
+            });
+        }
+
+        [TestMethod]
+        public void DictionaryWithNumberKey()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitModuleWithController<TypeTestController>();
+
+                var methodHeader = "public DictionaryWithNumberKey = (dictionary: {[key: number]:string}) : ng.IPromise<void> => {";
+                Assert.IsTrue(content.Contains(methodHeader), "DictionaryWithNumberKey method header is not present, or incorrect.");
+            });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DictionaryWithBoolKey()
+        {
+            RegisterController<DictionaryKeyTypeMismatchTestController>();
+
+            RunInScope(() =>
+            {
+                VisitModuleWithController<DictionaryKeyTypeMismatchTestController>();
+            });
+        }
+
+        [TestMethod]
+        public void DictionaryReturningAnObjectOfDictionaryReturnType()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    UseNamespaces = true,
+                    NamespaceNamingRule = type => type.Namespace.Replace("SB.TradingTools.", "")
+                };
+
+                var content = VisitModuleWithController<TypeTestController>(config);
+
+                var methodHeader = "public DictionaryWithComplexValue = (dictionary: {[key: number]:AngularClientGeneratorTest.TestModels.IDictionaryReturnType}) : ng.IPromise<void> => {";
+                Assert.IsTrue(content.Contains(methodHeader), "DictionaryWithComplexValue method header is not present, or incorrect.");
+            });
+        }
+
+        [TestMethod]
+        public void DictionaryValueTypeVisited()
+        {
+            RegisterController<TypeTestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    UseNamespaces = true,
+                    NamespaceNamingRule = type => type.Namespace.Replace("SB.TradingTools.", "")
+                };
+
+                var content = VisitModuleWithController<TypeTestController>(config);
+
+                var methodHeader = "public DictionaryWithComplexValue = (dictionary: {[key: number]:AngularClientGeneratorTest.TestModels.IDictionaryReturnType}) : ng.IPromise<void> => {";
+                Assert.IsTrue(content.Contains(methodHeader), "DictionaryWithComplexValue method header is not present, or incorrect.");
+
+                var interfaceDeclaration = string.Join(Environment.NewLine, new[]
+                {
+                    "\t\texport interface IDictionaryReturnType {",
+                    "\t\t}"
+                });
+
+                Assert.IsTrue(content.Contains(interfaceDeclaration), "IDictionaryReturnType should have been generated");
             });
         }
     }

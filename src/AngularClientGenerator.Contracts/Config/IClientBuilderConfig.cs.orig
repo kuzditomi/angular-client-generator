@@ -1,0 +1,17 @@
+<<<<<<< HEAD
+﻿namespace SB.TradingTools.AngularClientGenerator.Contracts.Config
+{
+    public interface IClientBuilderConfig
+    {
+        IndentType IndentType { get; set; }
+    }
+}
+=======
+﻿namespace SB.TradingTools.AngularClientGenerator.Contracts.Config
+{
+    public interface IClientBuilderConfig
+    {
+        IndentType IndentType { get; set; }
+    }
+}
+>>>>>>> feature/SPB-4125-scoreboard
