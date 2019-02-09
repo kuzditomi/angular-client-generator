@@ -54,7 +54,7 @@ namespace AngularClientGeneratorTest
             }
         }
 
-        protected string VisitModuleWithController<T>(GeneratorConfig config = null) where T:ApiController
+        protected string VisitModuleWithController<T>(GeneratorConfig config = null) where T : ApiController
         {
             if (config == null)
             {
@@ -72,14 +72,16 @@ namespace AngularClientGeneratorTest
                 .ApiDescriptions
                 .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerType == typeof(T));
 
-            var module = new ModuleDescriptionPart();
-            module.ControllerDescriptionParts = new ControllerDescriptionPart[]
+            var module = new ModuleDescriptionPart
             {
-               new ControllerDescriptionPart(apiDescriptions.First().ActionDescriptor.ControllerDescriptor)
-               {
-                   ActionDescriptionParts = apiDescriptions.Select(a => new ActionDescriptionPart(a))
-               }  
-            }; 
+                ControllerDescriptionParts = new ControllerDescriptionPart[]
+                {
+                    new ControllerDescriptionPart(null) // apiDescriptions.First().ActionDescriptor.ControllerDescriptor)
+                    {
+                        ActionDescriptionParts = apiDescriptions.Select(a => new ActionDescriptionPart(null))//a))
+                    }
+                }
+            };
 
             module.Accept(apiVisitor);
 
@@ -106,7 +108,7 @@ namespace AngularClientGeneratorTest
 
             foreach (var httpActionDescriptor in apiDescriptions)
             {
-                var actionDescriptorPart = new ActionDescriptionPart(httpActionDescriptor);
+                var actionDescriptorPart = new ActionDescriptionPart(null);// httpActionDescriptor);
                 actionDescriptorPart.Accept(apiVisitor);
             }
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Web.Http.Description;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
+using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.Contracts.Exceptions;
 using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitor;
@@ -16,7 +16,7 @@ namespace AngularClientGenerator
 
         public GeneratorConfig Config { get; set; }
 
-        public Generator(IApiExplorer explorer)
+        public Generator(ApiDescriptor explorer)
         {
             this.Config = new GeneratorConfig();
             this.DescriptionCollector = new DescriptionCollector(explorer);

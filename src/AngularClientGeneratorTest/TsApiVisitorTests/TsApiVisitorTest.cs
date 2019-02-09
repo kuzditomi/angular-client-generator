@@ -37,10 +37,10 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var actionDescriptions = ApiExplorer
                     .ApiDescriptions
                     .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
-                    .Select(a => new ActionDescriptionPart(a))
+                    .Select(a => new ActionDescriptionPart(null))//a))
                     .ToList();
 
-                var controllerDesciptionPart = new ControllerDescriptionPart(controllerDescription)
+                var controllerDesciptionPart = new ControllerDescriptionPart(null)//controllerDescription)
                 {
                     ActionDescriptionParts = actionDescriptions
                 };
@@ -86,7 +86,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 foreach (var httpActionDescriptor in apiDescriptions)
                 {
-                    var actionDescriptorPart = new ActionDescriptionPart(httpActionDescriptor);
+                    var actionDescriptorPart = new ActionDescriptionPart(null);//httpActionDescriptor);
                     actionDescriptorPart.Accept(apiVisitor);
                 }
 
@@ -135,9 +135,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 {
                     ControllerDescriptionParts = new List<ControllerDescriptionPart>
                     {
-                        new ControllerDescriptionPart(controllerDescription)
+                        new ControllerDescriptionPart(null)//controllerDescription)
                         {
-                            ActionDescriptionParts = actionDescriptions.Select(a => new ActionDescriptionPart(a))
+                            ActionDescriptionParts = actionDescriptions.Select(a => new ActionDescriptionPart(null))//a))
                         }
                     }
                 };

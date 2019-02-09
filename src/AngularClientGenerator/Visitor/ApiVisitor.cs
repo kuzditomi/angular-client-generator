@@ -1,5 +1,4 @@
-﻿using AngularClientGenerator.Config;
-using AngularClientGenerator.Contracts.Config;
+﻿using AngularClientGenerator.Contracts.Config;
 using AngularClientGenerator.DescriptionParts;
 
 namespace AngularClientGenerator.Visitor
@@ -7,7 +6,7 @@ namespace AngularClientGenerator.Visitor
     public abstract class ApiVisitor : IApiVisitor
     {
         protected ClientBuilder ClientBuilder;
-        private StaticPartBuilder StaticPartBuilder;
+        private readonly StaticPartBuilder StaticPartBuilder;
         protected IVisitorConfig Config;
 
         protected ApiVisitor(IVisitorConfig config, ClientBuilder builder)

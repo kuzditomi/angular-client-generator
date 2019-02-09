@@ -1,31 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http.Description;
+using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.DescriptionParts;
 
 namespace AngularClientGenerator
 {
     public class DescriptionCollector
     {
-        private IApiExplorer ApiExplorer;
+        private ApiDescriptor ApiDescriptor;
 
-        public DescriptionCollector(IApiExplorer apiExplorer)
+        public DescriptionCollector(ApiDescriptor apiDescriptor)
         {
-            this.ApiExplorer = apiExplorer;
+            this.ApiDescriptor = apiDescriptor;
         }
 
         public IEnumerable<ControllerDescriptionPart> GetControllerDescriptions()
         {
-            return this.ApiExplorer.ApiDescriptions
-                .Select(d => d.ActionDescriptor.ControllerDescriptor)
-                .Distinct()
+            return this.ApiDescriptor.ControllerDescriptors
                 .Select(cd => new ControllerDescriptionPart(cd)).ToList();
         }
 
         public IEnumerable<ActionDescriptionPart> GetActionDescriptionsForController(string controllerName)
         {
-            return this.ApiExplorer.ApiDescriptions
-                .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == controllerName)
+            return this.ApiDescriptor.ControllerDescriptors
+                .Single(a => a.Name == controllerName)
+                .ActionDescriptors
                 .Select(a => new ActionDescriptionPart(a));
         }
     }

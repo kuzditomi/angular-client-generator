@@ -17,7 +17,7 @@ namespace AngularClientGeneratorTest
         [TestMethod]
         public void CreateGeneratorDefaultParams()
         {
-            var generator = new Generator(this.ApiExplorer);
+            var generator = new Generator(null);//this.ApiExplorer);
 
             Assert.AreEqual("angular-generated-client.ts", generator.Config.ExportPath);
             Assert.AreEqual(Language.TypeScript, generator.Config.Language);
@@ -36,7 +36,7 @@ namespace AngularClientGeneratorTest
                 ExportPath = path
             };
 
-            var generator = new Generator(this.ApiExplorer)
+            var generator = new Generator(null)//this.ApiExplorer)
             {
                 Config = config
             };
@@ -50,7 +50,7 @@ namespace AngularClientGeneratorTest
             this.HttpConfiguration = new HttpConfiguration();
             this.ApiExplorer = new ApiExplorer(this.HttpConfiguration);
 
-            var generator = new Generator(this.ApiExplorer);
+            var generator = new Generator(null);//this.ApiExplorer);
             generator.Generate();
 
             var fileExists = File.Exists(generator.Config.ExportPath);
@@ -69,7 +69,7 @@ namespace AngularClientGeneratorTest
 
             this.RunInScope(() =>
             {
-                var generator = new Generator(this.ApiExplorer);
+                var generator = new Generator(null);//this.ApiExplorer);
                 generator.Generate();
 
                 var content = File.ReadAllText(generator.Config.ExportPath);
@@ -102,7 +102,7 @@ namespace AngularClientGeneratorTest
                 DefaultBaseUrl = "abc"
             };
 
-            var generator = new Generator(this.ApiExplorer)
+            var generator = new Generator(null)//this.ApiExplorer)
             {
                 Config = config
             };
@@ -124,7 +124,7 @@ namespace AngularClientGeneratorTest
             };
 
 
-            var generator = new Generator(this.ApiExplorer)
+            var generator = new Generator(null)//this.ApiExplorer)
             {
                 Config = config
             };

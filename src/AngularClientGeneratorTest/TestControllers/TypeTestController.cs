@@ -92,6 +92,7 @@ namespace AngularClientGeneratorTest.TestControllers
         [Route("unwraptask")]
         public async Task<IHttpActionResult> UnWrapTaskGeneric()
         {
+            await Task.CompletedTask;
             return Ok();
         }
 
@@ -99,6 +100,7 @@ namespace AngularClientGeneratorTest.TestControllers
         [Route("tasktovoid")]
         public async Task TaskToVoid()
         {
+            await Task.CompletedTask;
         }
 
         [HttpPost]

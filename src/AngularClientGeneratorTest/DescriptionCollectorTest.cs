@@ -14,10 +14,10 @@ namespace AngularClientGeneratorTest
         {
             this.RegisterController<TestController>();
             this.RegisterController<SimpleController>();
-            
+
             this.RunInScope(() =>
             {
-                var descriptionCollector = new DescriptionCollector(this.ApiExplorer);
+                var descriptionCollector = new DescriptionCollector(null);//this.ApiExplorer);
                 var controllerDefinitions = descriptionCollector.GetControllerDescriptions();
 
                 Assert.AreEqual(2, controllerDefinitions.Count());
@@ -33,7 +33,7 @@ namespace AngularClientGeneratorTest
         {
             this.RunInScope(() =>
             {
-                var descriptionCollector = new DescriptionCollector(this.ApiExplorer);
+                var descriptionCollector = new DescriptionCollector(null);// this.ApiExplorer);
                 var controllerDefinitions = descriptionCollector.GetControllerDescriptions();
 
                 Assert.AreEqual(0, controllerDefinitions.Count());
@@ -48,7 +48,7 @@ namespace AngularClientGeneratorTest
 
             this.RunInScope(() =>
             {
-                var descriptionCollector = new DescriptionCollector(this.ApiExplorer);
+                var descriptionCollector = new DescriptionCollector(null);//this.ApiExplorer);
                 var controllerDescription = descriptionCollector.GetControllerDescriptions().First(c => c.Name == "Simple");
                 var actionDescriptions = descriptionCollector.GetActionDescriptionsForController(controllerDescription.Name);
 

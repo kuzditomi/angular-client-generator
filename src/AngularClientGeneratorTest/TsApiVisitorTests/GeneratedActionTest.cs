@@ -10,7 +10,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
     [TestClass]
     public class GeneratedActionTest: TestBase
     {
-        private IEnumerable<string> httpThenPart;
+        private readonly IEnumerable<string> httpThenPart;
 
         public GeneratedActionTest()
         {

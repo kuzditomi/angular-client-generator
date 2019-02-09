@@ -2,6 +2,7 @@
 using System.Web.Http;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
+using AngularClientGenerator.Descriptor;
 using AngularClientGenerator.ExampleWebAPI;
 using Microsoft.Owin.Hosting;
 
@@ -33,7 +34,8 @@ namespace AngularClientGenerator.Example
                 }
 
                 var explorer = config.Services.GetApiExplorer();
-                var generator = new Generator(explorer)
+                var descriptor = ApiDescriptorConverter.CreateApiDescriptor(explorer);
+                var generator = new Generator(descriptor)
                 {
                     Config = new GeneratorConfig
                     {
