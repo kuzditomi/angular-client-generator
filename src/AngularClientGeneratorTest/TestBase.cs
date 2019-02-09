@@ -3,14 +3,14 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Dispatcher;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AngularClientGenerator.Config;
-using AngularClientGenerator.Contracts;
 using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitor;
 using AngularClientGeneratorTest.Util;
 using Microsoft.Owin.Hosting;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Owin;
+using AngularClientGenerator.Contracts;
 
 namespace AngularClientGeneratorTest
 {
@@ -66,7 +66,7 @@ namespace AngularClientGeneratorTest
             }
 
             var builder = new ClientBuilder(config);
-            var apiVisitor = new TsApiVisitor(config, builder);
+            var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
 
             var apiDescriptions = ApiExplorer
                 .ApiDescriptions
@@ -86,16 +86,19 @@ namespace AngularClientGeneratorTest
             return apiVisitor.GetContent();
         }
 
-        protected string VisitActionsFromController<T>() where T : ApiController
+        protected string VisitActionsFromController<T>(GeneratorConfig config = null) where T : ApiController
         {
-            var config = new GeneratorConfig
+            if (config == null)
             {
-                IndentType = IndentType.Tab,
-                Language = Language.TypeScript
-            };
+                config = new GeneratorConfig
+                {
+                    IndentType = IndentType.Tab,
+                    Language = Language.TypeScript
+                };
+            }
 
             var builder = new ClientBuilder(config);
-            var apiVisitor = new TsApiVisitor(config, builder);
+            var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
 
             var apiDescriptions = ApiExplorer
                 .ApiDescriptions

@@ -36,7 +36,7 @@ namespace AngularClientGenerator.DescriptionParts
             {
                 this.ReturnValueDescription = new TypeDescriptionPart(((ResponseTypeAttribute)responseTypeAttribute).ResponseType);
             }
-            
+
             this.HttpMethod = apiDescription.HttpMethod;
 
             this.ParameterDescriptions = apiDescription.ParameterDescriptions

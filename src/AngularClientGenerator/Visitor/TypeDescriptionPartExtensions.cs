@@ -15,7 +15,12 @@ namespace AngularClientGenerator.Visitor
         {
             return typeDescriptionPart.Type.GetInterfaces().Any(ti => ti == typeof(IEnumerable));
         }
-        
+
+        public static bool IsGeneric(this TypeDescriptionPart typeDescriptionPart)
+        {
+            return typeDescriptionPart.Type.IsGenericType;
+        }
+
         public static bool IsNullable(this TypeDescriptionPart typeDescriptionPart)
         {
             return typeDescriptionPart.Type.IsGenericType &&
@@ -36,8 +41,8 @@ namespace AngularClientGenerator.Visitor
 
         public static bool IsDictionary(this TypeDescriptionPart typeDescriptionPart)
         {
-            return typeDescriptionPart.Type.IsGenericType 
-                && typeDescriptionPart.Type.GetGenericTypeDefinition() == typeof(Dictionary<,>);
+            return typeDescriptionPart.Type.IsGenericType
+                && (typeof(IDictionary).IsAssignableFrom(typeDescriptionPart.Type) || typeDescriptionPart.Type.GetGenericTypeDefinition() == typeof(IDictionary<,>));
         }
 
         private static readonly Type[] NumberTypes = { typeof(int), typeof(double), typeof(float), typeof(decimal) };

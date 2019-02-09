@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AngularClientGeneratorTest.TestControllers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 
 namespace AngularClientGeneratorTest.TsApiVisitorTests
 {
@@ -18,17 +18,17 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidParameterlessGetActionConfig() : ng.IRequestConfig {",
+                    "public VoidParameterlessGetActionConfig(): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: 'api/configtest/void',",
+                    "\t\turl: API_BASE_URL + 'api/configtest/void',",
                     "\t\tmethod: 'GET',",
                     "\t};",
                     "}"
                 };
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
-                
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
 
@@ -42,9 +42,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidStringParameterActionConfig(stringparam: string) : ng.IRequestConfig {",
+                    "public VoidStringParameterActionConfig(stringparam: string): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: 'api/configtest/voidstring',",
+                    "\t\turl: API_BASE_URL + 'api/configtest/voidstring',",
                     "\t\tmethod: 'GET',",
                     "\t\tparams: {",
                     "\t\t\tstringparam: stringparam,",
@@ -55,7 +55,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
 
@@ -69,9 +69,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidIntParameterActionConfig(intparam: number) : ng.IRequestConfig {",
+                    "public VoidIntParameterActionConfig(intparam: number): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: 'api/configtest/voidint',",
+                    "\t\turl: API_BASE_URL + 'api/configtest/voidint',",
                     "\t\tmethod: 'GET',",
                     "\t\tparams: {",
                     "\t\t\tintparam: intparam,",
@@ -82,37 +82,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
-
-        public void VoidDateParameterActionConfig()
-        {
-            RegisterController<ConfigVoidTestController>();
-
-            RunInScope(() =>
-            {
-                var content = VisitActionsFromController<ConfigVoidTestController>();
-                var expectedLines = new List<string>
-                {
-                    "public VoidDateParametersActionConfig(from: number, to: number) : ng.IRequestConfig {",
-                    "\treturn {",
-                    "\t\turl: 'api/configtest/voiddates',",
-                    "\t\tmethod: 'GET',",
-                    "\t\tparams: {",
-                    "\t\t\tfrom: from,",
-                    "\t\t\tto: to,",
-                    "\t\t},",
-                    "\t};",
-                    "}"
-                };
-
-                var expectedContent = String.Join(Environment.NewLine, expectedLines);
-
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
-            });
-        }
-
 
         [TestMethod]
         public void VoidDoubleParameterActionConfig()
@@ -124,9 +96,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidDoubleParameterActionConfig(doubleparam: number) : ng.IRequestConfig {",
+                    "public VoidDoubleParameterActionConfig(doubleparam: number): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: 'api/configtest/voiddouble',",
+                    "\t\turl: API_BASE_URL + 'api/configtest/voiddouble',",
                     "\t\tmethod: 'GET',",
                     "\t\tparams: {",
                     "\t\t\tdoubleparam: doubleparam,",
@@ -137,7 +109,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
 
@@ -151,9 +123,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidDecimalParameterActionConfig(decimalparam: number) : ng.IRequestConfig {",
+                    "public VoidDecimalParameterActionConfig(decimalparam: number): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: 'api/configtest/voiddecimal',",
+                    "\t\turl: API_BASE_URL + 'api/configtest/voiddecimal',",
                     "\t\tmethod: 'GET',",
                     "\t\tparams: {",
                     "\t\t\tdecimalparam: decimalparam,",
@@ -164,7 +136,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
 
@@ -178,9 +150,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidGuidParameterActionConfig(guidparam: string) : ng.IRequestConfig {",
+                    "public VoidGuidParameterActionConfig(guidparam: string): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: 'api/configtest/voidguid',",
+                    "\t\turl: API_BASE_URL + 'api/configtest/voidguid',",
                     "\t\tmethod: 'GET',",
                     "\t\tparams: {",
                     "\t\t\tguidparam: guidparam,",
@@ -191,7 +163,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
                 Assert.IsFalse(content.Contains("public interface IGuid[]"), "Guid type should not be defined as new type");
             });
         }
@@ -206,9 +178,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidSimpleParametersActionConfig(a: string, b: number, c: number) : ng.IRequestConfig {",
+                    "public VoidSimpleParametersActionConfig(a: string, b: number, c: number): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: 'api/configtest/voidsimpleparams',",
+                    "\t\turl: API_BASE_URL + 'api/configtest/voidsimpleparams',",
                     "\t\tmethod: 'GET',",
                     "\t\tparams: {",
                     "\t\t\ta: a,",
@@ -221,7 +193,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
 
@@ -235,9 +207,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidReplaceNumberActionConfig(id: number) : ng.IRequestConfig {",
+                    "public VoidReplaceNumberActionConfig(id: number): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: replaceUrl('api/configtest/voidreplaceparams/{id}', {",
+                    "\t\turl: replaceUrl(API_BASE_URL + 'api/configtest/voidreplaceparams/{id}', {",
                     "\t\t\tid: id,",
                     "\t\t}),",
                     "\t\tmethod: 'GET',",
@@ -247,7 +219,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
 
@@ -261,9 +233,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidReplaceMoreParamsActionConfig(id: number, second: string) : ng.IRequestConfig {",
+                    "public VoidReplaceMoreParamsActionConfig(id: number, second: string): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: replaceUrl('api/configtest/voidreplacemoreparams/{id}/more/{second}', {",
+                    "\t\turl: replaceUrl(API_BASE_URL + 'api/configtest/voidreplacemoreparams/{id}/more/{second}', {",
                     "\t\t\tid: id,",
                     "\t\t\tsecond: second,",
                     "\t\t}),",
@@ -274,7 +246,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
 
@@ -288,9 +260,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidComplexParamPostActionConfig(complex: IMyEmptyTestClass) : ng.IRequestConfig {",
+                    "public VoidComplexParamPostActionConfig(complex: IMyEmptyTestClass): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: 'api/configtest/voidcomplexparampost',",
+                    "\t\turl: API_BASE_URL + 'api/configtest/voidcomplexparampost',",
                     "\t\tmethod: 'POST',",
                     "\t\tdata: complex,",
                     "\t};",
@@ -299,7 +271,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
 
@@ -313,9 +285,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidComplexParamPutActionConfig(complex: IMyEmptyTestClass) : ng.IRequestConfig {",
+                    "public VoidComplexParamPutActionConfig(complex: IMyEmptyTestClass): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: 'api/configtest/voidcomplexparamput',",
+                    "\t\turl: API_BASE_URL + 'api/configtest/voidcomplexparamput',",
                     "\t\tmethod: 'PUT',",
                     "\t\tdata: complex,",
                     "\t};",
@@ -324,7 +296,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
 
@@ -338,9 +310,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidComplexParamAndReplaceActionConfig(id: string, complex: IMyEmptyTestClass) : ng.IRequestConfig {",
+                    "public VoidComplexParamAndReplaceActionConfig(id: string, complex: IMyEmptyTestClass): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: replaceUrl('api/configtest/voidcomplexparamandreplace/{id}', {",
+                    "\t\turl: replaceUrl(API_BASE_URL + 'api/configtest/voidcomplexparamandreplace/{id}', {",
                     "\t\t\tid: id,",
                     "\t\t}),",
                     "\t\tmethod: 'PUT',",
@@ -351,7 +323,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
 
@@ -365,9 +337,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var content = VisitActionsFromController<ConfigVoidTestController>();
                 var expectedLines = new List<string>
                 {
-                    "public VoidComplexParamAndReplaceGetActionConfig(id: string, complex: IMyEmptyTestClass) : ng.IRequestConfig {",
+                    "public VoidComplexParamAndReplaceGetActionConfig(id: string, complex: IMyEmptyTestClass): ng.IRequestConfig {",
                     "\treturn {",
-                    "\t\turl: replaceUrl('api/configtest/voidcomplexparamandreplaceget/{id}', {",
+                    "\t\turl: replaceUrl(API_BASE_URL + 'api/configtest/voidcomplexparamandreplaceget/{id}', {",
                     "\t\t\tid: id,",
                     "\t\t}),",
                     "\t\tmethod: 'GET',",
@@ -378,7 +350,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
 
                 var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
-                Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
 
@@ -388,10 +360,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
         {
             RegisterController<ConfigComplexParamGerErrorTestController>();
 
-            RunInScope(() =>
-            {
-                VisitActionsFromController<ConfigComplexParamGerErrorTestController>();
-            });
+            RunInScope(() => { VisitActionsFromController<ConfigComplexParamGerErrorTestController>(); });
         }
 
         [TestMethod]
@@ -400,9 +369,141 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
         {
             RegisterController<ConfigBigintErrorTestController>();
 
+            RunInScope(() => { VisitActionsFromController<ConfigBigintErrorTestController>(); });
+        }
+
+        [TestMethod]
+        public void DataPropertyForDeleteMethodBodyTest()
+        {
+            RegisterController<GeneratedMethodTestController>();
+
             RunInScope(() =>
             {
-                VisitActionsFromController<ConfigBigintErrorTestController>();
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
+                var expectedLines = new List<string>
+                {
+                    "public DeleteComplexParamConfig(param: IComplexDeleteType): ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: API_BASE_URL + 'api/methodtest/deletedata',",
+                    "\t\tmethod: 'DELETE',",
+                    "\t\tdata: param,",
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
+            });
+        }
+
+        [TestMethod]
+        public void ParamsPropertyForDeleteMethodUrlTest()
+        {
+            RegisterController<GeneratedMethodTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
+                var expectedLines = new List<string>
+                {
+                    "public DeleteSimpleParamConfig(param: string): ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: API_BASE_URL + 'api/methodtest/deletesimpledata',",
+                    "\t\tmethod: 'DELETE',",
+                    "\t\tparams: {",
+                    "\t\t\tparam: param,",
+                    "\t\t},",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
+            });
+        }
+
+        [TestMethod]
+        public void EnumerableParamsPropertyForDeleteMethodUrlTest()
+        {
+            RegisterController<GeneratedMethodTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
+                var expectedLines = new List<string>
+                {
+                    "public DeleteSimpleEnumerableParamConfig(param: number[]): ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: API_BASE_URL + 'api/methodtest/deletesimpleenumerabledata',",
+                    "\t\tmethod: 'DELETE',",
+                    "\t\tparams: {",
+                    "\t\t\tparam: param,",
+                    "\t\t},",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
+            });
+        }
+
+        [TestMethod]
+        public void ContentTypeSetForDeleteBodyTest()
+        {
+            RegisterController<GeneratedMethodTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
+                var expectedLines = new List<string>
+                {
+                    "public DeleteComplexParamConfig(param: IComplexDeleteType): ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: API_BASE_URL + 'api/methodtest/deletedata',",
+                    "\t\tmethod: 'DELETE',",
+                    "\t\tdata: param,",
+                    "\t\theaders: {",
+                    "\t\t\t'Content-Type': 'application/json',",
+                    "\t\t},",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
+            });
+        }
+
+        [TestMethod]
+        public void DeleteUrlReplaceAndBody()
+        {
+            RegisterController<GeneratedMethodTestController>();
+
+            RunInScope(() =>
+            {
+                var content = VisitActionsFromController<GeneratedMethodTestController>();
+                var expectedLines = new List<string>
+                {
+                    "public DeleteUrlReplaceAndBodyConfig(id: number, param: IComplexDeleteType): ng.IRequestConfig {",
+                    "\treturn {",
+                    "\t\turl: replaceUrl(API_BASE_URL + 'api/methodtest/deleteurlreplaceandbody/{id}', {",
+                    "\t\t\tid: id,",
+                    "\t\t}),",
+                    "\t\tmethod: 'DELETE',",
+                    "\t\tdata: param,",
+                    "\t\theaders: {",
+                    "\t\t\t'Content-Type': 'application/json',",
+                    "\t\t},",
+                    "\t};",
+                    "}"
+                };
+
+                var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+                Assert.IsTrue(content.Contains(expectedContent), $"\nExpected: {expectedContent}\nGenerated: {content}");
             });
         }
     }

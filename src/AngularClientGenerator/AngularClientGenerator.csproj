@@ -9,8 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AngularClientGenerator</RootNamespace>
     <AssemblyName>AngularClientGenerator</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,20 +68,24 @@
     <Compile Include="Visitor\ClientBuilder.cs" />
     <Compile Include="Visitor\IApiVisitor.cs" />
     <Compile Include="Visitor\StaticPartBuilder.cs" />
+    <Compile Include="Visitor\AngularApiVisitor.cs" />
     <Compile Include="Visitor\TsApiVisitor.cs" />
     <Compile Include="Visitor\TypeDescriptionPartExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AngularClientGenerator.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
-    <Content Include="StaticParts\EnumHelper.ts.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AngularClientGenerator.Contracts\AngularClientGenerator.Contracts.csproj">
       <Project>{5cf1b966-6109-431d-acd4-3cb3a0ee68f9}</Project>
       <Name>AngularClientGenerator.Contracts</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="StaticParts\EnumHelper.ts.template.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

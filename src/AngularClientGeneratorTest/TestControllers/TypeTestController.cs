@@ -7,7 +7,7 @@ using AngularClientGeneratorTest.TestModels;
 namespace AngularClientGeneratorTest.TestControllers
 {
     [RoutePrefix("api/type")]
-    public class TypeTestController: ApiController
+    public class TypeTestController : ApiController
     {
         [HttpGet]
         [Route("basictypes")]
@@ -19,42 +19,36 @@ namespace AngularClientGeneratorTest.TestControllers
         [Route("arrayvalue")]
         public void ArrayTypeAction(string[] arr)
         {
-
         }
 
         [HttpGet]
         [Route("enumtype")]
         public void EnumTypeAction(TestEnum enumvalue)
         {
-
         }
-        
+
         [HttpGet]
         [Route("numberenumtype")]
         public void NumberedEnumTypeAction(TestNumberedEnum enumvalue)
         {
-
         }
 
         [HttpGet]
         [Route("doubletype1")]
         public void OneMyEmptyTestClassAction(MyEmptyTestClass model)
         {
-
         }
 
         [HttpGet]
         [Route("doubletype2")]
         public void TwoMyEmptyTestClassAction(MyEmptyTestClass model)
         {
-
         }
 
         [HttpGet]
         [Route("recursivediscover")]
         public void TestRecursiveDiscovery(TestComplexType model)
         {
-
         }
 
         [HttpPost]
@@ -67,28 +61,24 @@ namespace AngularClientGeneratorTest.TestControllers
         [Route("enumerablevalue")]
         public void EnumerableTypeAction(IEnumerable<EnumerableOnlyType> model)
         {
-
         }
 
         [HttpPost]
         [Route("optionalparam")]
         public void OptionalParam(int? optional = 3)
         {
-
         }
 
         [HttpPost]
         [Route("nullableprop")]
         public void NullableProperty(ContainsNullableProperty hasnullable)
         {
-
         }
 
         [HttpPost]
         [Route("asoptionalparamonly")]
         public void OnlyAsOptionalParam(AsOptionalParamOnly model = null)
         {
-
         }
 
         [HttpPost]
@@ -130,8 +120,38 @@ namespace AngularClientGeneratorTest.TestControllers
         }
 
         [HttpPost]
+        [Route("idictionarywithnumberkey")]
+        public void IDictionaryWithNumberKey(IDictionary<int, string> dictionary)
+        {
+        }
+
+        [HttpPost]
         [Route("dictionarywithcomplexvalue")]
         public void DictionaryWithComplexValue(Dictionary<int, DictionaryReturnType> dictionary)
+        {
+        }
+
+        [HttpPost]
+        [Route("generictypenumber")]
+        public void GenericType(GenericClass<int> type)
+        {
+        }
+
+        [HttpPost]
+        [Route("generictypestring")]
+        public void OtherGenericType(GenericClass<string> type)
+        {
+        }
+
+        [HttpPost]
+        [Route("generictypecomplex")]
+        public void ComplexGenericType(GenericClass<TestModelA> type)
+        {
+        }
+
+        [HttpPost]
+        [Route("generictypeothercomplex")]
+        public void OtherComplexGenericType(GenericClass<TestModelB> type)
         {
         }
     }

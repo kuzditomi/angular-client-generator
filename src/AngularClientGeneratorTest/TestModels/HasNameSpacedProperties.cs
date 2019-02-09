@@ -1,8 +1,14 @@
-﻿namespace AngularClientGeneratorTest.TestModels
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AngularClientGeneratorTest.TestModels
 {
     public class HasNameSpacedProperties
     {
-        public SB.TradingTools.AngularClientGeneratorTest.TestModels.NameSpaceA.SameNameDifferentNameSpace AProperty { get; set; }
-        public SB.TradingTools.AngularClientGeneratorTest.TestModels.NameSpaceB.SameNameDifferentNameSpace BProperty { get; set; }
+        public NameSpaceA.SameNameDifferentNameSpace AProperty { get; set; }
+        public NameSpaceB.SameNameDifferentNameSpace BProperty { get; set; }
     }
 }

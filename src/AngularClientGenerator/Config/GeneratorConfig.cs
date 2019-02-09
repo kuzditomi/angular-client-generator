@@ -11,6 +11,8 @@ namespace AngularClientGenerator.Config
         public string ModuleName { get; set; }
         public IndentType IndentType { get; set; }
         public bool UseNamespaces { get; set; }
+        public string DefaultBaseUrl { get; set; }
+        public string UrlSuffix { get; set; }
         public Func<Type, string> NamespaceNamingRule { get; set; }
 
         public GeneratorConfig()
@@ -20,6 +22,8 @@ namespace AngularClientGenerator.Config
             this.ModuleName = "mymodule";
             this.IndentType = IndentType.Tab;
             this.UseNamespaces = false;
+            this.DefaultBaseUrl = "http://localhost:1337/";
+            this.UrlSuffix = "api/";
         }
     }
 }

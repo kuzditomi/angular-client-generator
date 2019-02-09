@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
 using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitor;
 using AngularClientGeneratorTest.TestControllers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AngularClientGeneratorTest.TsApiVisitorTests
 {
@@ -26,7 +26,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                     Language = Language.TypeScript
                 };
                 var builder = new ClientBuilder(config);
-                var apiVisitor = new TsApiVisitor(config, builder);
+                var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
 
                 var controllerDescription = ApiExplorer
                     .ApiDescriptions
@@ -55,7 +55,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                     "}",
                     ".service('ApiTestService', ApiTestService)",
                     "static $inject = ['$http', '$q']",
-                    "constructor(private http, private q)"
+                    "constructor(private http: ng.IHttpService, private q: ng.IQService)"
                 };
 
                 foreach (var expectedContent in expectedContents)
@@ -78,7 +78,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                     Language = Language.TypeScript
                 };
                 var builder = new ClientBuilder(config);
-                var apiVisitor = new TsApiVisitor(config, builder);
+                var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
 
                 var apiDescriptions = ApiExplorer
                     .ApiDescriptions
@@ -120,7 +120,7 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                     Language = Language.TypeScript
                 };
                 var builder = new ClientBuilder(config);
-                var apiVisitor = new TsApiVisitor(config, builder);
+                var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
 
                 var controllerDescription = ApiExplorer
                     .ApiDescriptions
@@ -142,7 +142,6 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                     }
                 };
 
-
                 moduleDescription.Accept(apiVisitor);
 
                 var content = apiVisitor.GetContent();
@@ -151,6 +150,81 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 {
                     "export interface ITestModelA {",
                     "export interface ITestModelB {",
+                };
+
+                foreach (var expectedContent in expectedContents)
+                {
+                    Assert.IsTrue(content.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
+                }
+            });
+        }
+
+        [TestMethod]
+        public void ApiHostIsInitialisedFromWindow()
+        {
+            RegisterController<TestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    IndentType = IndentType.Tab,
+                    Language = Language.TypeScript,
+                    DefaultBaseUrl = "http://localhost:1337"
+                };
+
+                var content = VisitModuleWithController<TestController>(config);
+
+                var expectedContent = "\tlet addr = window.ApiHost;";
+
+                Assert.IsTrue(content.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
+            });
+        }
+
+        [TestMethod]
+        public void DefaultBaseURLFromConfig()
+        {
+            RegisterController<TestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    IndentType = IndentType.Tab,
+                    Language = Language.TypeScript,
+                    DefaultBaseUrl = "myexampleurl"
+                };
+
+                var content = VisitModuleWithController<TestController>(config);
+
+                var expectedContent = "\t\taddr = 'myexampleurl';";
+
+                Assert.IsTrue(content.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
+            });
+        }
+
+
+        [TestMethod]
+        public void UrlSuffixAddition()
+        {
+            RegisterController<TestController>();
+
+            RunInScope(() =>
+            {
+                var config = new GeneratorConfig
+                {
+                    IndentType = IndentType.Tab,
+                    Language = Language.TypeScript,
+                    DefaultBaseUrl = "mybaseurl",
+                    UrlSuffix = "abc"
+                };
+
+                var content = VisitModuleWithController<TestController>(config);
+
+                var expectedContents = new List<string>
+                {
+                    "\t\taddr = 'mybaseurl';",
+                    "\texport const API_SUFFIX = 'abc';",
                 };
 
                 foreach (var expectedContent in expectedContents)

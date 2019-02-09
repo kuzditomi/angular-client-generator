@@ -1,6 +1,4 @@
-﻿using SB.TradingTools.AngularClientGeneratorTest.TestModels;
-
-namespace AngularClientGeneratorTest.TestModels
+﻿namespace AngularClientGeneratorTest.TestModels
 {
     public class TestComplexType
     {

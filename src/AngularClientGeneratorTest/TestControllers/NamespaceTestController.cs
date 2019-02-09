@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web.Http;
 using AngularClientGeneratorTest.TestModels;
 using AngularClientGeneratorTest.TestModels.EnumNameSpace;
@@ -10,19 +14,19 @@ namespace AngularClientGeneratorTest.TestControllers
     {
         [HttpPost]
         [Route("samenamea")]
-        public void SameNameDifferentNameSpaceA(SB.TradingTools.AngularClientGeneratorTest.TestModels.NameSpaceA.SameNameDifferentNameSpace parameter)
+        public void SameNameDifferentNameSpaceA(TestModels.NameSpaceA.SameNameDifferentNameSpace parameter)
         {
         }
 
         [HttpPost]
         [Route("samenameb")]
-        public void SameNameDifferentNameSpaceB(SB.TradingTools.AngularClientGeneratorTest.TestModels.NameSpaceB.SameNameDifferentNameSpace parameter)
+        public void SameNameDifferentNameSpaceB(TestModels.NameSpaceB.SameNameDifferentNameSpace parameter)
         {
         }
 
         [HttpPost]
         [Route("array")]
-        public void NameSpacedArrays(IEnumerable<SB.TradingTools.AngularClientGeneratorTest.TestModels.NameSpaceA.SameNameDifferentNameSpace> parameter)
+        public void NameSpacedArrays(IEnumerable<TestModels.NameSpaceA.SameNameDifferentNameSpace> parameter)
         {
         }
         

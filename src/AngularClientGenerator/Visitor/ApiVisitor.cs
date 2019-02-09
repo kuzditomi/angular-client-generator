@@ -1,4 +1,5 @@
-﻿using AngularClientGenerator.Contracts.Config;
+﻿using AngularClientGenerator.Config;
+using AngularClientGenerator.Contracts.Config;
 using AngularClientGenerator.DescriptionParts;
 
 namespace AngularClientGenerator.Visitor

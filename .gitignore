@@ -6,3 +6,4 @@ obj
 TestResults
 node_modules
 temp
+*.nupkg

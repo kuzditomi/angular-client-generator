@@ -65,7 +65,9 @@ namespace AngularClientGenerator.Visitor
 
         public void WriteLine(string pattern = "", params object[] parameters)
         {
-            this.Builder.Append(Indent);
+            if(!string.IsNullOrEmpty(pattern))
+                this.Builder.Append(Indent);
+
             this.Builder.AppendFormat(pattern, parameters);
             this.Builder.AppendLine();
         }

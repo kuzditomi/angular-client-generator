@@ -2,7 +2,6 @@
 using System.Web.Http;
 using System.Web.Http.Description;
 using AngularClientGeneratorTest.TestModels;
-using SB.TradingTools.AngularClientGeneratorTest.TestModels;
 
 namespace AngularClientGeneratorTest.TestControllers
 {
@@ -54,6 +53,47 @@ namespace AngularClientGeneratorTest.TestControllers
         [HttpGet]
         [ResponseType(typeof(IEnumerable<MyEmptyTestClass>))]
         public IHttpActionResult IEnumerableReturnAction()
+        {
+            return Ok();
+        }
+
+        [Route("generictyperet")]
+        [HttpGet]
+        [ResponseType(typeof(GenericTypeClass<int>))]
+        public IHttpActionResult GenericTypeReturnAction()
+        {
+            return Ok();
+        }
+
+        [Route("deletedata")]
+        [HttpDelete]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult DeleteComplexParam(ComplexDeleteType param)
+        {
+            return Ok();
+        }
+
+
+        [Route("deletesimpledata")]
+        [HttpDelete]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult DeleteSimpleParam(string param)
+        {
+            return Ok();
+        }
+
+        [Route("deletesimpleenumerabledata")]
+        [HttpDelete]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult DeleteSimpleEnumerableParam(IEnumerable<int> param)
+        {
+            return Ok();
+        }
+
+        [Route("deleteurlreplaceandbody/{id}")]
+        [HttpDelete]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult DeleteUrlReplaceAndBody(int id, ComplexDeleteType param)
         {
             return Ok();
         }

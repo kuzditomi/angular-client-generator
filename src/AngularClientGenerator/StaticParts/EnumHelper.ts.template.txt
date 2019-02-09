@@ -1,0 +1,37 @@
+﻿    public Register = (name: string, enumtype: any, titles?: { [key: string]: string }) => {
+        this.RegisterArray(name, enumtype, titles);
+        this.RegisterHash(name, enumtype, titles);
+    }
+
+    private RegisterArray = (enumname: string, enumtype: any, titles?: { [key: string]: string }) => {
+        const enumArray = [];
+        for (const enumMember in enumtype) {
+            const isValueProperty = parseInt(enumMember, 10) >= 0;
+            if (isValueProperty) {
+                const name = enumtype[enumMember];
+                const value = parseInt(enumMember);
+                const title = (titles && titles[name]) || name;
+
+                enumArray.push({ Name: name, Value: value, Title: title });
+            }
+        }
+
+        this[enumname] = enumArray;
+    }
+
+    private RegisterHash(enumname: string, enumtype: any, titles?: { [key: string]: string }) {
+        const enumObj: Record<string, EnumValue> = {};
+        for (const enumMember in enumtype) {
+            const isValueProperty = parseInt(enumMember, 10) >= 0;
+            const name = isValueProperty ? enumtype[enumMember] : enumMember;
+            const value = isValueProperty ? parseInt(enumMember) : parseInt(enumtype[enumMember]);
+            const title = titles ? titles[name] : name;
+
+            enumObj[enumMember] = ({ Name: name, Value: value, Title: title });
+        }
+
+        this[enumname + 'Obj'] = enumObj;
+    }
+}
+
+Module.service('Enums', EnumHelperService);

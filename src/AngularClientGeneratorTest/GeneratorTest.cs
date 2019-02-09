@@ -2,12 +2,12 @@
 using System.IO;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AngularClientGenerator;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
+using AngularClientGenerator.Contracts.Exceptions;
 using AngularClientGeneratorTest.TestControllers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SB.TradingTools.AngularClientGeneratorTest;
 
 namespace AngularClientGeneratorTest
 {
@@ -57,7 +57,7 @@ namespace AngularClientGeneratorTest
 
             Assert.IsTrue(fileExists);
         }
-        
+
         [TestMethod]
         public void GenerateAllRegisteredControllers()
         {
@@ -88,6 +88,48 @@ namespace AngularClientGeneratorTest
                     Assert.IsTrue(content.Contains(controller), "Generator doesnt include registered controller: " + controller);
                 }
             });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(GeneratorConfigurationException))]
+        public void BaseUrlDoesntEndWithSlash()
+        {
+            var path = "generate/here/the/code";
+
+            var config = new GeneratorConfig
+            {
+                ExportPath = path,
+                DefaultBaseUrl = "abc"
+            };
+
+            var generator = new Generator(this.ApiExplorer)
+            {
+                Config = config
+            };
+
+            generator.Generate();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(GeneratorConfigurationException))]
+        public void UrlPrefixDoesntEndWithSlash()
+        {
+            var path = "generate/here/the/code";
+
+            var config = new GeneratorConfig
+            {
+                ExportPath = path,
+                DefaultBaseUrl = "abc/",
+                UrlSuffix = "efg"
+            };
+
+
+            var generator = new Generator(this.ApiExplorer)
+            {
+                Config = config
+            };
+
+            generator.Generate();
         }
     }
 }

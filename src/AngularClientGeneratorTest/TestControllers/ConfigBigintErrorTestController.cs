@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using AngularClientGeneratorTest.TestModels;
 
 namespace AngularClientGeneratorTest.TestControllers
 {

@@ -1,6 +1,5 @@
 ﻿using System.Web.Http;
 using AngularClientGeneratorTest.TestModels;
-using SB.TradingTools.AngularClientGeneratorTest.TestModels;
 
 namespace AngularClientGeneratorTest.TestControllers
 {

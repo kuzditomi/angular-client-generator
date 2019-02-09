@@ -10,11 +10,11 @@ using AngularClientGenerator.DescriptionParts;
 
 namespace AngularClientGenerator.Visitor
 {
-    public class TsApiVisitor : ApiVisitor
+    public class AngularJSTypescriptApiVisitor : ApiVisitor
     {
         private List<KeyValuePair<string, Type>> Types { get; }
 
-        public TsApiVisitor(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
+        public AngularJSTypescriptApiVisitor(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
         {
             this.Types = new List<KeyValuePair<string, Type>>();
         }
@@ -24,7 +24,7 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("export class Api{0}Service {{", controllerDescription.Name);
             this.ClientBuilder.IncreaseIndent();
             this.ClientBuilder.WriteLine("static $inject = ['$http', '$q'];", controllerDescription.Name);
-            this.ClientBuilder.WriteLine("constructor(private http, private q){{ }}", controllerDescription.Name);
+            this.ClientBuilder.WriteLine("constructor(private http: ng.IHttpService, private q: ng.IQService) {{ }}", controllerDescription.Name);
             this.ClientBuilder.WriteLine();
 
             foreach (var actionDescriptionPart in controllerDescription.ActionDescriptionParts)
@@ -64,6 +64,17 @@ namespace AngularClientGenerator.Visitor
 
             this.ClientBuilder.WriteLine("export let Module = angular.module('{0}', []);", moduleDescription.Name);
             this.ClientBuilder.WriteLine();
+            this.ClientBuilder.WriteLine("let addr = window.ApiHost;");
+            this.ClientBuilder.WriteLine("if (addr.indexOf('ApiHost') !== -1) {{");
+            this.ClientBuilder.IncreaseIndent();
+            this.ClientBuilder.WriteLine($"addr = '{Config.DefaultBaseUrl}';");
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}}");
+            this.ClientBuilder.WriteLine();
+            this.ClientBuilder.WriteLine("export const BASE_URL = addr;");
+            this.ClientBuilder.WriteLine($"export const API_SUFFIX = '{Config.UrlSuffix}';");
+            this.ClientBuilder.WriteLine("export const API_BASE_URL = BASE_URL + API_SUFFIX;");
+            this.ClientBuilder.WriteLine();
 
             this.GenerateUrlReplaceMethod();
 
@@ -73,12 +84,12 @@ namespace AngularClientGenerator.Visitor
             }
 
             this.WriteTypes();
+            this.WriteEnumServiceInterface();
             this.WriteEnumService();
 
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}}");
         }
-
 
         public override void Visit(TypeDescriptionPart typeDescriptionPart)
         {
@@ -87,7 +98,8 @@ namespace AngularClientGenerator.Visitor
 
             var generatedName = GetNameForType(typeDescriptionPart.Type);
             var sameName = this.Types.Where(t => t.Key == generatedName).ToList();
-            if (sameName.Count > 0)
+
+            if (sameName.Any() && !typeDescriptionPart.IsGeneric())
             {
                 if (sameName.Any(t => t.Value.FullName == typeDescriptionPart.Type.FullName))
                     return;
@@ -97,6 +109,11 @@ namespace AngularClientGenerator.Visitor
 
                 if (this.Config.NamespaceNamingRule == null)
                     throw new ArgumentNullException("Config.NamespaceNamingRule");
+            }
+
+            if (typeDescriptionPart.Type.IsGenericParameter)
+            {
+                return;
             }
 
             if (typeDescriptionPart.IsIgnoredType())
@@ -128,10 +145,28 @@ namespace AngularClientGenerator.Visitor
                 return;
             }
 
+            if (typeDescriptionPart.IsGeneric())
+            {
+                var genericarguments = typeDescriptionPart.Type.GetGenericArguments();
+                foreach (var genericargument in genericarguments)
+                {
+                    this.Visit(new TypeDescriptionPart(genericargument));
+                }
+
+                if (sameName.Any())
+                {
+                    return;
+                }
+            }
+
             this.Types.Add(new KeyValuePair<string, Type>(generatedName, typeDescriptionPart.Type));
 
+            var typeToCheckPropertiesIn = typeDescriptionPart.IsGeneric()
+                ? typeDescriptionPart.Type.GetGenericTypeDefinition()
+                : typeDescriptionPart.Type;
+
             // visit properties
-            foreach (var propertyInfo in typeDescriptionPart.Type.GetProperties())
+            foreach (var propertyInfo in typeToCheckPropertiesIn.GetProperties())
             {
                 this.Visit(new TypeDescriptionPart(propertyInfo.PropertyType));
             }
@@ -152,11 +187,11 @@ namespace AngularClientGenerator.Visitor
                     p => p.ParameterName));
 
             // method header
-            this.ClientBuilder.WriteLine("public {0} = ({1}) : ng.IPromise<{2}> => {{", actionDescription.Name, parametersWithTypes, GetNameSpaceAndNameForType(actionDescription.ReturnValueDescription.Type));
+            this.ClientBuilder.WriteLine("public {0} = ({1}): ng.IPromise<{2}> => {{", actionDescription.Name, parametersWithTypes, GetNameSpaceAndNameForType(actionDescription.ReturnValueDescription.Type));
 
             // call config
             this.ClientBuilder.IncreaseIndent();
-            this.ClientBuilder.WriteLine("return this.http(this.{0}Config({1}))", actionDescription.Name, parameters);
+            this.ClientBuilder.WriteLine("return this.http<{0}>(this.{1}Config({2}))", GetNameSpaceAndNameForType(actionDescription.ReturnValueDescription.Type), actionDescription.Name, parameters);
             this.ClientBuilder.IncreaseIndent();
             this.ClientBuilder.WriteLine(".then(resp => {{");
             this.ClientBuilder.IncreaseIndent();
@@ -167,7 +202,8 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("return this.q.reject({{");
             this.ClientBuilder.IncreaseIndent();
             this.ClientBuilder.WriteLine("Status: resp.status,");
-            this.ClientBuilder.WriteLine("Message: (resp.data && resp.data.Message) || resp.statusText");
+            this.ClientBuilder.WriteLine("Message: (resp.data && resp.data.Message) || resp.statusText,");
+            this.ClientBuilder.WriteLine("Data: resp.data,");
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}});");
             this.ClientBuilder.DecreaseIndent();
@@ -186,6 +222,10 @@ namespace AngularClientGenerator.Visitor
             var isPostOrPut = actionDescription.HttpMethod == HttpMethod.Post ||
                               actionDescription.HttpMethod == HttpMethod.Put;
 
+            var deleteHasComplexParam = actionDescription.HttpMethod == HttpMethod.Delete && actionDescription.ParameterDescriptions.Any(parameterDescription => parameterDescription.IsComplex());
+
+            var shouldUseData = isPostOrPut || deleteHasComplexParam;
+
             var paramsToReplace = actionDescription.ParameterDescriptions
                 .Where(a => actionDescription.UrlTemplate.Contains("{" + a.ParameterName + "}"))
                 .ToList();
@@ -203,13 +243,13 @@ namespace AngularClientGenerator.Visitor
                     return $"{p.ParameterName}{optionalPrefix}: {GetNameSpaceAndNameForType(p.Type)}";
                 }));
 
-                this.ClientBuilder.WriteLine("public {0}Config({1}) : ng.IRequestConfig {{",
+                this.ClientBuilder.WriteLine("public {0}Config({1}): ng.IRequestConfig {{",
                     actionDescription.Name,
                     parameters);
             }
             else
             {
-                this.ClientBuilder.WriteLine("public {0}Config() : ng.IRequestConfig {{",
+                this.ClientBuilder.WriteLine("public {0}Config(): ng.IRequestConfig {{",
                     actionDescription.Name);
             }
             this.ClientBuilder.IncreaseIndent();
@@ -223,7 +263,7 @@ namespace AngularClientGenerator.Visitor
 
             if (needsUrlReplace)
             {
-                this.ClientBuilder.WriteLine("url: replaceUrl('{0}', {{", actionDescription.UrlTemplate);
+                this.ClientBuilder.WriteLine("url: replaceUrl(API_BASE_URL + '{0}', {{", actionDescription.UrlTemplate);
                 this.ClientBuilder.IncreaseIndent();
 
                 foreach (var actionDescriptionParameterDescription in paramsToReplace)
@@ -236,14 +276,14 @@ namespace AngularClientGenerator.Visitor
             }
             else
             {
-                this.ClientBuilder.WriteLine("url: '{0}',", actionDescription.UrlTemplate);
+                this.ClientBuilder.WriteLine("url: API_BASE_URL + '{0}',", actionDescription.UrlTemplate);
             }
 
             this.ClientBuilder.WriteLine("method: '{0}',", actionDescription.HttpMethod.ToString().ToUpper());
 
             if (hasParameter)
             {
-                if (isPostOrPut)
+                if (shouldUseData)
                 {
                     if (paramsToNotReplace.Count > 1)
                         throw new ArgumentException($"Error with {actionDescription.UrlTemplate} : More complex type to add in POST/PUT request, please wrap them.");
@@ -274,6 +314,15 @@ namespace AngularClientGenerator.Visitor
                 }
             }
 
+            if (deleteHasComplexParam)
+            {
+                this.ClientBuilder.WriteLine("headers: {{");
+                this.ClientBuilder.IncreaseIndent();
+                this.ClientBuilder.WriteLine("'Content-Type': 'application/json',");
+                this.ClientBuilder.DecreaseIndent();
+                this.ClientBuilder.WriteLine("}},");
+            }
+
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}};");
 
@@ -284,7 +333,7 @@ namespace AngularClientGenerator.Visitor
 
         private void GenerateUrlReplaceMethod()
         {
-            this.ClientBuilder.WriteLine("function replaceUrl(url: string, params: {{ }}) {{");
+            this.ClientBuilder.WriteLine("function replaceUrl(url: string, params: any) {{");
             this.ClientBuilder.IncreaseIndent();
             this.ClientBuilder.WriteLine("let replaced = url;");
             this.ClientBuilder.WriteLine("for (let key in params) {{");
@@ -303,10 +352,27 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine();
         }
 
+        private void WriteEnumServiceInterface()
+        {
+            var enumtypes = Types.Where(t => t.Value.IsEnum).Select(t => t.Value).ToList();
+            var enumTypeArr = string.Join("|", enumtypes.Select(e => $"'{e.Name}'"));
+            var enumTypeObj = string.Join("|", enumtypes.Select(e => $"'{e.Name}Obj'"));
+
+            this.ClientBuilder.WriteLine();
+            this.ClientBuilder.WriteLine($"export type EnumArr = {enumTypeArr};");
+            this.ClientBuilder.WriteLine($"export type EnumObj = {enumTypeObj};");
+            this.ClientBuilder.WriteLine("export type EnumValue = {{ Name: string, Value: number, Title: string }};");
+            this.ClientBuilder.WriteLine("export type EnumArrayServiceType = {{ [K in EnumArr]?: Array<EnumValue>; }};");
+            this.ClientBuilder.WriteLine("export type EnumObjServiceType = {{ [K in EnumObj]?: Record<string, EnumValue>; }};");
+            this.ClientBuilder.WriteLine("export interface IEnumService extends EnumArrayServiceType, EnumObjServiceType, GeneratedClient.EnumHelperService {{ }}");
+            this.ClientBuilder.WriteLine();
+        }
+
         private void WriteEnumService()
         {
             this.ClientBuilder.WriteLine("export class EnumHelperService {{");
             this.ClientBuilder.IncreaseIndent();
+            this.ClientBuilder.WriteLine("[index: string]: any;");
             this.ClientBuilder.WriteLine("constructor() {{");
             this.ClientBuilder.IncreaseIndent();
 
@@ -391,14 +457,18 @@ namespace AngularClientGenerator.Visitor
             }
             else
             {
-                this.ClientBuilder.WriteLine("export interface {0} {{", GetNameForType(type));
+                var name = GetNameForType(type);
+                this.ClientBuilder.WriteLine("export interface {0} {{", name);
                 this.ClientBuilder.IncreaseIndent();
 
-                foreach (var propertyInfo in type.GetProperties())
+                var typeToCheckPropertiesIn = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
+
+                foreach (var propertyInfo in typeToCheckPropertiesIn.GetProperties())
                 {
                     var isPropertyNullable = propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
                     var nullablePrefix = isPropertyNullable ? "?" : string.Empty;
-                    this.ClientBuilder.WriteLine("{0}{1}: {2};", propertyInfo.Name, nullablePrefix, GetNameSpaceAndNameForType(propertyInfo.PropertyType));
+                    var typename = GetNameSpaceAndNameForType(propertyInfo.PropertyType);
+                    this.ClientBuilder.WriteLine("{0}{1}: {2};", propertyInfo.Name, nullablePrefix, typename);
                 }
 
                 this.ClientBuilder.DecreaseIndent();
@@ -419,6 +489,12 @@ namespace AngularClientGenerator.Visitor
 
             if (name.EndsWith("[]"))
                 return name;
+
+            if (type.IsGenericType)
+            {
+                // Suitable only for one generic argument
+                name = name.Replace("<T>", $"<{GetNameSpaceAndNameForType(type.GetGenericArguments()[0])}>");
+            }
 
             var @namespace = this.Config.NamespaceNamingRule(type);
             return $"{@namespace}.{name}";
@@ -463,6 +539,12 @@ namespace AngularClientGenerator.Visitor
                 return "string";
             }
 
+            if (type.IsGenericParameter)
+            {
+                // Suitable only for one generic argument
+                return "T";
+            }
+
             if (typeDescPart.IsDictionary())
             {
                 Type keyType = type.GetGenericArguments()[0];
@@ -475,7 +557,7 @@ namespace AngularClientGenerator.Visitor
                 {
                     keyTypeName = "number";
                 }
-                else if(keyType == typeof(string) )
+                else if (keyType == typeof(string))
                 {
                     keyTypeName = "string";
                 }
@@ -486,7 +568,7 @@ namespace AngularClientGenerator.Visitor
 
                 string valueTypeName = GetNameSpaceAndNameForType(valueType);
 
-                return $"{{[key: {keyTypeName}]:{valueTypeName}}}";
+                return $"{{[key: {keyTypeName}]: {valueTypeName}}}";
             }
 
             if (typeDescPart.IsTask())
@@ -520,6 +602,13 @@ namespace AngularClientGenerator.Visitor
             {
                 var genericType = type.GetGenericArguments()[0];
                 return GetNameSpaceAndNameForType(genericType);
+            }
+
+            if (typeDescPart.IsGeneric())
+            {
+                // Suitable only for one generic argument
+                var name = type.GetGenericTypeDefinition().Name;
+                return "I" + name.Split('`')[0] + "<T>";
             }
 
             return "I" + type.Name;

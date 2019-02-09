@@ -1,5 +1,5 @@
-﻿using System;
 using System.IO;
+using System.Reflection;
 
 namespace AngularClientGenerator.Visitor
 {
@@ -18,17 +18,17 @@ namespace AngularClientGenerator.Visitor
         /// <param name="filename">Name of the file under StaticParts folder</param>
         public void WritePart(string filename)
         {
-            var directory = Directory.GetCurrentDirectory();
-            var filePath = Path.Combine(directory, "StaticParts", filename);
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "AngularClientGenerator.StaticParts.EnumHelper.ts.template.txt";
 
-            if(!File.Exists(filePath))
-                throw new ArgumentException("Invalid file path to build static part from.", nameof(filePath));
-
-            var content = File.ReadAllLines(filePath);
-
-            foreach (var line in content)
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
             {
-                builder.WriteLine(line.Replace("{", "{{").Replace("}","}}"));
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    builder.WriteLine(line.Replace("{", "{{").Replace("}", "}}"));
+                }                
             }
         }
     }

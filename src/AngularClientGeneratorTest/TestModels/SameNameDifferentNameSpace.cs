@@ -1,11 +1,17 @@
-﻿namespace SB.TradingTools.AngularClientGeneratorTest.TestModels.NameSpaceA
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AngularClientGeneratorTest.TestModels.NameSpaceA
 {
     public class SameNameDifferentNameSpace
     {
     }
 }
 
-namespace SB.TradingTools.AngularClientGeneratorTest.TestModels.NameSpaceB
+namespace AngularClientGeneratorTest.TestModels.NameSpaceB
 {
     public class SameNameDifferentNameSpace
     {

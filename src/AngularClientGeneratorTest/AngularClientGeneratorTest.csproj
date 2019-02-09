@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AngularClientGeneratorTest</RootNamespace>
     <AssemblyName>AngularClientGeneratorTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,6 +16,8 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -102,11 +104,14 @@
     <Compile Include="TestControllers\TypeTestController.cs" />
     <Compile Include="TestModels\ArrayOnlyType.cs" />
     <Compile Include="TestModels\AsOptionalParamOnly.cs" />
+    <Compile Include="TestModels\ComplexDeleteType.cs" />
     <Compile Include="TestModels\ContainsNullableProperty.cs" />
     <Compile Include="TestModels\DictionaryReturnType.cs" />
     <Compile Include="TestModels\EnumerableOnlyType.cs" />
+    <Compile Include="TestModels\Generics.cs" />
+    <Compile Include="TestModels\GenericTypeClass.cs" />
     <Compile Include="TestModels\HasNameSpacedProperties.cs" />
-    <Compile Include="TestModels\EnumNameSpace\OnlyEnumInNamespace.cs" />
+    <Compile Include="TestModels\OnlyEnumInNamespace.cs" />
     <Compile Include="TestModels\SameNameDifferentNameSpace.cs" />
     <Compile Include="TestModels\TestComplexType.cs" />
     <Compile Include="TestModels\MyEmptyTestClass.cs" />
@@ -124,6 +129,7 @@
     <Compile Include="TestControllers\SimpleController.cs" />
     <Compile Include="TestControllers\TestController.cs" />
     <Compile Include="Util\CustomHttpControllerTypeResolver.cs" />
+    <Compile Include="Util\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AngularClientGenerator.Contracts\AngularClientGenerator.Contracts.csproj">
@@ -137,10 +143,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="tsconfig.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="angular.d.ts" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -6,6 +6,8 @@ namespace AngularClientGenerator.Contracts.Config
     {
         string ModuleName { get; set; }
         bool UseNamespaces { get; set; }
+        string DefaultBaseUrl { get; set; }
+        string UrlSuffix { get; set; }
 
         /// <summary>
         /// Should return the desired namespace of a type, eg. from type Examle.Namespace.Models.Car it can return Models or MyNameSpace.Models, etc"

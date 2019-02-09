@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AngularClientGenerator;
 using AngularClientGeneratorTest.TestControllers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SB.TradingTools.AngularClientGeneratorTest;
 
 namespace AngularClientGeneratorTest
 {
