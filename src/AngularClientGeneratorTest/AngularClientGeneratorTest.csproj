@@ -90,7 +90,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ClientBuilderTest.cs" />
-    <Compile Include="DescriptionCollectorTest.cs" />
     <Compile Include="TestControllers\ConfigBigintErrorTestController.cs" />
     <Compile Include="TestControllers\ConfigComplexParamGerErrorTestController.cs" />
     <Compile Include="TestControllers\DictionaryKeyTypeMismatchTestController.cs" />
@@ -131,6 +130,10 @@
     <ProjectReference Include="..\AngularClientGenerator.Contracts\AngularClientGenerator.Contracts.csproj">
       <Project>{F046B58E-5F57-48DB-99A8-698F98F3D1C6}</Project>
       <Name>AngularClientGenerator.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AngularClientGenerator.Descriptor\AngularClientGenerator.Descriptor.csproj">
+      <Project>{FB399215-719B-41B6-8703-6AE455340FF4}</Project>
+      <Name>AngularClientGenerator.Descriptor</Name>
     </ProjectReference>
     <ProjectReference Include="..\AngularClientGenerator\AngularClientGenerator.csproj">
       <Project>{a0ad4f12-3057-42f5-93e4-b8d4987a8e59}</Project>

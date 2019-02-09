@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Contracts.Descriptors;
@@ -11,15 +12,15 @@ namespace AngularClientGenerator
 {
     public class Generator
     {
-        private DescriptionCollector DescriptionCollector;
+        private ApiDescriptor ApiDescriptor;
         private IApiVisitor Visitor;
 
         public GeneratorConfig Config { get; set; }
 
-        public Generator(ApiDescriptor explorer)
+        public Generator(ApiDescriptor apiDescriptor)
         {
             this.Config = new GeneratorConfig();
-            this.DescriptionCollector = new DescriptionCollector(explorer);
+            this.ApiDescriptor = apiDescriptor;
         }
 
         public void Generate()
@@ -36,11 +37,8 @@ namespace AngularClientGenerator
                 throw new NotSupportedException("Requested language is not supported: " + this.Config.Language);
             }
 
-            var controllerDescriptions = DescriptionCollector.GetControllerDescriptions();
-            foreach (var controllerDescription in controllerDescriptions)
-            {
-                controllerDescription.ActionDescriptionParts = DescriptionCollector.GetActionDescriptionsForController(controllerDescription.Name);
-            }
+            var controllerDescriptions = ApiDescriptor.ControllerDescriptors
+                .Select(cd => new ControllerDescriptionPart(cd));
 
             var moduleDescription = new ModuleDescriptionPart
             {

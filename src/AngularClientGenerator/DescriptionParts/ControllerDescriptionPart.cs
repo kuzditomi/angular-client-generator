@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.Visitor;
 
@@ -12,6 +13,7 @@ namespace AngularClientGenerator.DescriptionParts
         public ControllerDescriptionPart(ControllerDescriptor controllerDescriptor)
         {
             this.Name = controllerDescriptor.Name;
+            this.ActionDescriptionParts = controllerDescriptor.ActionDescriptors.Select(ad => new ActionDescriptionPart(ad));
         }
         
         public void Accept(IApiVisitor visitor)

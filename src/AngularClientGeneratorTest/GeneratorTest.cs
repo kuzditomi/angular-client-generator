@@ -8,6 +8,7 @@ using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Contracts.Exceptions;
 using AngularClientGeneratorTest.TestControllers;
+using AngularClientGenerator.Descriptor;
 
 namespace AngularClientGeneratorTest
 {
@@ -17,7 +18,8 @@ namespace AngularClientGeneratorTest
         [TestMethod]
         public void CreateGeneratorDefaultParams()
         {
-            var generator = new Generator(null);//this.ApiExplorer);
+            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
+            var generator = new Generator(descriptor);
 
             Assert.AreEqual("angular-generated-client.ts", generator.Config.ExportPath);
             Assert.AreEqual(Language.TypeScript, generator.Config.Language);
@@ -36,7 +38,8 @@ namespace AngularClientGeneratorTest
                 ExportPath = path
             };
 
-            var generator = new Generator(null)//this.ApiExplorer)
+            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
+            var generator = new Generator(descriptor)
             {
                 Config = config
             };
@@ -49,8 +52,8 @@ namespace AngularClientGeneratorTest
         {
             this.HttpConfiguration = new HttpConfiguration();
             this.ApiExplorer = new ApiExplorer(this.HttpConfiguration);
-
-            var generator = new Generator(null);//this.ApiExplorer);
+            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
+            var generator = new Generator(descriptor);
             generator.Generate();
 
             var fileExists = File.Exists(generator.Config.ExportPath);
@@ -69,7 +72,8 @@ namespace AngularClientGeneratorTest
 
             this.RunInScope(() =>
             {
-                var generator = new Generator(null);//this.ApiExplorer);
+                var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
+                var generator = new Generator(descriptor);
                 generator.Generate();
 
                 var content = File.ReadAllText(generator.Config.ExportPath);
@@ -102,7 +106,8 @@ namespace AngularClientGeneratorTest
                 DefaultBaseUrl = "abc"
             };
 
-            var generator = new Generator(null)//this.ApiExplorer)
+            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
+            var generator = new Generator(descriptor)
             {
                 Config = config
             };
@@ -124,7 +129,8 @@ namespace AngularClientGeneratorTest
             };
 
 
-            var generator = new Generator(null)//this.ApiExplorer)
+            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
+            var generator = new Generator(descriptor)
             {
                 Config = config
             };
