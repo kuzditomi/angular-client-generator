@@ -11,6 +11,7 @@ using AngularClientGeneratorTest.Util;
 using Microsoft.Owin.Hosting;
 using Owin;
 using AngularClientGenerator.Contracts;
+using AngularClientGenerator.Descriptor;
 
 namespace AngularClientGeneratorTest
 {
@@ -71,15 +72,15 @@ namespace AngularClientGeneratorTest
             var apiDescriptions = ApiExplorer
                 .ApiDescriptions
                 .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerType == typeof(T));
+            var controllerName = apiDescriptions.First().ActionDescriptor.ControllerDescriptor.ControllerName;
 
+            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(ApiExplorer);
+            var controllerDescriptor = descriptor.ControllerDescriptors.First(c => c.Name == controllerName);
             var module = new ModuleDescriptionPart
             {
                 ControllerDescriptionParts = new ControllerDescriptionPart[]
                 {
-                    new ControllerDescriptionPart(null) // apiDescriptions.First().ActionDescriptor.ControllerDescriptor)
-                    {
-                        ActionDescriptionParts = apiDescriptions.Select(a => new ActionDescriptionPart(null))//a))
-                    }
+                    new ControllerDescriptionPart(controllerDescriptor)
                 }
             };
 
@@ -102,13 +103,18 @@ namespace AngularClientGeneratorTest
             var builder = new ClientBuilder(config);
             var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
 
-            var apiDescriptions = ApiExplorer
+            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(ApiExplorer);
+            var controllerName = ApiExplorer
                 .ApiDescriptions
-                .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerType == typeof(T));
+                .First(a => a.ActionDescriptor.ControllerDescriptor.ControllerType == typeof(T))
+                .ActionDescriptor.ControllerDescriptor.ControllerName;
 
-            foreach (var httpActionDescriptor in apiDescriptions)
+            var actionDescriptors = descriptor.ControllerDescriptors.First(c => c.Name == controllerName)
+                .ActionDescriptors;
+
+            foreach (var actionDescriptor in actionDescriptors)
             {
-                var actionDescriptorPart = new ActionDescriptionPart(null);// httpActionDescriptor);
+                var actionDescriptorPart = new ActionDescriptionPart(actionDescriptor);
                 actionDescriptorPart.Accept(apiVisitor);
             }
 
