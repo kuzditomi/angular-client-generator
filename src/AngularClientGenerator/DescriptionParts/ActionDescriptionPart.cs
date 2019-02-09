@@ -23,6 +23,7 @@ namespace AngularClientGenerator.DescriptionParts
 
             this.ParameterDescriptions = actionDescriptor.ParameterDescriptors
                 .Select(p => new ParameterDescription(p)).ToList();
+            this.ReturnValueDescription = new TypeDescriptionPart(actionDescriptor.ReturnValueDescriptor.Type);
         }
 
         public void Accept(IApiVisitor visitor)

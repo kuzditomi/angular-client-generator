@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="StaticParts\EnumHelper.ts.template.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="StaticParts\EnumHelper.ts.template.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AngularClientGenerator.Contracts\AngularClientGenerator.Contracts.csproj" />
   </ItemGroup>
 
