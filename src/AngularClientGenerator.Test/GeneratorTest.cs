@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Web.Http;
-using System.Web.Http.Description;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AngularClientGenerator;
-using AngularClientGenerator.Config;
+﻿using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
+using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.Contracts.Exceptions;
-using AngularClientGeneratorTest.TestControllers;
-using AngularClientGenerator.Descriptor;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
-namespace AngularClientGeneratorTest
+namespace AngularClientGenerator.Test
 {
     [TestClass]
-    public class GeneratorTest : TestBase
+    public class GeneratorTest
     {
         [TestMethod]
         public void CreateGeneratorDefaultParams()
@@ -48,48 +45,17 @@ namespace AngularClientGeneratorTest
         [TestMethod]
         public void GenerateCode()
         {
-            this.HttpConfiguration = new HttpConfiguration();
-            this.ApiExplorer = new ApiExplorer(this.HttpConfiguration);
-            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
+            var descriptor = new ApiDescriptor
+            {
+                ControllerDescriptors = Enumerable.Empty<ControllerDescriptor>()
+            };
+
             var generator = new Generator(descriptor);
             generator.Generate();
 
             var fileExists = File.Exists(generator.Config.ExportPath);
 
             Assert.IsTrue(fileExists);
-        }
-
-        [TestMethod]
-        public void GenerateAllRegisteredControllers()
-        {
-            RegisterController<TestController>();
-            RegisterController<SimpleController>();
-            RegisterController<ConfigVoidTestController>();
-            RegisterController<GeneratedMethodTestController>();
-            RegisterController<TypeTestController>();
-
-            this.RunInScope(() =>
-            {
-                var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
-                var generator = new Generator(descriptor);
-                generator.Generate();
-
-                var content = File.ReadAllText(generator.Config.ExportPath);
-
-                var needToContain = new List<string>
-                {
-                    "ApiTestService",
-                    "ApiSimpleService",
-                    "ApiConfigVoidTestService",
-                    "ApiGeneratedMethodTestService",
-                    "ApiTypeTestService"
-                };
-
-                foreach (var controller in needToContain)
-                {
-                    Assert.IsTrue(content.Contains(controller), "Generator doesnt include registered controller: " + controller);
-                }
-            });
         }
 
         [TestMethod]
@@ -131,6 +97,36 @@ namespace AngularClientGeneratorTest
             };
 
             generator.Generate();
+        }
+
+        [TestMethod]
+        public void GenerateAllRegisteredControllers()
+        {
+            var controllerNames = new[] { "A", "B", "C" };
+            var descriptor = new ApiDescriptor
+            {
+                ControllerDescriptors = controllerNames.Select(name => new ControllerDescriptor
+                {
+                    Name = name,
+                    ActionDescriptors = Enumerable.Empty<ActionDescriptor>()
+                })
+            };
+
+            var generator = new Generator(descriptor);
+            generator.Generate();
+
+            var content = File.ReadAllText(generator.Config.ExportPath);
+
+            var needToContain = new List<string> {
+                "ApiAService",
+                "ApiBService",
+                "ApiCService",
+            };
+
+            foreach (var controller in needToContain)
+            {
+                Assert.IsTrue(content.Contains(controller), "Generator doesnt include registered controller: " + controller);
+            }
         }
     }
 }

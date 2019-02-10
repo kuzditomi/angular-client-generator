@@ -118,7 +118,6 @@
     <Compile Include="TsApiVisitorTests\GeneratedActionTest.cs" />
     <Compile Include="TsApiVisitorTests\TsApiVisitorTest.cs" />
     <Compile Include="TestBase.cs" />
-    <Compile Include="GeneratorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestControllers\SimpleController.cs" />
     <Compile Include="TestControllers\TestController.cs" />
