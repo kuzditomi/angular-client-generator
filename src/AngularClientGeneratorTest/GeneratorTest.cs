@@ -18,8 +18,7 @@ namespace AngularClientGeneratorTest
         [TestMethod]
         public void CreateGeneratorDefaultParams()
         {
-            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
-            var generator = new Generator(descriptor);
+            var generator = new Generator(null);
 
             Assert.AreEqual("angular-generated-client.ts", generator.Config.ExportPath);
             Assert.AreEqual(Language.TypeScript, generator.Config.Language);
@@ -38,8 +37,7 @@ namespace AngularClientGeneratorTest
                 ExportPath = path
             };
 
-            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
-            var generator = new Generator(descriptor)
+            var generator = new Generator(null)
             {
                 Config = config
             };
@@ -106,8 +104,7 @@ namespace AngularClientGeneratorTest
                 DefaultBaseUrl = "abc"
             };
 
-            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
-            var generator = new Generator(descriptor)
+            var generator = new Generator(null)
             {
                 Config = config
             };
@@ -128,9 +125,7 @@ namespace AngularClientGeneratorTest
                 UrlSuffix = "efg"
             };
 
-
-            var descriptor = ApiDescriptorConverter.CreateApiDescriptor(this.ApiExplorer);
-            var generator = new Generator(descriptor)
+            var generator = new Generator(null)
             {
                 Config = config
             };
