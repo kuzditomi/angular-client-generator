@@ -11,11 +11,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{A147
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGenerator.ExampleWebAPI", "AngularClientGenerator.ExampleWebAPI\AngularClientGenerator.ExampleWebAPI.csproj", "{3BA70B22-6B25-4C7A-A8E8-BA35C58ED54C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGenerator.Contracts", "AngularClientGenerator.Contracts\AngularClientGenerator.Contracts.csproj", "{F046B58E-5F57-48DB-99A8-698F98F3D1C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AngularClientGenerator.Contracts", "AngularClientGenerator.Contracts\AngularClientGenerator.Contracts.csproj", "{F046B58E-5F57-48DB-99A8-698F98F3D1C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGenerator", "AngularClientGenerator\AngularClientGenerator.csproj", "{A0AD4F12-3057-42F5-93E4-B8D4987A8E59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AngularClientGenerator", "AngularClientGenerator\AngularClientGenerator.csproj", "{A0AD4F12-3057-42F5-93E4-B8D4987A8E59}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGenerator.Descriptor", "AngularClientGenerator.Descriptor\AngularClientGenerator.Descriptor.csproj", "{FB399215-719B-41B6-8703-6AE455340FF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGenerator.Test", "AngularClientGenerator.Test\AngularClientGenerator.Test.csproj", "{E01D4DAC-968B-4D91-B0BC-72C3C0F0FE4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGenerator.Descriptor.Test", "AngularClientGenerator.Descriptor.Test\AngularClientGenerator.Descriptor.Test.csproj", "{B987AF68-2BE9-43DB-B2CA-768CD7394630}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetFramework", "NetFramework", "{D0D6A7A7-07FB-48CD-9F9B-DB5D33246943}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetCore", "NetCore", "{5D0E9973-4F81-4262-BA59-1AD0A9506AC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,13 +55,24 @@ Global
 		{FB399215-719B-41B6-8703-6AE455340FF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB399215-719B-41B6-8703-6AE455340FF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB399215-719B-41B6-8703-6AE455340FF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E01D4DAC-968B-4D91-B0BC-72C3C0F0FE4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E01D4DAC-968B-4D91-B0BC-72C3C0F0FE4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E01D4DAC-968B-4D91-B0BC-72C3C0F0FE4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E01D4DAC-968B-4D91-B0BC-72C3C0F0FE4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B987AF68-2BE9-43DB-B2CA-768CD7394630}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B987AF68-2BE9-43DB-B2CA-768CD7394630}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B987AF68-2BE9-43DB-B2CA-768CD7394630}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B987AF68-2BE9-43DB-B2CA-768CD7394630}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B832BE01-9CA8-4ADF-AB3C-7592759F87DF} = {A1479CF1-2366-4051-B588-5BD999AC1C32}
+		{A1479CF1-2366-4051-B588-5BD999AC1C32} = {D0D6A7A7-07FB-48CD-9F9B-DB5D33246943}
 		{3BA70B22-6B25-4C7A-A8E8-BA35C58ED54C} = {A1479CF1-2366-4051-B588-5BD999AC1C32}
+		{FB399215-719B-41B6-8703-6AE455340FF4} = {D0D6A7A7-07FB-48CD-9F9B-DB5D33246943}
+		{B987AF68-2BE9-43DB-B2CA-768CD7394630} = {D0D6A7A7-07FB-48CD-9F9B-DB5D33246943}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B3E4525-76E2-4681-B088-FE490FB6A462}

@@ -50,8 +50,7 @@ namespace AngularClientGenerator.Descriptor
         {
             var actionDescriptor = new ActionDescriptor();
 
-            var reflectedDescriptor = description.ActionDescriptor as ReflectedHttpActionDescriptor;
-            if (reflectedDescriptor == null)
+            if (!(description.ActionDescriptor is ReflectedHttpActionDescriptor reflectedDescriptor))
                 throw new ArgumentNullException(nameof(description), "Unexpected descriptor type");
 
             actionDescriptor.Name = description.ActionDescriptor.ActionName;
