@@ -5,11 +5,6 @@ namespace AngularClientGenerator.Descriptor.Test.TestControllers
     [RoutePrefix("api/simple")]
     public class SimpleController: ApiController
     {
-        public SimpleController()
-        {
-
-        }
-
         [Route("one")]
         public IHttpActionResult ActionOne()
         {
@@ -17,13 +12,14 @@ namespace AngularClientGenerator.Descriptor.Test.TestControllers
         }
 
         [Route("two")]
-        public IHttpActionResult ActionTwo()
+        public IHttpActionResult ActionTwo(int a, string b)
         {
             return Ok();
         }
 
+        [HttpGet]
         [Route("three")]
-        public IHttpActionResult ActionThree()
+        public IHttpActionResult ActionThree(int? a = 3)
         {
             return Ok();
         }

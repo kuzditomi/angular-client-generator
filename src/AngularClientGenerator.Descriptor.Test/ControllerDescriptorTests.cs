@@ -1,10 +1,7 @@
-﻿using AngularClientGenerator.Contracts.Descriptors;
-using AngularClientGenerator.Descriptor.Test.TestControllers;
+﻿using AngularClientGenerator.Descriptor.Test.TestControllers;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
 
 namespace AngularClientGenerator.Descriptor.Test
 {
@@ -16,9 +13,6 @@ namespace AngularClientGenerator.Descriptor.Test
         {
             RegisterController<TestController>();
             RegisterController<SimpleController>();
-            RegisterController<ConfigVoidTestController>();
-            RegisterController<GeneratedMethodTestController>();
-            RegisterController<TypeTestController>();
 
             this.RunInScope(() =>
             {
@@ -27,14 +21,13 @@ namespace AngularClientGenerator.Descriptor.Test
                 var expectedControllersNames = new List<string>
                 {
                     "Test",
-                    "Simple",
-                    "ConfigVoidTest",
-                    "GeneratedMethodTest",
-                    "TypeTest"
+                    "Simple"
                 };
 
                 CollectionAssert.AreEquivalent(expectedControllersNames, actualControllerNames, "Description doesnt include all registered controller.");
             });
         }
+
+        
     }
 }

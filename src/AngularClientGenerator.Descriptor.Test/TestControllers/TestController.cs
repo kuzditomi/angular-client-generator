@@ -6,11 +6,7 @@ namespace AngularClientGenerator.Descriptor.Test.TestControllers
     [RoutePrefix("api/test")]
     public class TestController: ApiController
     {
-        public TestController()
-        {
-            
-        }
-
+        [HttpGet]
         [Route("test")]
         public string TestAction()
         {
@@ -28,7 +24,7 @@ namespace AngularClientGenerator.Descriptor.Test.TestControllers
         {
             return new TestModelA();
         }
-
+        
         [Route("testb")]
         public TestModelB TestActionB()
         {

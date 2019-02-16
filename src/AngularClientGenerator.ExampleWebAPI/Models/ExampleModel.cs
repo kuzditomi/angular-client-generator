@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace AngularClientGenerator.ExampleWebAPI.Models
+﻿namespace AngularClientGenerator.ExampleWebAPI.Models
 {
     public enum Color
     {
