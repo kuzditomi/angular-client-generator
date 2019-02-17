@@ -1,9 +1,8 @@
 language: csharp
-solution: src/AgularClientGenerator.sln
 mono: none
 dotnet: 2.1.502
 script:
- - dotnet restore .\src\AgularClientGenerator.sln
+ - dotnet restore .\src\AngularClientGenerator.sln
  - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov .\src\AngularClientGenerator.Test
 notifications:
   email: false
