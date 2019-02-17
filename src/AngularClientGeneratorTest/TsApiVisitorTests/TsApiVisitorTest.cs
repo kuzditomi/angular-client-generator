@@ -7,6 +7,7 @@ using AngularClientGenerator.Contracts;
 using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitor;
 using AngularClientGeneratorTest.TestControllers;
+using AngularClientGenerator.Descriptor;
 
 namespace AngularClientGeneratorTest.TsApiVisitorTests
 {
@@ -28,22 +29,9 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var builder = new ClientBuilder(config);
                 var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
 
-                var controllerDescription = ApiExplorer
-                    .ApiDescriptions
-                    .First(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
-                    .ActionDescriptor
-                    .ControllerDescriptor;
-
-                var actionDescriptions = ApiExplorer
-                    .ApiDescriptions
-                    .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
-                    .Select(a => new ActionDescriptionPart(a))
-                    .ToList();
-
-                var controllerDesciptionPart = new ControllerDescriptionPart(controllerDescription)
-                {
-                    ActionDescriptionParts = actionDescriptions
-                };
+                var descriptor = ApiDescriptorConverter.CreateApiDescriptor(ApiExplorer);
+                var controllerDescriptor = descriptor.ControllerDescriptors.Single(c => c.Name == "Test");
+                var controllerDesciptionPart = new ControllerDescriptionPart(controllerDescriptor);
 
                 apiVisitor.Visit(controllerDesciptionPart);
 
@@ -80,13 +68,16 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 var builder = new ClientBuilder(config);
                 var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
 
+                var descriptor = ApiDescriptorConverter.CreateApiDescriptor(ApiExplorer);
+                var controllerDescriptor = descriptor.ControllerDescriptors.Single(c => c.Name == "Test");
+
                 var apiDescriptions = ApiExplorer
                     .ApiDescriptions
                     .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test");
 
-                foreach (var httpActionDescriptor in apiDescriptions)
+                foreach (var actionDescriptor in controllerDescriptor.ActionDescriptors)
                 {
-                    var actionDescriptorPart = new ActionDescriptionPart(httpActionDescriptor);
+                    var actionDescriptorPart = new ActionDescriptionPart(actionDescriptor);
                     actionDescriptorPart.Accept(apiVisitor);
                 }
 
@@ -121,24 +112,15 @@ namespace AngularClientGeneratorTest.TsApiVisitorTests
                 };
                 var builder = new ClientBuilder(config);
                 var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
+                var descriptor = ApiDescriptorConverter.CreateApiDescriptor(ApiExplorer);
 
-                var controllerDescription = ApiExplorer
-                    .ApiDescriptions
-                    .First(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test")
-                    .ActionDescriptor.ControllerDescriptor;
-
-                var actionDescriptions = ApiExplorer
-                    .ApiDescriptions
-                    .Where(a => a.ActionDescriptor.ControllerDescriptor.ControllerName == "Test");
+                var controllerDescriptor = descriptor.ControllerDescriptors.First(c => c.Name == "Test");
 
                 var moduleDescription = new ModuleDescriptionPart
                 {
                     ControllerDescriptionParts = new List<ControllerDescriptionPart>
                     {
-                        new ControllerDescriptionPart(controllerDescription)
-                        {
-                            ActionDescriptionParts = actionDescriptions.Select(a => new ActionDescriptionPart(a))
-                        }
+                        new ControllerDescriptionPart(controllerDescriptor)
                     }
                 };
 

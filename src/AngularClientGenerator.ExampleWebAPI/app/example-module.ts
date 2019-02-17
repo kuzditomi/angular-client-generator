@@ -10,7 +10,7 @@ class ExampleController {
     static $inject = ["$scope", "ApiExampleService"];
 
     constructor(scope: IExampleControllerScope, apiExampleService: GeneratedClient.ApiExampleService) {
-        apiExampleService.ExampleMethod().then(model => {
+        apiExampleService.ExampleMethod(1).then(model => {
             scope.model = model;
         });
     }

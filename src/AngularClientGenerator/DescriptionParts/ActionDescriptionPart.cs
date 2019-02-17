@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
-using System.Web.Http.Controllers;
-using System.Web.Http.Description;
+using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.Visitor;
 
 namespace AngularClientGenerator.DescriptionParts
@@ -18,29 +15,15 @@ namespace AngularClientGenerator.DescriptionParts
         public IEnumerable<ParameterDescription> ParameterDescriptions { get; set; }
         public TypeDescriptionPart ReturnValueDescription { get; set; }
 
-        public ActionDescriptionPart(ApiDescription apiDescription)
+        public ActionDescriptionPart(ActionDescriptor actionDescriptor)
         {
-            var reflectedDescriptor = apiDescription.ActionDescriptor as ReflectedHttpActionDescriptor;
-            if(reflectedDescriptor == null)
-                throw new ArgumentNullException(nameof(apiDescription), "Unexpected descriptor type");
+            this.Name = actionDescriptor.Name;
+            this.UrlTemplate = actionDescriptor.UrlTemplate;
+            this.HttpMethod = actionDescriptor.HttpMethod;
 
-            this.Name = apiDescription.ActionDescriptor.ActionName;
-            this.UrlTemplate = apiDescription.Route.RouteTemplate;
-
-            var responseTypeAttribute = reflectedDescriptor.MethodInfo.GetCustomAttribute(typeof(ResponseTypeAttribute));
-            if (responseTypeAttribute == null)
-            {
-                this.ReturnValueDescription = new TypeDescriptionPart(reflectedDescriptor.MethodInfo.ReturnType);
-            }
-            else
-            {
-                this.ReturnValueDescription = new TypeDescriptionPart(((ResponseTypeAttribute)responseTypeAttribute).ResponseType);
-            }
-
-            this.HttpMethod = apiDescription.HttpMethod;
-
-            this.ParameterDescriptions = apiDescription.ParameterDescriptions
+            this.ParameterDescriptions = actionDescriptor.ParameterDescriptors
                 .Select(p => new ParameterDescription(p)).ToList();
+            this.ReturnValueDescription = new TypeDescriptionPart(actionDescriptor.ReturnValueDescriptor.Type);
         }
 
         public void Accept(IApiVisitor visitor)

@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AngularClientGenerator;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Visitor;
 
-namespace AngularClientGeneratorTest
+namespace AngularClientGenerator.Test
 {
     [TestClass]
     public class ClientBuilderTest

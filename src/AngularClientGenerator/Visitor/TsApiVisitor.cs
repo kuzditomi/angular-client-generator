@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
-using System.Web.Http;
 using AngularClientGenerator.Contracts.Config;
 using AngularClientGenerator.DescriptionParts;
 
@@ -529,7 +528,7 @@ namespace AngularClientGenerator.Visitor
                 return "number";
             }
 
-            if (type == typeof(IHttpActionResult) || type == typeof(HttpResponseMessage))
+            if (type.Name == "IHttpActionResult" || type == typeof(HttpResponseMessage))
             {
                 return "any";
             }

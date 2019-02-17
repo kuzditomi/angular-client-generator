@@ -1,4 +1,4 @@
-﻿using System.Web.Http.Description;
+﻿using AngularClientGenerator.Contracts.Descriptors;
 
 namespace AngularClientGenerator.DescriptionParts
 {
@@ -7,10 +7,10 @@ namespace AngularClientGenerator.DescriptionParts
         public string ParameterName { get; set; }
         public bool IsOptional { get; set; }
 
-        public ParameterDescription(ApiParameterDescription parameterDescriptor): base(parameterDescriptor.ParameterDescriptor.ParameterType)
+        public ParameterDescription(ParameterDescriptor parameterDescriptor): base(parameterDescriptor.ParameterType)
         {
-            this.ParameterName = parameterDescriptor.Name;
-            this.IsOptional = parameterDescriptor.ParameterDescriptor.IsOptional;
+            this.ParameterName = parameterDescriptor.ParameterName;
+            this.IsOptional = parameterDescriptor.IsOptional;
         }
     }
 }

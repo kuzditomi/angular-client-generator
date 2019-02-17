@@ -7,3 +7,4 @@ TestResults
 node_modules
 temp
 *.nupkg
+lcov.info

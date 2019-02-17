@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
 using AngularClientGenerator.DescriptionParts;
 
 namespace AngularClientGenerator.Visitor
@@ -32,11 +31,11 @@ namespace AngularClientGenerator.Visitor
             return typeDescriptionPart.Type == typeof(Task) || typeDescriptionPart.Type.BaseType == typeof(Task);
         }
 
-        private static readonly Type[] IgnoredTypesOnDefinition = { typeof(int), typeof(double), typeof(float), typeof(decimal), typeof(string), typeof(bool), typeof(DateTime), typeof(void), typeof(IHttpActionResult), typeof(HttpResponseMessage), typeof(Guid) };
+        private static readonly Type[] IgnoredTypesOnDefinition = { typeof(int), typeof(double), typeof(float), typeof(decimal), typeof(string), typeof(bool), typeof(DateTime), typeof(void), typeof(HttpResponseMessage), typeof(Guid) };
 
         public static bool IsIgnoredType(this TypeDescriptionPart typeDescriptionPart)
         {
-            return IgnoredTypesOnDefinition.Contains(typeDescriptionPart.Type);
+            return IgnoredTypesOnDefinition.Contains(typeDescriptionPart.Type) || typeDescriptionPart.Type.Name == "IHttpActionResult";
         }
 
         public static bool IsDictionary(this TypeDescriptionPart typeDescriptionPart)
