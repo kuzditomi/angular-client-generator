@@ -13,7 +13,7 @@ using AngularClientGenerator.Test.TestModels;
 namespace AngularClientGenerator.Test.TsApiVisitorTests
 {
     [TestClass]
-    public class TsApiVisitorTest
+    public class TsApiVisitorTest : TsApiVisitorTestBase
     {
         [TestMethod]
         public void ControllerDescriptionPart_TestController()
@@ -124,10 +124,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
 
             var moduleDescription = new ModuleDescriptionPart
             {
-                ControllerDescriptionParts = new List<ControllerDescriptionPart>
-                    {
-                        new ControllerDescriptionPart(controllerDescriptor)
-                    }
+                ControllerDescriptionParts = new List<ControllerDescriptionPart> {
+                    new ControllerDescriptionPart(controllerDescriptor)
+                }
             };
 
             moduleDescription.Accept(apiVisitor);
@@ -149,14 +148,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
         [TestMethod]
         public void ApiHostIsInitialisedFromWindow()
         {
-            var config = new GeneratorConfig
-            {
-                IndentType = IndentType.Tab,
-                Language = Language.TypeScript,
-                DefaultBaseUrl = "http://localhost:1337"
-            };
-
-            var actualContent = VisitEmptyModule(config);
+            var actualContent = VisitEmptyTsModule();
             var expectedContent = "\tlet addr = window.ApiHost;";
 
             Assert.IsTrue(actualContent.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
@@ -201,20 +193,6 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             {
                 Assert.IsTrue(actualContent.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
             }
-        }
-
-        private string VisitEmptyModule(GeneratorConfig config)
-        {
-            var builder = new ClientBuilder(config);
-            var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
-            var moduleDescription = new ModuleDescriptionPart
-            {
-                Name = "example",
-                ControllerDescriptionParts = Enumerable.Empty<ControllerDescriptionPart>()
-            };
-
-            apiVisitor.Visit(moduleDescription);
-            return apiVisitor.GetContent();
         }
     }
 }
