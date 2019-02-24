@@ -114,7 +114,6 @@
     <Compile Include="TestModels\TestModelA.cs" />
     <Compile Include="TestModels\TestNumberedEnum.cs" />
     <Compile Include="TsApiVisitorTests\GeneratedTypeTest.cs" />
-    <Compile Include="TsApiVisitorTests\ActionConfigTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestControllers\SimpleController.cs" />
