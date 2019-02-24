@@ -3,9 +3,21 @@ mono: none
 dotnet: 2.1.502
 sudo: required
 solution: AngularClientGenerator.sln
-script:
+
+install:
+ - dotnet tool install coveralls.net -g
  - cd src 
  - dotnet restore
- - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov AngularClientGenerator.Test
+
+before_script:
+ - REPO_COMMIT_AUTHOR=$(git show -s --pretty=format:"%cn")
+ - REPO_COMMIT_AUTHOR_EMAIL=$(git show -s --pretty=format:"%ce")
+ - REPO_COMMIT_MESSAGE=$(git show -s --pretty=format:"%s")
+ - export PATH="$PATH:$HOME/.dotnet/tools"
+
+script:
+ - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage.xml AngularClientGenerator.Test
+ - csmacnz.Coveralls --opencover -i AngularClientGenerator.Test/coverage.xml --repoToken $COVERALLS_REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci"  --useRelativePaths
+
 notifications:
   email: false
