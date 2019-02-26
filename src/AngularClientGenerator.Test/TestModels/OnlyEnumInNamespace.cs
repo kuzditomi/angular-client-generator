@@ -1,4 +1,4 @@
-﻿namespace AngularClientGeneratorTest.TestModels.EnumNameSpace
+﻿namespace AngularClientGenerator.Test.TestModels.EnumNameSpace
 {
     public enum OnlyEnumInNameSpace
     {

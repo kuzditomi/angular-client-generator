@@ -44,6 +44,29 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             return apiVisitor.GetContent();
         }
 
+        protected string VisitTsControllerInModule(ControllerDescriptor controllerDescriptor)
+        {
+            return this.VisitTsControllerInModule(controllerDescriptor, this.basicTsConfig);
+        }
+
+        protected string VisitTsControllerInModule(ControllerDescriptor controllerDescriptor, GeneratorConfig config)
+        {
+            var builder = new ClientBuilder(config);
+            var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
+
+            var module = new ModuleDescriptionPart
+            {
+                Name = "ExampleModule",
+                ControllerDescriptionParts = new List<ControllerDescriptionPart>
+                {
+                    new ControllerDescriptionPart(controllerDescriptor)
+                }
+            };
+
+            apiVisitor.Visit(module);
+            return apiVisitor.GetContent();
+        }
+
         protected string VisitTsAction(ActionDescriptor actionDescriptor)
         {
             return this.VisitTsAction(actionDescriptor, this.basicTsConfig);
@@ -56,6 +79,24 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
 
             apiVisitor.Visit(new ActionDescriptionPart(actionDescriptor));
             return apiVisitor.GetContent();
+        }
+
+        protected string VisitTsActionInModule(ActionDescriptor actionDescriptor)
+        {
+            return this.VisitTsControllerInModule(new ControllerDescriptor
+            {
+                Name = "ExampleController",
+                ActionDescriptors = new List<ActionDescriptor> { actionDescriptor }
+            });
+        }
+
+        protected string VisitTsActionInModule(ActionDescriptor actionDescriptor, GeneratorConfig config)
+        {
+            return this.VisitTsControllerInModule(new ControllerDescriptor
+            {
+                Name = "ExampleController",
+                ActionDescriptors = new List<ActionDescriptor> { actionDescriptor }
+            }, config);
         }
     }
 }

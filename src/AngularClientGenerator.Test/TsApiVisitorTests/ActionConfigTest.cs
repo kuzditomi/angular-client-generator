@@ -43,6 +43,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
         [DataRow(typeof(int), "number")]
         [DataRow(typeof(double), "number")]
         [DataRow(typeof(decimal), "number")]
+        [DataRow(typeof(float), "number")]
         [DataRow(typeof(string), "string")]
         [DataRow(typeof(Guid), "string")]
         [DataRow(typeof(DateTime), "string")]

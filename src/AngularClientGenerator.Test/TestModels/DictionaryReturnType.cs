@@ -1,4 +1,4 @@
-namespace AngularClientGeneratorTest.TestModels
+namespace AngularClientGenerator.Test.TestModels
 {
     public class DictionaryReturnType
     {

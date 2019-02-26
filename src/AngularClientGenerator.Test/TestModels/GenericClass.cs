@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AngularClientGeneratorTest.TestModels
+namespace AngularClientGenerator.Test.TestModels
 {
     public class GenericClass<T>
     {
