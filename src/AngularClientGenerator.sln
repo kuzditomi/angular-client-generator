@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGeneratorTest", "AngularClientGeneratorTest\AngularClientGeneratorTest.csproj", "{A599F57C-3055-4EB0-8711-677EDF2F0CA3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGenerator.Example", "AngularClientGenerator.Example\AngularClientGenerator.Example.csproj", "{B832BE01-9CA8-4ADF-AB3C-7592759F87DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{A1479CF1-2366-4051-B588-5BD999AC1C32}"
@@ -17,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AngularClientGenerator", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGenerator.Descriptor", "AngularClientGenerator.Descriptor\AngularClientGenerator.Descriptor.csproj", "{FB399215-719B-41B6-8703-6AE455340FF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGenerator.Test", "AngularClientGenerator.Test\AngularClientGenerator.Test.csproj", "{E01D4DAC-968B-4D91-B0BC-72C3C0F0FE4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AngularClientGenerator.Test", "AngularClientGenerator.Test\AngularClientGenerator.Test.csproj", "{E01D4DAC-968B-4D91-B0BC-72C3C0F0FE4C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGenerator.Descriptor.Test", "AngularClientGenerator.Descriptor.Test\AngularClientGenerator.Descriptor.Test.csproj", "{B987AF68-2BE9-43DB-B2CA-768CD7394630}"
 EndProject
@@ -31,10 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A599F57C-3055-4EB0-8711-677EDF2F0CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A599F57C-3055-4EB0-8711-677EDF2F0CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A599F57C-3055-4EB0-8711-677EDF2F0CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A599F57C-3055-4EB0-8711-677EDF2F0CA3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B832BE01-9CA8-4ADF-AB3C-7592759F87DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B832BE01-9CA8-4ADF-AB3C-7592759F87DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B832BE01-9CA8-4ADF-AB3C-7592759F87DF}.Release|Any CPU.ActiveCfg = Release|Any CPU

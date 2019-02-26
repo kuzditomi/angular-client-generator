@@ -1,4 +1,4 @@
-﻿namespace AngularClientGeneratorTest.Util
+﻿namespace AngularClientGenerator.Test.Utils
 {
     public static class StringExtensions
     {
