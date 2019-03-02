@@ -27,6 +27,8 @@ jobs:
       - dotnet restore 
       - nuget install NUnit.Console -Version 3.9.0 -OutputDirectory testrunner
       script: 
+      - echo PATH
+      - echo $PATH
       - msbuild /p:Configuration=Release /t:AngularClientGenerator.Descriptor.Test AngularClientGenerator.sln
       - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./AngularClientGenerator.Descriptor.Test/bin/Release/AngularClientGenerator.Descriptor.Test.dll
 
