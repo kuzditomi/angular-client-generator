@@ -7,7 +7,7 @@ namespace AngularClientGenerator.ExampleWebAPI.Controllers
     [RoutePrefix("api/example")]
     public class ExampleController: ApiController
     {
-        [Route("example/{id}")]
+        [Route("{id}")]
         [HttpGet]
         [ResponseType(typeof(ExampleModel))]
         public IHttpActionResult ExampleMethod(int id)

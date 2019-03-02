@@ -63,7 +63,7 @@ namespace AngularClientGenerator.Visitor
 
             this.ClientBuilder.WriteLine("export let Module = angular.module('{0}', []);", moduleDescription.Name);
             this.ClientBuilder.WriteLine();
-            this.ClientBuilder.WriteLine("let addr = window.ApiHost;");
+            this.ClientBuilder.WriteLine("let addr = window['ApiHost'];");
             this.ClientBuilder.WriteLine("if (addr.indexOf('ApiHost') !== -1) {{");
             this.ClientBuilder.IncreaseIndent();
             this.ClientBuilder.WriteLine($"addr = '{Config.DefaultBaseUrl}';");

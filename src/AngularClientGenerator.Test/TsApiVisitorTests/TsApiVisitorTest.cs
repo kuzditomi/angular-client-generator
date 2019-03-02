@@ -149,7 +149,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
         public void ApiHostIsInitialisedFromWindow()
         {
             var actualContent = VisitEmptyTsModule();
-            var expectedContent = "\tlet addr = window.ApiHost;";
+            var expectedContent = "\tlet addr = window['ApiHost'];";
 
             Assert.IsTrue(actualContent.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
         }

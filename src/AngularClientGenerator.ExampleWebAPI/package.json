@@ -1,20 +1,21 @@
 {
-  "name": "example",
-  "version": "1.0.0",
-  "description": "example",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "browserify": "13.3.0",
-    "gulp": "3.9.1",
-    "gulp-rename": "1.2.2",
-    "gulp-util": "3.0.8",
-    "tsify": "3.0.0",
-    "typescript": "2.1.5",
-    "vinyl-source-stream": "1.1.0"
-  }
+    "name": "example",
+    "version": "1.0.0",
+    "description": "example",
+    "main": "index.js",
+    "scripts": {
+        "build": "gulp",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "browserify": "13.3.0",
+        "gulp": "3.9.1",
+        "gulp-rename": "1.2.2",
+        "gulp-util": "3.0.8",
+        "tsify": "3.0.0",
+        "typescript": "3.3.3333",
+        "vinyl-source-stream": "1.1.0"
+    }
 }

@@ -23,7 +23,7 @@ namespace AngularClientGenerator.Config
             this.IndentType = IndentType.Tab;
             this.UseNamespaces = false;
             this.DefaultBaseUrl = "http://localhost:1337/";
-            this.UrlSuffix = "api/";
+            this.UrlSuffix = "";
         }
     }
 }

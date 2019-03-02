@@ -1,13 +1,4 @@
 language: csharp
-mono: none
-dotnet: 2.1.502
-sudo: required
-solution: AngularClientGenerator.sln
-
-install:
- - dotnet tool install coveralls.net -g
- - cd src 
- - dotnet restore
 
 before_script:
  - REPO_COMMIT_AUTHOR=$(git show -s --pretty=format:"%cn")
@@ -15,9 +6,31 @@ before_script:
  - REPO_COMMIT_MESSAGE=$(git show -s --pretty=format:"%s")
  - export PATH="$PATH:$HOME/.dotnet/tools"
 
-script:
- - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage.xml AngularClientGenerator.Test
- - csmacnz.Coveralls --opencover -i AngularClientGenerator.Test/coverage.xml --repoToken $COVERALLS_REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci"  --useRelativePaths
+jobs:
+  include:
+    - stage: test
+      env: COMMAND=test:generator
+      mono: none
+      dotnet: 2.1.502
+      install:
+      - cd src 
+      - dotnet restore
+      - dotnet tool install coveralls.net -g
+      script:
+      - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage.xml AngularClientGenerator.Test
+      - csmacnz.Coveralls --opencover -i AngularClientGenerator.Test/coverage.xml --repoToken $COVERALLS_REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci"  --useRelativePaths
+    - stage: test
+      env: COMMAND=test:netframework-descriptor
+      mono: latest
+      install:
+      - cd src
+      - nuget restore 
+      - nuget install NUnit.Console -Version 3.9.0 -OutputDirectory testrunner
+      script: 
+      - echo PATH
+      - echo $PATH
+      - msbuild /p:Configuration=Release AngularClientGenerator.sln
+      - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./AngularClientGenerator.Descriptor.Test/bin/Release/AngularClientGenerator.Descriptor.Test.dll
 
 notifications:
   email: false
