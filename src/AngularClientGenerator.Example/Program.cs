@@ -44,6 +44,7 @@ namespace AngularClientGenerator.Example
                         IndentType = IndentType.FourSpace,
                         Language = Language.TypeScript,
                         UseNamespaces = true,
+                        UrlSuffix = "",
                         NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.", "")
                     }
                 };

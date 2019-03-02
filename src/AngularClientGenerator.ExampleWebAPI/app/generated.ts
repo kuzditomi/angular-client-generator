@@ -1,13 +1,13 @@
 export namespace GeneratedClient {
     export let Module = angular.module('example-generated', []);
 
-    let addr = window.ApiHost;
+    let addr = window['ApiHost'];
     if (addr.indexOf('ApiHost') !== -1) {
         addr = 'http://localhost:1337/';
     }
 
     export const BASE_URL = addr;
-    export const API_SUFFIX = 'api/';
+    export const API_SUFFIX = '';
     export const API_BASE_URL = BASE_URL + API_SUFFIX;
 
     function replaceUrl(url: string, params: any) {
@@ -27,7 +27,7 @@ export namespace GeneratedClient {
 
         public ExampleMethodConfig(id: number): ng.IRequestConfig {
             return {
-                url: replaceUrl(API_BASE_URL + 'api/example/example/{id}', {
+                url: replaceUrl(API_BASE_URL + 'api/example/{id}', {
                     id: id,
                 }),
                 method: 'GET',
