@@ -1,5 +1,4 @@
 language: csharp
-solution: AngularClientGenerator.sln
 dotnet: 2.1.502
 
 before_script:
@@ -15,18 +14,17 @@ jobs:
       mono: none
       install:
       - cd src 
-      - dotnet tool install coveralls.net -g
       - dotnet restore
+      - dotnet tool install coveralls.net -g
       script:
       - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage.xml AngularClientGenerator.Test
       - csmacnz.Coveralls --opencover -i AngularClientGenerator.Test/coverage.xml --repoToken $COVERALLS_REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci"  --useRelativePaths
     - stage: test
       env: COMMAND=test:netframework-descriptor
-      mono: 3.12.0
+      mono: latest
       install:
       - cd src
-      - dotnet restore
-      #- nuget restore AngularClientGenerator.sln
+      - dotnet restore 
       - nuget install NUnit.Console -Version 3.9.0 -OutputDirectory testrunner
       script: 
       - msbuild /p:Configuration=Release /t:AngularClientGenerator.Descriptor.Test AngularClientGenerator.sln
