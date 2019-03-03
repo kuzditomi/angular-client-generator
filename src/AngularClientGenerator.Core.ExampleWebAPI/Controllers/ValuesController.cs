@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AngularClientGenerator.Core.ExampleWebAPI.Controllers
@@ -12,7 +9,7 @@ namespace AngularClientGenerator.Core.ExampleWebAPI.Controllers
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<string>> GetAll()
         {
             return new string[] { "value1", "value2" };
         }
