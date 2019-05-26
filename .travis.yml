@@ -29,7 +29,7 @@ jobs:
       script: 
       - echo PATH
       - echo $PATH
-      - msbuild /p:Configuration=Release AngularClientGenerator.sln
+      - msbuild AngularClientGenerator.sln /p:Configuration=Release /t:AngularClientGenerator;AngularClientGenerator_Contracts;AngularClientGenerator_Test;AngularClientGenerator_Descriptor;AngularClientGenerator_Descriptor_Test
       - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./AngularClientGenerator.Descriptor.Test/bin/Release/AngularClientGenerator.Descriptor.Test.dll
 
 notifications:
