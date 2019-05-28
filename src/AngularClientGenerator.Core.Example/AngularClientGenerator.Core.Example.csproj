@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,12 +15,6 @@
     <ProjectReference Include="..\AngularClientGenerator.Core.Descriptor\AngularClientGenerator.Core.Descriptor.csproj" />
     <ProjectReference Include="..\AngularClientGenerator.Core.ExampleWebAPI\AngularClientGenerator.Core.ExampleWebAPI.csproj" />
     <ProjectReference Include="..\AngularClientGenerator\AngularClientGenerator.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.AspNetCore">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore\2.1.1\lib\netstandard2.0\Microsoft.AspNetCore.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
