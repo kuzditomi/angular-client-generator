@@ -1,12 +1,16 @@
 ﻿using AngularClientGenerator.Contracts.Config;
 using AngularClientGenerator.DescriptionParts;
+using System.Collections.Generic;
 
 namespace AngularClientGenerator.Visitor
 {
     public class AngularApiVisitor : AngularJSTypescriptApiVisitor
     {
+        private ICollection<string> serviceNames;
+
         public AngularApiVisitor(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
         {
+            this.serviceNames = new List<string>();
         }
 
         public override void Visit(ModuleDescriptionPart moduleDescription)
@@ -14,10 +18,10 @@ namespace AngularClientGenerator.Visitor
             this.WriteUrlConstants();
             this.WriteUrlReplaceMethod();
 
-            //foreach (var controllerDescriptionPart in moduleDescription.ControllerDescriptionParts)
-            //{
-            //    controllerDescriptionPart.Accept(this);
-            //}
+            foreach (var controllerDescriptionPart in moduleDescription.ControllerDescriptionParts)
+            {
+                controllerDescriptionPart.Accept(this);
+            }
 
             this.WriteModuleDefinition(moduleDescription.Name);
 
@@ -32,7 +36,7 @@ namespace AngularClientGenerator.Visitor
 
         public override void Visit(ControllerDescriptionPart controllerDescription)
         {
-            throw new System.NotImplementedException();
+            this.serviceNames.Add($"{controllerDescription.Name}ApiService");
         }
 
         public override void Visit(ActionDescriptionPart actionDescription)
@@ -54,6 +58,12 @@ namespace AngularClientGenerator.Visitor
             //services
             this.ClientBuilder.WriteLine("declarations: [");
             this.ClientBuilder.IncreaseIndent();
+
+            foreach (var serviceName in this.serviceNames)
+            {
+                this.ClientBuilder.WriteLine("{0},", serviceName);
+            }
+
             // TODO: service list
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("],");
@@ -70,7 +80,6 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("}})");
             this.ClientBuilder.WriteLine("export class {0} {{", moduleName);
             this.ClientBuilder.WriteLine("}}");
-
         }
     }
 }
