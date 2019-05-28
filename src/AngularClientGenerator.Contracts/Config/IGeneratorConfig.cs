@@ -3,6 +3,6 @@
     public interface IGeneratorConfig
     {
         string ExportPath { get; set; }
-        Language Language { get; set; }
+        ClientType Language { get; set; }
     }
 }

@@ -18,6 +18,27 @@ namespace AngularClientGenerator.Visitor
             this.Types = new List<KeyValuePair<string, Type>>();
         }
 
+        public override void Visit(ModuleDescriptionPart moduleDescription)
+        {
+            this.ClientBuilder.WriteLine("export namespace GeneratedClient {{");
+            this.ClientBuilder.IncreaseIndent();
+
+            this.WriteModuleDefinition(moduleDescription.Name);
+            this.WriteUrlConstants();
+            this.WriteUrlReplaceMethod();
+
+            foreach (var controllerDescriptionPart in moduleDescription.ControllerDescriptionParts)
+            {
+                controllerDescriptionPart.Accept(this);
+            }
+
+            this.WriteTypes();
+            this.WriteEnumService();
+
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}}");
+        }
+
         public override void Visit(ControllerDescriptionPart controllerDescription)
         {
             this.ClientBuilder.WriteLine("export class Api{0}Service {{", controllerDescription.Name);
@@ -54,40 +75,6 @@ namespace AngularClientGenerator.Visitor
 
             GenerateConfigFor(actionDescription);
             GenerateMethodFor(actionDescription);
-        }
-
-        public override void Visit(ModuleDescriptionPart moduleDescription)
-        {
-            this.ClientBuilder.WriteLine("export namespace GeneratedClient {{");
-            this.ClientBuilder.IncreaseIndent();
-
-            this.ClientBuilder.WriteLine("export let Module = angular.module('{0}', []);", moduleDescription.Name);
-            this.ClientBuilder.WriteLine();
-            this.ClientBuilder.WriteLine("let addr = window['ApiHost'];");
-            this.ClientBuilder.WriteLine("if (addr.indexOf('ApiHost') !== -1) {{");
-            this.ClientBuilder.IncreaseIndent();
-            this.ClientBuilder.WriteLine($"addr = '{Config.DefaultBaseUrl}';");
-            this.ClientBuilder.DecreaseIndent();
-            this.ClientBuilder.WriteLine("}}");
-            this.ClientBuilder.WriteLine();
-            this.ClientBuilder.WriteLine("export const BASE_URL = addr;");
-            this.ClientBuilder.WriteLine($"export const API_SUFFIX = '{Config.UrlSuffix}';");
-            this.ClientBuilder.WriteLine("export const API_BASE_URL = BASE_URL + API_SUFFIX;");
-            this.ClientBuilder.WriteLine();
-
-            this.GenerateUrlReplaceMethod();
-
-            foreach (var controllerDescriptionPart in moduleDescription.ControllerDescriptionParts)
-            {
-                controllerDescriptionPart.Accept(this);
-            }
-
-            this.WriteTypes();
-            this.WriteEnumServiceInterface();
-            this.WriteEnumService();
-
-            this.ClientBuilder.DecreaseIndent();
-            this.ClientBuilder.WriteLine("}}");
         }
 
         public override void Visit(TypeDescriptionPart typeDescriptionPart)
@@ -330,7 +317,7 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("}}");
         }
 
-        private void GenerateUrlReplaceMethod()
+        protected void WriteUrlReplaceMethod()
         {
             this.ClientBuilder.WriteLine("function replaceUrl(url: string, params: any) {{");
             this.ClientBuilder.IncreaseIndent();
@@ -369,6 +356,8 @@ namespace AngularClientGenerator.Visitor
 
         private void WriteEnumService()
         {
+            this.WriteEnumServiceInterface();
+
             this.ClientBuilder.WriteLine("export class EnumHelperService {{");
             this.ClientBuilder.IncreaseIndent();
             this.ClientBuilder.WriteLine("[index: string]: any;");
@@ -409,34 +398,9 @@ namespace AngularClientGenerator.Visitor
             this.WriteStaticPart("EnumHelper.ts.template");
         }
 
-        private void WriteTypes()
+        private void WriteModuleDefinition(string moduleName)
         {
-            if (this.Config.UseNamespaces)
-            {
-                var namespaceGroups = this.Types.GroupBy(t => t.Value.Namespace);
-
-                foreach (var namespaceGroup in namespaceGroups)
-                {
-                    var namespaceName = this.Config.NamespaceNamingRule(namespaceGroup.First().Value);
-                    this.ClientBuilder.WriteLine("export namespace {0} {{", namespaceName);
-                    this.ClientBuilder.IncreaseIndent();
-
-                    foreach (var type in namespaceGroup)
-                    {
-                        this.WriteType(type.Value);
-                    }
-
-                    this.ClientBuilder.DecreaseIndent();
-                    this.ClientBuilder.WriteLine("}}");
-                }
-            }
-            else
-            {
-                foreach (var type in Types)
-                {
-                    this.WriteType(type.Value);
-                }
-            }
+            this.ClientBuilder.WriteLine("export let Module = angular.module('{0}', []);", moduleName);
         }
 
         private void WriteType(Type type)
@@ -474,6 +438,52 @@ namespace AngularClientGenerator.Visitor
                 this.ClientBuilder.WriteLine("}}");
                 this.ClientBuilder.WriteLine();
             }
+        }
+
+        protected void WriteTypes()
+        {
+            if (this.Config.UseNamespaces)
+            {
+                var namespaceGroups = this.Types.GroupBy(t => t.Value.Namespace);
+
+                foreach (var namespaceGroup in namespaceGroups)
+                {
+                    var namespaceName = this.Config.NamespaceNamingRule(namespaceGroup.First().Value);
+                    this.ClientBuilder.WriteLine("export namespace {0} {{", namespaceName);
+                    this.ClientBuilder.IncreaseIndent();
+
+                    foreach (var type in namespaceGroup)
+                    {
+                        this.WriteType(type.Value);
+                    }
+
+                    this.ClientBuilder.DecreaseIndent();
+                    this.ClientBuilder.WriteLine("}}");
+                }
+            }
+            else
+            {
+                foreach (var type in Types)
+                {
+                    this.WriteType(type.Value);
+                }
+            }
+        }
+
+        protected void WriteUrlConstants()
+        {
+            this.ClientBuilder.WriteLine();
+            this.ClientBuilder.WriteLine("let addr = window['ApiHost'];");
+            this.ClientBuilder.WriteLine("if (addr.indexOf('ApiHost') !== -1) {{");
+            this.ClientBuilder.IncreaseIndent();
+            this.ClientBuilder.WriteLine($"addr = '{Config.DefaultBaseUrl}';");
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}}");
+            this.ClientBuilder.WriteLine();
+            this.ClientBuilder.WriteLine("export const BASE_URL = addr;");
+            this.ClientBuilder.WriteLine($"export const API_SUFFIX = '{Config.UrlSuffix}';");
+            this.ClientBuilder.WriteLine("export const API_BASE_URL = BASE_URL + API_SUFFIX;");
+            this.ClientBuilder.WriteLine();
         }
 
         private string GetNameSpaceAndNameForType(Type type)

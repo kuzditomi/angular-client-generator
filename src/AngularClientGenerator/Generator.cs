@@ -28,7 +28,7 @@ namespace AngularClientGenerator
             ValidateConfig();
             var builder = new ClientBuilder(this.Config);
 
-            if (this.Config.Language == Language.TypeScript)
+            if (this.Config.Language == ClientType.AngularJsTypeScript)
             {
                 this.Visitor = new AngularJSTypescriptApiVisitor(this.Config, builder);
             }

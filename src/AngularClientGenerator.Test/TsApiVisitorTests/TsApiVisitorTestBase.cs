@@ -13,7 +13,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
         private readonly GeneratorConfig basicTsConfig = new GeneratorConfig
         {
             IndentType = IndentType.Tab,
-            Language = Language.TypeScript
+            Language = ClientType.AngularJsTypeScript
         };
 
         protected string VisitEmptyModule(GeneratorConfig config)

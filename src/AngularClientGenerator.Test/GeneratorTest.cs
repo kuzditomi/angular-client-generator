@@ -18,7 +18,7 @@ namespace AngularClientGenerator.Test
             var generator = new Generator(null);
 
             Assert.AreEqual("angular-generated-client.ts", generator.Config.ExportPath);
-            Assert.AreEqual(Language.TypeScript, generator.Config.Language);
+            Assert.AreEqual(ClientType.AngularJsTypeScript, generator.Config.Language);
             Assert.AreEqual(false, generator.Config.UseNamespaces);
             Assert.AreEqual(IndentType.Tab, generator.Config.IndentType);
             Assert.AreEqual("mymodule", generator.Config.ModuleName);

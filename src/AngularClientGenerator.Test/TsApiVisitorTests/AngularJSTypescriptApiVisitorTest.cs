@@ -13,7 +13,7 @@ using AngularClientGenerator.Test.TestModels;
 namespace AngularClientGenerator.Test.TsApiVisitorTests
 {
     [TestClass]
-    public class TsApiVisitorTest : TsApiVisitorTestBase
+    public class AngularJSTypescriptApiVisitorTest : TsApiVisitorTestBase
     {
         [TestMethod]
         public void ControllerDescriptionPart_TestController()
@@ -21,7 +21,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             var config = new GeneratorConfig
             {
                 IndentType = IndentType.Tab,
-                Language = Language.TypeScript
+                Language = ClientType.AngularJsTypeScript
             };
             var builder = new ClientBuilder(config);
             var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
@@ -55,7 +55,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             var config = new GeneratorConfig
             {
                 IndentType = IndentType.Tab,
-                Language = Language.TypeScript
+                Language = ClientType.AngularJsTypeScript
             };
             var builder = new ClientBuilder(config);
             var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
@@ -97,7 +97,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             var config = new GeneratorConfig
             {
                 IndentType = IndentType.Tab,
-                Language = Language.TypeScript
+                Language = ClientType.AngularJsTypeScript
             };
             var builder = new ClientBuilder(config);
             var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
@@ -161,7 +161,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             var config = new GeneratorConfig
             {
                 IndentType = IndentType.Tab,
-                Language = Language.TypeScript,
+                Language = ClientType.AngularJsTypeScript,
                 DefaultBaseUrl = "myexampleurl"
             };
 
@@ -177,7 +177,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             var config = new GeneratorConfig
             {
                 IndentType = IndentType.Tab,
-                Language = Language.TypeScript,
+                Language = ClientType.AngularJsTypeScript,
                 DefaultBaseUrl = "mybaseurl",
                 UrlSuffix = "abc"
             };
