@@ -29,8 +29,8 @@ jobs:
       script: 
       - echo PATH
       - echo $PATH
-      - msbuild /p:Configuration=Release AngularClientGenerator.sln
-      - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./AngularClientGenerator.Descriptor.Test/bin/Release/AngularClientGenerator.Descriptor.Test.dll
+      - msbuild AngularClientGenerator.sln /p:Configuration=CINetFramework
+      - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./AngularClientGenerator.Descriptor.Test/bin/CINetFramework/AngularClientGenerator.Descriptor.Test.dll
 
 notifications:
   email: false
