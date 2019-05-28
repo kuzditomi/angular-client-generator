@@ -37,6 +37,18 @@ namespace AngularClientGenerator.Visitor
         public override void Visit(ControllerDescriptionPart controllerDescription)
         {
             this.serviceNames.Add($"{controllerDescription.Name}ApiService");
+
+            this.ClientBuilder.WriteLine("@Injectable()");
+            this.ClientBuilder.WriteLine("export class {0}ApiService {{", controllerDescription.Name);
+            this.ClientBuilder.IncreaseIndent();
+
+            this.ClientBuilder.WriteLine("apiUrl: string = API_BASE_URL;");
+            this.ClientBuilder.WriteLine();
+            this.ClientBuilder.WriteLine("constructor(private http: HttpClient) {{");
+            this.ClientBuilder.WriteLine("}}");
+
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}}");
         }
 
         public override void Visit(ActionDescriptionPart actionDescription)
