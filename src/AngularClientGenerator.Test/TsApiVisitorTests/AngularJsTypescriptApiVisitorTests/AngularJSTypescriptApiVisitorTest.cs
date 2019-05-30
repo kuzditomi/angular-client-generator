@@ -93,54 +93,5 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 Assert.IsTrue(content.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
             }
         }
-
-        [TestMethod]
-        public void ApiHostIsInitialisedFromWindow()
-        {
-            var actualContent = this.visitor.VisitEmptyModule();
-            var expectedContent = "\tlet addr = window['ApiHost'];";
-
-            Assert.IsTrue(actualContent.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
-        }
-
-        [TestMethod]
-        public void DefaultBaseURLFromConfig()
-        {
-            var config = new GeneratorConfig
-            {
-                IndentType = IndentType.Tab,
-                ClientType = ClientType.AngularJsTypeScript,
-                DefaultBaseUrl = "myexampleurl"
-            };
-
-            var actualContent = this.visitor.VisitEmptyModule(config);
-            var expectedContent = "\t\taddr = 'myexampleurl';";
-
-            Assert.IsTrue(actualContent.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
-        }
-
-        [TestMethod]
-        public void UrlSuffixAddition()
-        {
-            var config = new GeneratorConfig
-            {
-                IndentType = IndentType.Tab,
-                ClientType = ClientType.AngularJsTypeScript,
-                DefaultBaseUrl = "mybaseurl",
-                UrlSuffix = "abc"
-            };
-
-            var actualContent = this.visitor.VisitEmptyModule(config);
-            var expectedContents = new List<string>
-                {
-                    "\t\taddr = 'mybaseurl';",
-                    "\texport const API_SUFFIX = 'abc';",
-                };
-
-            foreach (var expectedContent in expectedContents)
-            {
-                Assert.IsTrue(actualContent.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
-            }
-        }
     }
 }
