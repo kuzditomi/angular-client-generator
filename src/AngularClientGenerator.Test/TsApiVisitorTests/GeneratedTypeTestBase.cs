@@ -10,12 +10,12 @@ using AngularClientGenerator.Config;
 using AngularClientGenerator.Test.Utils;
 using AngularClientGenerator.Contracts;
 
-namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
+namespace AngularClientGenerator.Test.TsApiVisitorTests
 {
     [TestClass]
-    public class GeneratedTypeTest : TestBaseWithHelper
+    public abstract class GeneratedTypeTestBase : TestBaseWithHelper
     {
-        public GeneratedTypeTest() : base(ClientType.AngularJsTypeScript)
+        public GeneratedTypeTestBase(ClientType clientType) : base(clientType)
         {
         }
 
@@ -63,10 +63,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var expectedHeader =
-                "public BasicTypesAction = (s: string, a: number, b: number, c: number, d: number, f: boolean): ng.IPromise<void> => {";
+            var expectedHeader = this.FormatMethodHeader("BasicTypesAction", "s: string, a: number, b: number, c: number, d: number, f: boolean", "void");
 
             Assert.IsTrue(content.Contains(expectedHeader), "BasicTypesAction is not generated, or it's wrong.");
 
@@ -119,10 +118,10 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 }
             };
 
-            var content = this.visitor.VisitTsControllerInModule(controllerDescriptor);
+            var content = this.visitor.VisitControllerInModule(controllerDescriptor);
 
-            var methodHeader1 = "public OneMyEmptyTestClassAction = (model: IMyEmptyTestClass): ng.IPromise<void> => {";
-            var methodHeader2 = "public TwoMyEmptyTestClassAction = (model: IMyEmptyTestClass): ng.IPromise<void> => {";
+            var methodHeader1 = this.FormatMethodHeader("OneMyEmptyTestClassAction", "model: IMyEmptyTestClass", "void");
+            var methodHeader2 = this.FormatMethodHeader("TwoMyEmptyTestClassAction", "model: IMyEmptyTestClass", "void");
 
             Assert.IsTrue(content.Contains(methodHeader1), "method header is not present, or incorrect." + "OneMyEmptyTestClassAction");
             Assert.IsTrue(content.Contains(methodHeader2), "method header is not present, or incorrect." + "TwoMyEmptyTestClassAction");
@@ -158,9 +157,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public EnumTypeAction = (enumvalue: TestEnum): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("EnumTypeAction", "enumvalue: TestEnum", "void");
 
             Assert.IsTrue(content.Contains(methodHeader), "Enum type method header is not present, or incorrect.");
 
@@ -197,9 +196,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public NumberedEnumTypeAction = (enumvalue: TestNumberedEnum): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("NumberedEnumTypeAction", "enumvalue: TestNumberedEnum", "void");
 
             Assert.IsTrue(content.Contains(methodHeader), "Enum type method header is not present, or incorrect.");
 
@@ -236,9 +235,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public ArrayTypeAction = (arr: string[]): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("ArrayTypeAction", "arr: string[]", "void");
 
             Assert.IsTrue(content.Contains(methodHeader), "Array type method header is not present, or incorrect.");
 
@@ -264,9 +263,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public TestRecursiveDiscovery = (model: ITestComplexType): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("TestRecursiveDiscovery", "model: ITestComplexType", "void");
 
             Assert.IsTrue(content.Contains(methodHeader), "TestRecursiveDiscovery method header is not present, or incorrect.");
 
@@ -293,8 +292,8 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
-            var methodHeader = "public ArrayTypesAction = (model: IArrayOnlyType[]): ng.IPromise<void> => {";
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
+            var methodHeader = this.FormatMethodHeader("ArrayTypesAction", "model: IArrayOnlyType[]", "void");
 
             Assert.IsTrue(content.Contains(methodHeader), "ArrayTypesAction method header is not present, or incorrect.");
 
@@ -321,9 +320,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public OnlyAsOptionalParam = (model?: IAsOptionalParamOnly): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("OnlyAsOptionalParam", "model?: IAsOptionalParamOnly", "void");
 
             Assert.IsTrue(content.Contains(methodHeader), "OnlyAsOptionalParam method header is not present, or incorrect.");
 
@@ -349,9 +348,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public EnumerableTypeAction = (model: IEnumerableOnlyType[]): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("EnumerableTypeAction", "model: IEnumerableOnlyType[]", "void");
 
             Assert.IsTrue(content.Contains(methodHeader), "EnumerableTypeAction method header is not present, or incorrect.");
 
@@ -377,9 +376,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public NullableProperty = (hasnullable: IContainsNullableProperty): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("NullableProperty", "hasnullable: IContainsNullableProperty", "void");
 
             Assert.IsTrue(content.Contains(methodHeader), "NullableProperty method header is not present, or incorrect.");
 
@@ -415,14 +414,10 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public OptionalParam = (optional?: number): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("OptionalParam", "optional?: number", "void");
             Assert.IsTrue(content.Contains(methodHeader), "OptionalParam method header is not present, or incorrect.");
-
-            var configHeader = "public OptionalParamConfig(optional?: number): ng.IRequestConfig {";
-            Assert.IsTrue(content.Contains(configHeader), "OptionalParamConfig method header is not present, or incorrect.");
-
             Assert.IsFalse(content.Contains("export interface INullable"), "optional parameters should not create nullable types");
         }
 
@@ -445,17 +440,17 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
             var interfaceDeclaration = string.Join(Environment.NewLine, new[]
             {
-                    "\texport interface ITestComplexType {",
-                    "\t\tNormalProperty: string;",
-                    "\t\tComplexProperty: ITestComplexInnerProperty;",
-                    "\t\tNumberProperty: number;",
-                    "\t\tEnum: TestEnum;",
-                    "\t}"
-                });
+                "\texport interface ITestComplexType {",
+                "\t\tNormalProperty: string;",
+                "\t\tComplexProperty: ITestComplexInnerProperty;",
+                "\t\tNumberProperty: number;",
+                "\t\tEnum: TestEnum;",
+                "\t}"
+            });
 
             Assert.IsTrue(content.Contains(interfaceDeclaration), "ITestComplexType should be defined fully");
         }
@@ -475,9 +470,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = mockIHttpActionResultType.Object }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public ActionResultWithoutAttribute = (): ng.IPromise<any> => {";
+            var methodHeader = this.FormatMethodHeader("ActionResultWithoutAttribute", "", "any");
             Assert.IsTrue(content.Contains(methodHeader), "ActionResultWithoutAttribute method header is not present, or incorrect.");
 
             var interfaceDeclaration = "export interface IIHttpActionResult";
@@ -499,9 +494,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(Task<int>) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public UnWrapTaskGeneric = (): ng.IPromise<number> => {";
+            var methodHeader = this.FormatMethodHeader("UnWrapTaskGeneric", "", "number");
             Assert.IsTrue(content.Contains(methodHeader), "UnWrapTaskGeneric method header is not present, or incorrect.");
 
             var interfaceDeclaration = "export interface ITask";
@@ -524,9 +519,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(Task) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public TaskToVoid = (): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("TaskToVoid", "", "void");
             Assert.IsTrue(content.Contains(methodHeader), "TaskToVoid method header is not present, or incorrect.");
 
             var interfaceDeclaration = "export interface ITask";
@@ -578,7 +573,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 }
             };
 
-            this.visitor.VisitTsControllerInModule(controllerDescriptor);
+            this.visitor.VisitControllerInModule(controllerDescriptor);
         }
 
         [TestMethod]
@@ -587,7 +582,8 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         {
             var config = new GeneratorConfig
             {
-                UseNamespaces = true
+                UseNamespaces = true,
+                ClientType = this.clientType
             };
 
             var controllerDescriptor = new ControllerDescriptor
@@ -628,7 +624,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 }
             };
 
-            this.visitor.VisitTsControllerInModule(controllerDescriptor, config);
+            this.visitor.VisitControllerInModule(controllerDescriptor, config);
         }
 
         [TestMethod]
@@ -637,7 +633,8 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
             var config = new GeneratorConfig
             {
                 UseNamespaces = true,
-                NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.", "")
+                NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.", ""),
+                ClientType = this.clientType,
             };
 
             var controllerDescriptor = new ControllerDescriptor
@@ -678,12 +675,12 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 }
             };
 
-            var content = this.visitor.VisitTsControllerInModule(controllerDescriptor, config);
+            var content = this.visitor.VisitControllerInModule(controllerDescriptor, config);
 
-            var methodHeadera = "public SameNameDifferentNameSpaceA = (parameter: TestModels.NameSpaceA.ISameNameDifferentNameSpace): ng.IPromise<void> => {";
+            var methodHeadera = this.FormatMethodHeader("SameNameDifferentNameSpaceA", "parameter: TestModels.NameSpaceA.ISameNameDifferentNameSpace", "void");
             Assert.IsTrue(content.Contains(methodHeadera), "SameNameDifferentNameSpaceA method header is not present, or incorrect.");
 
-            var methodHeaderb = "public SameNameDifferentNameSpaceB = (parameter: TestModels.NameSpaceB.ISameNameDifferentNameSpace): ng.IPromise<void> => {";
+            var methodHeaderb = this.FormatMethodHeader("SameNameDifferentNameSpaceB", "parameter: TestModels.NameSpaceB.ISameNameDifferentNameSpace", "void");
             Assert.IsTrue(content.Contains(methodHeaderb), "SameNameDifferentNameSpaceB method header is not present, or incorrect.");
 
             var interfaceDeclaration = "export interface ISameNameDifferentNameSpace";
@@ -717,9 +714,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
-            var methodHeader = "public DateTimeReplaced = (date: string): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("DateTimeReplaced", "date: string", "void");
             Assert.IsTrue(content.Contains(methodHeader), "DateTimeReplaced method header is not present, or incorrect.");
 
             var interfaceDeclaration = "export interface IDateTime";
@@ -732,7 +729,8 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
             var config = new GeneratorConfig
             {
                 UseNamespaces = true,
-                NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.", "")
+                NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.", ""),
+                ClientType = this.clientType,
             };
 
             var actionDescriptor = new ActionDescriptor
@@ -751,9 +749,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor, config);
+            var content = this.visitor.VisitActionInModule(actionDescriptor, config);
 
-            var methodHeader = "public GenericType = (type: TestModels.IGenericClass<number>): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("GenericType", "type: TestModels.IGenericClass<number>", "void");
             Assert.IsTrue(content.Contains(methodHeader), "GenericType method header is not present, or incorrect.");
 
             var interfaceDeclaration = string.Join(Environment.NewLine, new[]
@@ -773,7 +771,8 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
             var config = new GeneratorConfig
             {
                 UseNamespaces = true,
-                NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.", "")
+                NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.", ""),
+                ClientType = this.clientType,
             };
 
             var actionDescriptor = new ActionDescriptor
@@ -792,7 +791,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor, config);
+            var content = this.visitor.VisitActionInModule(actionDescriptor, config);
 
             var interfaceDeclaration = "export interface IGenericClass<T>";
             var numberOfDeclarations = content.Occures(interfaceDeclaration);
@@ -806,6 +805,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
             var config = new GeneratorConfig
             {
                 UseNamespaces = true,
+                ClientType = this.clientType,
                 NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.", "")
             };
 
@@ -825,9 +825,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor, config);
+            var content = this.visitor.VisitActionInModule(actionDescriptor, config);
 
-            var methodHeadera = "public NameSpacedArrays = (parameter: TestModels.NameSpaceA.ISameNameDifferentNameSpace[]): ng.IPromise<void> => {";
+            var methodHeadera = this.FormatMethodHeader("NameSpacedArrays", "parameter: TestModels.NameSpaceA.ISameNameDifferentNameSpace[]", "void");
             Assert.IsTrue(content.Contains(methodHeadera), "SameNameDifferentNameSpaceA method header is not present, or incorrect.");
         }
 
@@ -837,6 +837,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
             var config = new GeneratorConfig
             {
                 UseNamespaces = true,
+                ClientType = this.clientType,
                 NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.", "")
             };
 
@@ -856,9 +857,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor, config);
+            var content = this.visitor.VisitActionInModule(actionDescriptor, config);
 
-            var methodHeadera = "public NamespacedProperties = (parameter: TestModels.IHasNameSpacedProperties): ng.IPromise<void> => {";
+            var methodHeadera = this.FormatMethodHeader("NamespacedProperties", "parameter: TestModels.IHasNameSpacedProperties", "void");
             Assert.IsTrue(content.Contains(methodHeadera), "NamespacedProperties method header is not present, or incorrect.");
 
             var interfaceDeclaration = string.Join(Environment.NewLine, new[]
@@ -878,6 +879,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
             var config = new GeneratorConfig
             {
                 UseNamespaces = true,
+                ClientType = this.clientType,
                 NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.", "")
             };
 
@@ -897,9 +899,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor, config);
+            var content = this.visitor.VisitActionInModule(actionDescriptor, config);
 
-            var methodHeadera = "public NamespacedEnum = (enumparam: TestModels.EnumNameSpace.OnlyEnumInNameSpace): ng.IPromise<void> => {";
+            var methodHeadera = this.FormatMethodHeader("NamespacedEnum", "enumparam: TestModels.EnumNameSpace.OnlyEnumInNameSpace", "void");
             Assert.IsTrue(content.Contains(methodHeadera), "NamespacedEnum method header is not present, or incorrect.");
 
             var interfaceDeclaration = string.Join(Environment.NewLine, new[]
@@ -924,6 +926,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
             var config = new GeneratorConfig
             {
                 UseNamespaces = true,
+                ClientType = this.clientType,
                 NamespaceNamingRule = t => t.Namespace.Replace("AngularClientGenerator.Test.", "")
             };
 
@@ -943,9 +946,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor, config);
+            var content = this.visitor.VisitActionInModule(actionDescriptor, config);
 
-            var methodHeader = $"public DictionaryTypeTest = (dictionary: {{[key: {keyType}]: {valueType}}}): ng.IPromise<void> => {{";
+            var methodHeader = this.FormatMethodHeader("DictionaryTypeTest", $"dictionary: {{[key: {keyType}]: {valueType}}}", "void");
             Assert.IsTrue(content.Contains(methodHeader), "DictionaryTypeTest method header is not present, or incorrect.");
         }
 
@@ -962,6 +965,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
             var config = new GeneratorConfig
             {
                 UseNamespaces = true,
+                ClientType = this.clientType,
                 NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.", "")
             };
 
@@ -981,9 +985,9 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor, config);
+            var content = this.visitor.VisitActionInModule(actionDescriptor, config);
 
-            var methodHeader = "public DictionaryWithComplexValue = (dictionary: {[key: number]: TestModels.IDictionaryReturnType}): ng.IPromise<void> => {";
+            var methodHeader = this.FormatMethodHeader("DictionaryWithComplexValue", "dictionary: {[key: number]: TestModels.IDictionaryReturnType}", "void");
             Assert.IsTrue(content.Contains(methodHeader), "DictionaryWithComplexValue method header is not present, or incorrect.");
 
             var interfaceDeclaration = string.Join(Environment.NewLine, new[]
@@ -1004,7 +1008,11 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                     "export interface ITestModelA {",
                     "export interface ITestModelB {"
                 };
-            var config = new GeneratorConfig { UseNamespaces = false };
+            var config = new GeneratorConfig
+            {
+                ClientType = this.clientType,
+                UseNamespaces = false
+            };
 
             var controllerDescriptor = new ControllerDescriptor
             {
@@ -1045,7 +1053,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
             };
 
 
-            var content = this.visitor.VisitTsControllerInModule(controllerDescriptor, config);
+            var content = this.visitor.VisitControllerInModule(controllerDescriptor, config);
 
             foreach (var expectedContent in expectedTypes)
             {
@@ -1053,5 +1061,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 Assert.IsTrue(occurance == 1, "Generated content is not included: {0}", expectedContent);
             }
         }
+
+        protected abstract string FormatMethodHeader(string methodName, string parameterList, string returnType);
     }
 }

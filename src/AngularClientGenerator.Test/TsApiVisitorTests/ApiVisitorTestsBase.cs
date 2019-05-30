@@ -31,7 +31,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
                 UrlTemplate = string.Empty
             };
 
-            var content = this.visitor.VisitTsActionInModule(actionDescriptor);
+            var content = this.visitor.VisitActionInModule(actionDescriptor);
 
             var expectedContents = new List<string>
             {
@@ -110,7 +110,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
                 })
             };
 
-            var actualContent = this.visitor.VisitTsControllerInModule(controllerDescriptor);
+            var actualContent = this.visitor.VisitControllerInModule(controllerDescriptor);
             var expectedContents = new string[] { "A", "B", "Random" }.Select(name => $"public {name}");
 
             foreach (var expectedContent in expectedContents)

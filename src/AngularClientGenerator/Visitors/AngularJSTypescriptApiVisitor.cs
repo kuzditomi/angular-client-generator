@@ -10,9 +10,9 @@ using AngularClientGenerator.Extensions;
 
 namespace AngularClientGenerator.Visitors
 {
-    public class AngularJSTypescriptApiVisitor : TypescriptApiVisitorBase
+    public class AngularJsTypescriptApiVisitor : TypescriptApiVisitorBase
     {
-        public AngularJSTypescriptApiVisitor(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
+        public AngularJsTypescriptApiVisitor(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
         {
         }
 

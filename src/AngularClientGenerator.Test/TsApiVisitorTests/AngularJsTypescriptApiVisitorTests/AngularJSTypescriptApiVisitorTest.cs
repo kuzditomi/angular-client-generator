@@ -10,9 +10,9 @@ using AngularClientGenerator.PartBuilders;
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
-    public class AngularJSTypescriptApiVisitorTest : ApiVisitorTestsBase
+    public class AngularJsTypescriptApiVisitorTest : ApiVisitorTestsBase
     {
-        public AngularJSTypescriptApiVisitorTest() : base(ClientType.AngularJsTypeScript)
+        public AngularJsTypescriptApiVisitorTest() : base(ClientType.AngularJsTypeScript)
         {
         }
 
@@ -25,7 +25,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ClientType = ClientType.AngularJsTypeScript
             };
             var builder = new ClientBuilder(config);
-            var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
+            var apiVisitor = new AngularJsTypescriptApiVisitor(config, builder);
             var controllerDesciptionPart = new ControllerDescriptionPart(new ControllerDescriptor
             {
                 Name = "Test",

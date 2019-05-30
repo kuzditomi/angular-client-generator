@@ -92,7 +92,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
             };
 
             // Act
-            var actualContent = this.visitor.VisitTsController(controllerDescriptor);
+            var actualContent = this.visitor.VisitController(controllerDescriptor);
 
             // Assert
             var expectedLines = new List<string> {

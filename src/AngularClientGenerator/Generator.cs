@@ -31,7 +31,7 @@ namespace AngularClientGenerator
 
             if (this.Config.ClientType == ClientType.AngularJsTypeScript)
             {
-                this.Visitor = new AngularJSTypescriptApiVisitor(this.Config, builder);
+                this.Visitor = new AngularJsTypescriptApiVisitor(this.Config, builder);
             }
             else if (this.Config.ClientType == ClientType.Angular)
             {

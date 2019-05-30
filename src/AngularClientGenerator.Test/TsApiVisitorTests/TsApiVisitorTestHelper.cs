@@ -53,7 +53,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             return VisitModule(moduleDescription, this.basicTsConfig);
         }
 
-        public string VisitTsController(ControllerDescriptor controllerDescriptor)
+        public string VisitController(ControllerDescriptor controllerDescriptor)
         {
             var builder = new ClientBuilder(this.basicTsConfig);
             var apiVisitor = CreateVisitor(this.basicTsConfig, builder);
@@ -62,12 +62,12 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             return apiVisitor.GetContent();
         }
 
-        public string VisitTsControllerInModule(ControllerDescriptor controllerDescriptor)
+        public string VisitControllerInModule(ControllerDescriptor controllerDescriptor)
         {
-            return this.VisitTsControllerInModule(controllerDescriptor, this.basicTsConfig);
+            return this.VisitControllerInModule(controllerDescriptor, this.basicTsConfig);
         }
 
-        public string VisitTsControllerInModule(ControllerDescriptor controllerDescriptor, GeneratorConfig config)
+        public string VisitControllerInModule(ControllerDescriptor controllerDescriptor, GeneratorConfig config)
         {
             var builder = new ClientBuilder(config);
             var apiVisitor = CreateVisitor(config, builder);
@@ -85,12 +85,12 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             return apiVisitor.GetContent();
         }
 
-        public string VisitTsAction(ActionDescriptor actionDescriptor)
+        public string VisitAction(ActionDescriptor actionDescriptor)
         {
-            return this.VisitTsAction(actionDescriptor, this.basicTsConfig);
+            return this.VisitAction(actionDescriptor, this.basicTsConfig);
         }
 
-        public string VisitTsAction(ActionDescriptor actionDescriptor, GeneratorConfig config)
+        public string VisitAction(ActionDescriptor actionDescriptor, GeneratorConfig config)
         {
             var builder = new ClientBuilder(config);
             var apiVisitor = CreateVisitor(config, builder);
@@ -99,18 +99,18 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             return apiVisitor.GetContent();
         }
 
-        public string VisitTsActionInModule(ActionDescriptor actionDescriptor)
+        public string VisitActionInModule(ActionDescriptor actionDescriptor)
         {
-            return this.VisitTsControllerInModule(new ControllerDescriptor
+            return this.VisitControllerInModule(new ControllerDescriptor
             {
                 Name = "ExampleController",
                 ActionDescriptors = new List<ActionDescriptor> { actionDescriptor }
             });
         }
 
-        public string VisitTsActionInModule(ActionDescriptor actionDescriptor, GeneratorConfig config)
+        public string VisitActionInModule(ActionDescriptor actionDescriptor, GeneratorConfig config)
         {
-            return this.VisitTsControllerInModule(new ControllerDescriptor
+            return this.VisitControllerInModule(new ControllerDescriptor
             {
                 Name = "ExampleController",
                 ActionDescriptors = new List<ActionDescriptor> { actionDescriptor }
@@ -123,7 +123,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
                 return new AngularApiVisitor(config, builder);
 
             if (config.ClientType == ClientType.AngularJsTypeScript)
-                return new AngularJSTypescriptApiVisitor(config, builder);
+                return new AngularJsTypescriptApiVisitor(config, builder);
 
             throw new NotImplementedException("No implementation given for client type");
         }

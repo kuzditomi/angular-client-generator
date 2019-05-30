@@ -29,7 +29,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
             };
 
             // Act
-            var content = this.visitor.VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitAction(actionDescriptor);
 
             // Assert
             var expectedLines = new List<string>
