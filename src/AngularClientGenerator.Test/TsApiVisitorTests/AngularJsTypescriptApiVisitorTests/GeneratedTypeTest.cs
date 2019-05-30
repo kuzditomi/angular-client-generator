@@ -13,7 +13,7 @@ using AngularClientGenerator.Contracts;
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
-    public class GeneratedTypeTest : TsApiVisitorTestsBase
+    public class GeneratedTypeTest : TestBaseWithHelper
     {
         public GeneratedTypeTest() : base(ClientType.AngularJsTypeScript)
         {

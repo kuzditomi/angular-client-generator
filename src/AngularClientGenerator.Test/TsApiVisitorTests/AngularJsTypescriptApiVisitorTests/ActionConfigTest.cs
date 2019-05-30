@@ -10,7 +10,7 @@ using System.Net.Http;
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
-    public class ActionConfigTest : TsApiVisitorTestsBase
+    public class ActionConfigTest : TestBaseWithHelper
     {
         public ActionConfigTest() : base(ClientType.AngularJsTypeScript)
         {

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
 {
     [TestClass]
-    public class AngularApiVisitorTest : TsApiVisitorTestsBase
+    public class AngularApiVisitorTest : ApiVisitorTestsBase
     {
         public AngularApiVisitorTest() : base(ClientType.Angular)
         {

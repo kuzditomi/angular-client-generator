@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
 using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitors;
 using AngularClientGenerator.Contracts.Descriptors;
-using System.Net.Http;
 using AngularClientGenerator.PartBuilders;
 
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
-    public class AngularJSTypescriptApiVisitorTest : TsApiVisitorTestsBase
+    public class AngularJSTypescriptApiVisitorTest : ApiVisitorTestsBase
     {
         public AngularJSTypescriptApiVisitorTest() : base(ClientType.AngularJsTypeScript)
         {

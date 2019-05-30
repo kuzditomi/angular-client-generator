@@ -11,9 +11,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
-    public class GeneratedActionTest : TsApiVisitorTestsBase
+    public class AngularJsTypescriptGeneratedActionTest : GeneratedActionTestBase
     {
-        public GeneratedActionTest() : base(ClientType.AngularJsTypeScript)
+        public AngularJsTypescriptGeneratedActionTest() : base(ClientType.AngularJsTypeScript)
         {
         }
 
@@ -50,7 +50,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         }
 
         [TestMethod]
-        public void GeneratedVoidParameterlessActionTest()
+        public override void GeneratedVoidParameterlessActionTest()
         {
             var actionDescriptor = new ActionDescriptor
             {
@@ -74,7 +74,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         }
 
         [TestMethod]
-        public void GeneratedVoidStringparamActionTest()
+        public override void GeneratedVoidStringparamActionTest()
         {
             var actionDescriptor = new ActionDescriptor
             {
@@ -105,7 +105,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         }
 
         [TestMethod]
-        public void GeneratedVoidComplexparamActionTest()
+        public override void GeneratedVoidComplexparamActionTest()
         {
             var actionDescriptor = new ActionDescriptor
             {
@@ -136,7 +136,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         }
 
         [TestMethod]
-        public void StringReturnActionTest()
+        public override void StringReturnActionTest()
         {
             var actionDescriptor = new ActionDescriptor
             {
@@ -160,7 +160,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         }
 
         [TestMethod]
-        public void ResponseTypeAttributeReturnActionTest()
+        public override void ResponseTypeAttributeReturnActionTest()
         {
             var actionDescriptor = new ActionDescriptor
             {
@@ -187,7 +187,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         [DataRow(typeof(IEnumerable<MyEmptyTestClass>))]
         [DataRow(typeof(List<MyEmptyTestClass>))]
         [DataRow(typeof(MyEmptyTestClass[]))]
-        public void ArrayReturnActionTest(Type arrayType)
+        public override void ArrayReturnActionTest(Type arrayType)
         {
             var actionDescriptor = new ActionDescriptor
             {
@@ -211,7 +211,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         }
 
         [TestMethod]
-        public void GenericTypeReturnActionTest()
+        public override void GenericTypeReturnActionTest()
         {
             var _namespace = "Test";
 

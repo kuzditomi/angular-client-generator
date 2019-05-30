@@ -9,15 +9,10 @@ using System.Net.Http;
 
 namespace AngularClientGenerator.Test.TsApiVisitorTests
 {
-    public abstract class TsApiVisitorTestsBase
+    public abstract class ApiVisitorTestsBase : TestBaseWithHelper
     {
-        private ClientType clientType;
-        protected TsApiVisitorTestHelper visitor;
-
-        protected TsApiVisitorTestsBase(ClientType clientType)
+        protected ApiVisitorTestsBase(ClientType clientType) : base(clientType)
         {
-            this.clientType = clientType;
-            this.visitor = new TsApiVisitorTestHelper(clientType);
         }
 
         [TestMethod]
