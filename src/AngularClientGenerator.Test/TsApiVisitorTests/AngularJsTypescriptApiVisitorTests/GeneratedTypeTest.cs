@@ -8,12 +8,17 @@ using AngularClientGenerator.Test.TestModels;
 using System.Threading.Tasks;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Test.Utils;
+using AngularClientGenerator.Contracts;
 
-namespace AngularClientGenerator.Test.TsApiVisitorTests
+namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
     public class GeneratedTypeTest : TsApiVisitorTestBase
     {
+        public GeneratedTypeTest() : base(ClientType.AngularJsTypeScript)
+        {
+        }
+
         [TestMethod]
         public void BasicTypesNotGeneratedConfig()
         {

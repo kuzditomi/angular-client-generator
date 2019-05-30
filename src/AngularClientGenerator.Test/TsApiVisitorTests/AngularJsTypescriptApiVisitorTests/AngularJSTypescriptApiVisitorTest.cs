@@ -10,18 +10,22 @@ using AngularClientGenerator.Contracts.Descriptors;
 using System.Net.Http;
 using AngularClientGenerator.Test.TestModels;
 
-namespace AngularClientGenerator.Test.TsApiVisitorTests
+namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
     public class AngularJSTypescriptApiVisitorTest : TsApiVisitorTestBase
     {
+        public AngularJSTypescriptApiVisitorTest() : base(ClientType.AngularJsTypeScript)
+        {
+        }
+
         [TestMethod]
         public void ControllerDescriptionPart_TestController()
         {
             var config = new GeneratorConfig
             {
                 IndentType = IndentType.Tab,
-                Language = ClientType.AngularJsTypeScript
+                ClientType = ClientType.AngularJsTypeScript
             };
             var builder = new ClientBuilder(config);
             var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
@@ -55,7 +59,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             var config = new GeneratorConfig
             {
                 IndentType = IndentType.Tab,
-                Language = ClientType.AngularJsTypeScript
+                ClientType = ClientType.AngularJsTypeScript
             };
             var builder = new ClientBuilder(config);
             var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
@@ -97,7 +101,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             var config = new GeneratorConfig
             {
                 IndentType = IndentType.Tab,
-                Language = ClientType.AngularJsTypeScript
+                ClientType = ClientType.AngularJsTypeScript
             };
             var builder = new ClientBuilder(config);
             var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
@@ -148,7 +152,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
         [TestMethod]
         public void ApiHostIsInitialisedFromWindow()
         {
-            var actualContent = VisitEmptyTsModule();
+            var actualContent = VisitEmptyModule();
             var expectedContent = "\tlet addr = window['ApiHost'];";
 
             Assert.IsTrue(actualContent.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
@@ -161,7 +165,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             var config = new GeneratorConfig
             {
                 IndentType = IndentType.Tab,
-                Language = ClientType.AngularJsTypeScript,
+                ClientType = ClientType.AngularJsTypeScript,
                 DefaultBaseUrl = "myexampleurl"
             };
 
@@ -177,7 +181,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             var config = new GeneratorConfig
             {
                 IndentType = IndentType.Tab,
-                Language = ClientType.AngularJsTypeScript,
+                ClientType = ClientType.AngularJsTypeScript,
                 DefaultBaseUrl = "mybaseurl",
                 UrlSuffix = "abc"
             };

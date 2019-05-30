@@ -28,13 +28,13 @@ namespace AngularClientGenerator
             ValidateConfig();
             var builder = new ClientBuilder(this.Config);
 
-            if (this.Config.Language == ClientType.AngularJsTypeScript)
+            if (this.Config.ClientType == ClientType.AngularJsTypeScript)
             {
                 this.Visitor = new AngularJSTypescriptApiVisitor(this.Config, builder);
             }
             else
             {
-                throw new NotSupportedException("Requested language is not supported: " + this.Config.Language);
+                throw new NotSupportedException("Requested language is not supported: " + this.Config.ClientType);
             }
 
             var controllerDescriptions = ApiDescriptor.ControllerDescriptors

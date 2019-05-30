@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using AngularClientGenerator.Config;
+using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.Test.TestModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AngularClientGenerator.Test.TsApiVisitorTests
+namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
     public class GeneratedActionTest : TsApiVisitorTestBase
     {
+        public GeneratedActionTest() : base(ClientType.AngularJsTypeScript)
+        {
+        }
+
         private readonly IEnumerable<string> httpThenPart = new List<string> {
             "\t\t.then(resp => {",
             "\t\t\treturn resp.data;",

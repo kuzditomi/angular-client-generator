@@ -1,4 +1,5 @@
-﻿using AngularClientGenerator.Contracts.Descriptors;
+﻿using AngularClientGenerator.Contracts;
+using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.Test.TestModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -6,11 +7,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 
-namespace AngularClientGenerator.Test.TsApiVisitorTests
+namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
     public class ActionConfigTest : TsApiVisitorTestBase
     {
+        public ActionConfigTest() : base(ClientType.AngularJsTypeScript)
+        {
+        }
+
         [TestMethod]
         public void VoidParameterlessActionConfig()
         {

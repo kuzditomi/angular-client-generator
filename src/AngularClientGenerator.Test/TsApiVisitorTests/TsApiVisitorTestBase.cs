@@ -8,37 +8,53 @@ using System.Linq;
 
 namespace AngularClientGenerator.Test.TsApiVisitorTests
 {
-    public class TsApiVisitorTestBase
+    public abstract class TsApiVisitorTestBase
     {
-        private readonly GeneratorConfig basicTsConfig = new GeneratorConfig
+        private readonly GeneratorConfig basicTsConfig;
+
+        public TsApiVisitorTestBase(ClientType clientType)
         {
-            IndentType = IndentType.Tab,
-            Language = ClientType.AngularJsTypeScript
-        };
+            this.basicTsConfig = new GeneratorConfig
+            {
+                ClientType = clientType,
+                IndentType = IndentType.Tab
+            };
+        }
 
         protected string VisitEmptyModule(GeneratorConfig config)
         {
-            var builder = new ClientBuilder(config);
-            var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
             var moduleDescription = new ModuleDescriptionPart
             {
                 Name = "example",
                 ControllerDescriptionParts = Enumerable.Empty<ControllerDescriptionPart>()
             };
 
+            return this.VisitModule(moduleDescription, config);
+        }
+
+        protected string VisitEmptyModule()
+        {
+            return this.VisitEmptyModule(this.basicTsConfig);
+        }
+
+        protected string VisitModule(ModuleDescriptionPart moduleDescription, GeneratorConfig config)
+        {
+            var builder = new ClientBuilder(config);
+            var apiVisitor = CreateVisitor(config, builder);
+            
             apiVisitor.Visit(moduleDescription);
             return apiVisitor.GetContent();
         }
 
-        protected string VisitEmptyTsModule()
+        protected string VisitModule(ModuleDescriptionPart moduleDescription)
         {
-            return this.VisitEmptyModule(this.basicTsConfig);
+            return VisitModule(moduleDescription, this.basicTsConfig);
         }
 
         protected string VisitTsController(ControllerDescriptor controllerDescriptor)
         {
             var builder = new ClientBuilder(this.basicTsConfig);
-            var apiVisitor = new AngularJSTypescriptApiVisitor(this.basicTsConfig, builder);
+            var apiVisitor = CreateVisitor(this.basicTsConfig, builder);
 
             apiVisitor.Visit(new ControllerDescriptionPart(controllerDescriptor));
             return apiVisitor.GetContent();
@@ -52,7 +68,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
         protected string VisitTsControllerInModule(ControllerDescriptor controllerDescriptor, GeneratorConfig config)
         {
             var builder = new ClientBuilder(config);
-            var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
+            var apiVisitor = CreateVisitor(config, builder);
 
             var module = new ModuleDescriptionPart
             {
@@ -75,7 +91,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
         protected string VisitTsAction(ActionDescriptor actionDescriptor, GeneratorConfig config)
         {
             var builder = new ClientBuilder(config);
-            var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
+            var apiVisitor = CreateVisitor(config, builder);
 
             apiVisitor.Visit(new ActionDescriptionPart(actionDescriptor));
             return apiVisitor.GetContent();
@@ -97,6 +113,11 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
                 Name = "ExampleController",
                 ActionDescriptors = new List<ActionDescriptor> { actionDescriptor }
             }, config);
+        }
+
+        private ApiVisitor CreateVisitor(GeneratorConfig config, ClientBuilder builder)
+        {
+            return config.ClientType == ClientType.Angular ? new AngularApiVisitor(config, builder) : new AngularJSTypescriptApiVisitor(config, builder);
         }
     }
 }

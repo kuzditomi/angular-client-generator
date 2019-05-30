@@ -33,7 +33,7 @@ namespace AngularClientGenerator.Core.Example
                     ModuleName = "example-generated",
                     ExportPath = destinationPath,
                     IndentType = IndentType.FourSpace,
-                    Language = ClientType.AngularJsTypeScript,
+                    ClientType = ClientType.AngularJsTypeScript,
                     UseNamespaces = true,
                     UrlSuffix = "",
                     NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Core.", "")
