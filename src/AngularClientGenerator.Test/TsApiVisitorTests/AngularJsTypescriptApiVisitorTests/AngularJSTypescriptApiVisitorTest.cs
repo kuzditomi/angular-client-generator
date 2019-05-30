@@ -8,19 +8,18 @@ using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitor;
 using AngularClientGenerator.Contracts.Descriptors;
 using System.Net.Http;
-using AngularClientGenerator.Test.TestModels;
 
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
-    public class AngularJSTypescriptApiVisitorTest : TsApiVisitorTestBase
+    public class AngularJSTypescriptApiVisitorTest : TsApiVisitorTestsBase
     {
         public AngularJSTypescriptApiVisitorTest() : base(ClientType.AngularJsTypeScript)
         {
         }
 
         [TestMethod]
-        public void ControllerDescriptionPart_TestController()
+        public void ControllerDescriptionPartTest()
         {
             var config = new GeneratorConfig
             {
@@ -54,7 +53,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         }
 
         [TestMethod]
-        public void ActionDescriptionPart_TestController()
+        public void ActionDescriptionPartTest()
         {
             var config = new GeneratorConfig
             {
@@ -96,68 +95,13 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         }
 
         [TestMethod]
-        public void TypeDescriptionPart_TestController()
-        {
-            var config = new GeneratorConfig
-            {
-                IndentType = IndentType.Tab,
-                ClientType = ClientType.AngularJsTypeScript
-            };
-            var builder = new ClientBuilder(config);
-            var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
-
-            var controllerDescriptor = new ControllerDescriptor
-            {
-                Name = "Test",
-                ActionDescriptors = new List<ActionDescriptor>
-                {
-                    new ActionDescriptor
-                    {
-                        Name = "A",
-                        HttpMethod = HttpMethod.Get,
-                        ParameterDescriptors = new List<ParameterDescriptor> {
-                            new ParameterDescriptor {
-                                ParameterType = typeof(TestModelA)
-                            }
-                        },
-                        ReturnValueDescriptor = new TypeDescriptor { Type = typeof(TestModelB) },
-                        UrlTemplate = string.Empty
-                    }
-                }
-            };
-
-            var moduleDescription = new ModuleDescriptionPart
-            {
-                ControllerDescriptionParts = new List<ControllerDescriptionPart> {
-                    new ControllerDescriptionPart(controllerDescriptor)
-                }
-            };
-
-            moduleDescription.Accept(apiVisitor);
-
-            var content = apiVisitor.GetContent();
-
-            var expectedContents = new List<string>
-                {
-                    "export interface ITestModelA {",
-                    "export interface ITestModelB {",
-                };
-
-            foreach (var expectedContent in expectedContents)
-            {
-                Assert.IsTrue(content.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
-            }
-        }
-
-        [TestMethod]
         public void ApiHostIsInitialisedFromWindow()
         {
-            var actualContent = VisitEmptyModule();
+            var actualContent = this.visitor.VisitEmptyModule();
             var expectedContent = "\tlet addr = window['ApiHost'];";
 
             Assert.IsTrue(actualContent.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
         }
-
 
         [TestMethod]
         public void DefaultBaseURLFromConfig()
@@ -169,7 +113,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 DefaultBaseUrl = "myexampleurl"
             };
 
-            var actualContent = VisitEmptyModule(config);
+            var actualContent = this.visitor.VisitEmptyModule(config);
             var expectedContent = "\t\taddr = 'myexampleurl';";
 
             Assert.IsTrue(actualContent.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
@@ -186,7 +130,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlSuffix = "abc"
             };
 
-            var actualContent = VisitEmptyModule(config);
+            var actualContent = this.visitor.VisitEmptyModule(config);
             var expectedContents = new List<string>
                 {
                     "\t\taddr = 'mybaseurl';",

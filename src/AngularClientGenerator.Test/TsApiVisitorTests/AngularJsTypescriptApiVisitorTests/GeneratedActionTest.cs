@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
-    public class GeneratedActionTest : TsApiVisitorTestBase
+    public class GeneratedActionTest : TsApiVisitorTestsBase
     {
         public GeneratedActionTest() : base(ClientType.AngularJsTypeScript)
         {
@@ -32,7 +32,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         [TestMethod]
         public void HttpThenPart()
         {
-            var content = this.VisitTsAction(new ActionDescriptor
+            var content = this.visitor.VisitTsAction(new ActionDescriptor
             {
                 Name = "a",
                 HttpMethod = HttpMethod.Delete,
@@ -61,7 +61,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public VoidParameterlessGetAction = (): ng.IPromise<void> => {",
@@ -92,7 +92,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
             {
                 "public VoidStringParamGetAction = (stringparameter: string): ng.IPromise<void> => {",
@@ -123,7 +123,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
             {
                 "public VoidComplexparamAction = (complex: IMyEmptyTestClass): ng.IPromise<void> => {",
@@ -147,7 +147,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(string) }
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public StringReturnAction = (): ng.IPromise<string> => {",
@@ -171,7 +171,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(MyEmptyTestClass) }
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public ResponseTypeReturnAction = (): ng.IPromise<IMyEmptyTestClass> => {",
@@ -198,7 +198,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = arrayType }
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public ArrayReturnAction = (): ng.IPromise<IMyEmptyTestClass[]> => {",
@@ -230,7 +230,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 ReturnValueDescriptor = new TypeDescriptor { Type = typeof(GenericTypeClass<int>) }
             };
 
-            var content = this.VisitTsAction(actionDescriptor, config);
+            var content = this.visitor.VisitTsAction(actionDescriptor, config);
             var expectedLines = new List<string>
                 {
                     $"public GenericTypeReturnAction = (): ng.IPromise<{_namespace}.IGenericTypeClass<number>> => {{",

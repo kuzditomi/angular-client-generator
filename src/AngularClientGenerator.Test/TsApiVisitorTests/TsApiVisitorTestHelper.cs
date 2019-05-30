@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace AngularClientGenerator.Test.TsApiVisitorTests
 {
-    public abstract class TsApiVisitorTestBase
+    public class TsApiVisitorTestHelper
     {
         private readonly GeneratorConfig basicTsConfig;
 
-        public TsApiVisitorTestBase(ClientType clientType)
+        public TsApiVisitorTestHelper(ClientType clientType)
         {
             this.basicTsConfig = new GeneratorConfig
             {
@@ -21,7 +21,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             };
         }
 
-        protected string VisitEmptyModule(GeneratorConfig config)
+        public string VisitEmptyModule(GeneratorConfig config)
         {
             var moduleDescription = new ModuleDescriptionPart
             {
@@ -32,12 +32,12 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             return this.VisitModule(moduleDescription, config);
         }
 
-        protected string VisitEmptyModule()
+        public string VisitEmptyModule()
         {
             return this.VisitEmptyModule(this.basicTsConfig);
         }
 
-        protected string VisitModule(ModuleDescriptionPart moduleDescription, GeneratorConfig config)
+        public string VisitModule(ModuleDescriptionPart moduleDescription, GeneratorConfig config)
         {
             var builder = new ClientBuilder(config);
             var apiVisitor = CreateVisitor(config, builder);
@@ -46,12 +46,12 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             return apiVisitor.GetContent();
         }
 
-        protected string VisitModule(ModuleDescriptionPart moduleDescription)
+        public string VisitModule(ModuleDescriptionPart moduleDescription)
         {
             return VisitModule(moduleDescription, this.basicTsConfig);
         }
 
-        protected string VisitTsController(ControllerDescriptor controllerDescriptor)
+        public string VisitTsController(ControllerDescriptor controllerDescriptor)
         {
             var builder = new ClientBuilder(this.basicTsConfig);
             var apiVisitor = CreateVisitor(this.basicTsConfig, builder);
@@ -60,12 +60,12 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             return apiVisitor.GetContent();
         }
 
-        protected string VisitTsControllerInModule(ControllerDescriptor controllerDescriptor)
+        public string VisitTsControllerInModule(ControllerDescriptor controllerDescriptor)
         {
             return this.VisitTsControllerInModule(controllerDescriptor, this.basicTsConfig);
         }
 
-        protected string VisitTsControllerInModule(ControllerDescriptor controllerDescriptor, GeneratorConfig config)
+        public string VisitTsControllerInModule(ControllerDescriptor controllerDescriptor, GeneratorConfig config)
         {
             var builder = new ClientBuilder(config);
             var apiVisitor = CreateVisitor(config, builder);
@@ -83,12 +83,12 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             return apiVisitor.GetContent();
         }
 
-        protected string VisitTsAction(ActionDescriptor actionDescriptor)
+        public string VisitTsAction(ActionDescriptor actionDescriptor)
         {
             return this.VisitTsAction(actionDescriptor, this.basicTsConfig);
         }
 
-        protected string VisitTsAction(ActionDescriptor actionDescriptor, GeneratorConfig config)
+        public string VisitTsAction(ActionDescriptor actionDescriptor, GeneratorConfig config)
         {
             var builder = new ClientBuilder(config);
             var apiVisitor = CreateVisitor(config, builder);
@@ -97,7 +97,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             return apiVisitor.GetContent();
         }
 
-        protected string VisitTsActionInModule(ActionDescriptor actionDescriptor)
+        public string VisitTsActionInModule(ActionDescriptor actionDescriptor)
         {
             return this.VisitTsControllerInModule(new ControllerDescriptor
             {
@@ -106,7 +106,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             });
         }
 
-        protected string VisitTsActionInModule(ActionDescriptor actionDescriptor, GeneratorConfig config)
+        public string VisitTsActionInModule(ActionDescriptor actionDescriptor, GeneratorConfig config)
         {
             return this.VisitTsControllerInModule(new ControllerDescriptor
             {

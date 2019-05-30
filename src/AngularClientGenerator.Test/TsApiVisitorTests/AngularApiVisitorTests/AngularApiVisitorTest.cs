@@ -1,8 +1,6 @@
-﻿using AngularClientGenerator.Config;
-using AngularClientGenerator.Contracts;
+﻿using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.DescriptionParts;
-using AngularClientGenerator.Visitor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -10,7 +8,7 @@ using System.Collections.Generic;
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
 {
     [TestClass]
-    public class AngularApiVisitorTest : TsApiVisitorTestBase
+    public class AngularApiVisitorTest : TsApiVisitorTestsBase
     {
         public AngularApiVisitorTest() : base(ClientType.Angular)
         {
@@ -20,7 +18,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
         public void ModuleDefinitionTest()
         {
             // Act
-            var actualContent = VisitEmptyModule();
+            var actualContent = this.visitor.VisitEmptyModule();
             
             // Assert
             var expectedLines = new List<string> {
@@ -62,7 +60,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
             };
 
             // Act
-            var actualContent = VisitModule(moduleDesciptionPart);
+            var actualContent = this.visitor.VisitModule(moduleDesciptionPart);
 
             // Assert
             var expectedLines = new List<string> {
@@ -94,7 +92,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
             };
 
             // Act
-            var actualContent = VisitTsController(controllerDescriptor);
+            var actualContent = this.visitor.VisitTsController(controllerDescriptor);
 
             // Assert
             var expectedLines = new List<string> {

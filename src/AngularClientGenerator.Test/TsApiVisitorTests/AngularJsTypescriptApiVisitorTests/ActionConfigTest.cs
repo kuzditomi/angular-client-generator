@@ -10,7 +10,7 @@ using System.Net.Http;
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {
     [TestClass]
-    public class ActionConfigTest : TsApiVisitorTestBase
+    public class ActionConfigTest : TsApiVisitorTestsBase
     {
         public ActionConfigTest() : base(ClientType.AngularJsTypeScript)
         {
@@ -28,7 +28,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/configtest/void"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public VoidParameterlessGetActionConfig(): ng.IRequestConfig {",
@@ -71,7 +71,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/configtest/typetest"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     $"public QueryParamTestActionConfig(typetestparam: {generatedParamType}): ng.IRequestConfig {{",
@@ -121,7 +121,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/configtest/voidsimpleparams"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public VoidSimpleParametersActionConfig(a: string, b: number, c: number): ng.IRequestConfig {",
@@ -164,7 +164,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/configtest/{myparameter}"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public VoidReplaceNumberActionConfig(myparameter: number): ng.IRequestConfig {",
@@ -207,7 +207,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/configtest/{id}/more/{second}"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
 
             var expectedLines = new List<string>
                 {
@@ -249,7 +249,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/configtest/voidcomplexparampost"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public VoidComplexParamPostActionConfig(complex: IMyEmptyTestClass): ng.IRequestConfig {",
@@ -289,7 +289,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/configtest/voidcomplexparamandreplace/{id}"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public VoidComplexParamAndReplaceActionConfig(id: string, complex: IMyEmptyTestClass): ng.IRequestConfig {",
@@ -333,7 +333,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/configtest/voidcomplexparamandreplaceget/{id}"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public VoidComplexParamAndReplaceGetActionConfig(id: string, complex: IMyEmptyTestClass): ng.IRequestConfig {",
@@ -384,7 +384,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/configtest/voidcomplexparamandreplacegeterror/{id}"
             };
 
-            VisitTsAction(actionDescriptor);
+            this.visitor.VisitTsAction(actionDescriptor);
         }
 
         [TestMethod]
@@ -407,7 +407,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/configtest/biginterror"
             };
 
-            VisitTsAction(actionDescriptor);
+            this.visitor.VisitTsAction(actionDescriptor);
         }
 
         [TestMethod]
@@ -429,7 +429,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/methodtest/deletedata"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "\t\theaders: {",
@@ -461,7 +461,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/methodtest/deletesimpledata"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public DeleteSimpleParamConfig(param: string): ng.IRequestConfig {",
@@ -499,7 +499,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/methodtest/deletesimpleenumerabledata"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public DeleteSimpleEnumerableParamConfig(param: number[]): ng.IRequestConfig {",
@@ -544,7 +544,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 UrlTemplate = "api/methodtest/deleteurlreplaceandbody/{id}"
             };
 
-            var content = VisitTsAction(actionDescriptor);
+            var content = this.visitor.VisitTsAction(actionDescriptor);
             var expectedLines = new List<string>
                 {
                     "public DeleteUrlReplaceAndBodyConfig(id: number, param: IComplexDeleteType): ng.IRequestConfig {",
