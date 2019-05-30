@@ -64,12 +64,15 @@ namespace AngularClientGenerator.Visitors
 
         protected override void GenerateMethodFor(ActionDescriptionPart actionDescription)
         {
-           
+            this.ClientBuilder.WriteLine();
+            this.ClientBuilder.WriteLine("public {0} {{", actionDescription.Name);
+            this.ClientBuilder.WriteLine("}}");
         }
 
         private void WriteModuleDefinition(string moduleName)
         {
             // module header
+            this.ClientBuilder.WriteLine();
             this.ClientBuilder.WriteLine("@NgModule({{");
             this.ClientBuilder.IncreaseIndent();
 
@@ -98,6 +101,7 @@ namespace AngularClientGenerator.Visitors
             this.ClientBuilder.WriteLine("}})");
             this.ClientBuilder.WriteLine("export class {0} {{", moduleName);
             this.ClientBuilder.WriteLine("}}");
+            this.ClientBuilder.WriteLine();
         }
     }
 }

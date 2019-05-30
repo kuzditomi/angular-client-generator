@@ -3,6 +3,7 @@ using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.Contracts.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,21 +43,55 @@ namespace AngularClientGenerator.Test
             Assert.AreEqual(path, generator.Config.ExportPath);
         }
 
-        [TestMethod]
-        public void GenerateCode()
+        [DataTestMethod]
+        [DataRow(ClientType.Angular)]
+        [DataRow(ClientType.AngularJsTypeScript)]
+        public void GenerateCodeForClientType(ClientType clientType)
         {
             var descriptor = new ApiDescriptor
             {
                 ControllerDescriptors = Enumerable.Empty<ControllerDescriptor>()
             };
 
-            var generator = new Generator(descriptor);
+            var generator = new Generator(descriptor)
+            {
+                Config = new GeneratorConfig
+                {
+                    ClientType = clientType
+                }
+            };
+
             generator.Generate();
 
             var fileExists = File.Exists(generator.Config.ExportPath);
 
             Assert.IsTrue(fileExists);
         }
+
+        [ExpectedException(typeof(NotSupportedException))]
+        [TestMethod]
+        public void ThrowsForNewClientType()
+        {
+            var descriptor = new ApiDescriptor
+            {
+                ControllerDescriptors = Enumerable.Empty<ControllerDescriptor>()
+            };
+
+            var generator = new Generator(descriptor)
+            {
+                Config = new GeneratorConfig
+                {
+                    ClientType = (ClientType)3
+                }
+            };
+
+            generator.Generate();
+
+            var fileExists = File.Exists(generator.Config.ExportPath);
+
+            Assert.IsTrue(fileExists);
+        }
+
 
         [TestMethod]
         [ExpectedException(typeof(GeneratorConfigurationException))]

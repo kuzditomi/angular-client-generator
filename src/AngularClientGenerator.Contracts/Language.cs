@@ -2,7 +2,7 @@
 {
     public enum ClientType
     {
-        AngularJsTypeScript,
-        Angular
+        AngularJsTypeScript = 1,
+        Angular = 2
     }
 }

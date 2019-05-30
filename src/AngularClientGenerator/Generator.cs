@@ -33,6 +33,10 @@ namespace AngularClientGenerator
             {
                 this.Visitor = new AngularJSTypescriptApiVisitor(this.Config, builder);
             }
+            else if (this.Config.ClientType == ClientType.Angular)
+            {
+                this.Visitor = new AngularApiVisitor(this.Config, builder);
+            }
             else
             {
                 throw new NotSupportedException("Requested language is not supported: " + this.Config.ClientType);

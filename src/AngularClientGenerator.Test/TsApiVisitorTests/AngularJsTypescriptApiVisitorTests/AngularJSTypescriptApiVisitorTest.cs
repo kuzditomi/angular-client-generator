@@ -52,47 +52,5 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                 Assert.IsTrue(content.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
             }
         }
-
-        [TestMethod]
-        public void ActionDescriptionPartTest()
-        {
-            var config = new GeneratorConfig
-            {
-                IndentType = IndentType.Tab,
-                ClientType = ClientType.AngularJsTypeScript
-            };
-            var builder = new ClientBuilder(config);
-            var apiVisitor = new AngularJSTypescriptApiVisitor(config, builder);
-
-            var actionDescriptors = new string[] { "A", "B", "Random" }.Select(name => new ActionDescriptor
-            {
-                Name = name,
-                HttpMethod = HttpMethod.Get,
-                ParameterDescriptors = Enumerable.Empty<ParameterDescriptor>(),
-                ReturnValueDescriptor = new TypeDescriptor { Type = typeof(string) },
-                UrlTemplate = string.Empty
-            });
-
-            foreach (var actionDescriptor in actionDescriptors)
-            {
-                var actionDescriptorPart = new ActionDescriptionPart(actionDescriptor);
-                actionDescriptorPart.Accept(apiVisitor);
-            }
-
-            var content = apiVisitor.GetContent();
-
-            var expectedMethods = new string[] { "A", "B", "Random" };
-            var expectedContents = new List<string>();
-
-            foreach (var methodName in expectedMethods)
-            {
-                expectedContents.Add(String.Format("public {0}", methodName));
-            }
-
-            foreach (var expectedContent in expectedContents)
-            {
-                Assert.IsTrue(content.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
-            }
-        }
     }
 }

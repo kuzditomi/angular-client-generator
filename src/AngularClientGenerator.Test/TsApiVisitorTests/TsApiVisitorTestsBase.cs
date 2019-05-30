@@ -4,6 +4,7 @@ using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.Test.TestModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 
 namespace AngularClientGenerator.Test.TsApiVisitorTests
@@ -91,6 +92,31 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
                     "\taddr = 'mybaseurl';",
                     "export const API_SUFFIX = 'abc';",
                 };
+
+            foreach (var expectedContent in expectedContents)
+            {
+                Assert.IsTrue(actualContent.Contains(expectedContent), "Generated content is not included: {0}", expectedContent);
+            }
+        }
+
+        [TestMethod]
+        public void ActionDescriptionPartTest()
+        {
+            var controllerDescriptor = new ControllerDescriptor
+            {
+                Name = "testController",
+                ActionDescriptors = new string[] { "A", "B", "Random" }.Select(name => new ActionDescriptor
+                {
+                    Name = name,
+                    HttpMethod = HttpMethod.Get,
+                    ParameterDescriptors = Enumerable.Empty<ParameterDescriptor>(),
+                    ReturnValueDescriptor = new TypeDescriptor { Type = typeof(string) },
+                    UrlTemplate = string.Empty
+                })
+            };
+
+            var actualContent = this.visitor.VisitTsControllerInModule(controllerDescriptor);
+            var expectedContents = new string[] { "A", "B", "Random" }.Select(name => $"public {name}");
 
             foreach (var expectedContent in expectedContents)
             {
