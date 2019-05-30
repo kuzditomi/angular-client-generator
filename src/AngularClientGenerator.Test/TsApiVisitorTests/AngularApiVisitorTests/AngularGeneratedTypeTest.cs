@@ -12,7 +12,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
 
         protected override string FormatMethodHeader(string methodName, string parameterList, string returnType)
         {
-            return $"public {methodName}({parameterList}): : Observable<{returnType}> {{";
+            return $"public {methodName}({parameterList}): Observable<{returnType}> {{";
         }
     }
 }

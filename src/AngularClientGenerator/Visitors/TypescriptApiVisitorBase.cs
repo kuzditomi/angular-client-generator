@@ -9,6 +9,12 @@ using System.Net.Http;
 
 namespace AngularClientGenerator.Visitors
 {
+    public class GeneratedMethodInfo
+    {
+        public string ParametersWithType { get; set; }
+        public string Parameters { get; set; }
+    }
+
     public abstract class TypescriptApiVisitorBase : ApiVisitorBase
     {
         protected readonly List<KeyValuePair<string, Type>> Types = new List<KeyValuePair<string, Type>>();
@@ -31,8 +37,10 @@ namespace AngularClientGenerator.Visitors
                 actionDescriptionParameterDescription.Accept(this);
             }
 
+            var methodInfo = CreateMethodInfo(actionDescription);
+
             this.GenerateConfigFor(actionDescription);
-            this.GenerateMethodFor(actionDescription);
+            this.GenerateMethodFor(actionDescription, methodInfo);
         }
 
         public override void Visit(TypeDescriptionPart typeDescriptionPart)
@@ -118,7 +126,7 @@ namespace AngularClientGenerator.Visitors
 
         protected abstract void GenerateConfigFor(ActionDescriptionPart actionDescription);
 
-        protected abstract void GenerateMethodFor(ActionDescriptionPart actionDescription);
+        protected abstract void GenerateMethodFor(ActionDescriptionPart actionDescription, GeneratedMethodInfo generatedMethodInfo);
 
         protected void WriteTypes()
         {
@@ -359,6 +367,27 @@ namespace AngularClientGenerator.Visitors
                 this.ClientBuilder.WriteLine("}}");
                 this.ClientBuilder.WriteLine();
             }
+        }
+
+        private GeneratedMethodInfo CreateMethodInfo(ActionDescriptionPart actionDescription)
+        {
+            var parametersWithTypes = String.Join(", ",
+               actionDescription.ParameterDescriptions.Select(
+                   p =>
+                   {
+                       var optionalPrefix = p.IsOptional ? "?" : string.Empty;
+                       return $"{p.ParameterName}{optionalPrefix}: {GetNameSpaceAndNameForType(p.Type)}";
+                   }));
+
+            var parameters = String.Join(", ",
+                actionDescription.ParameterDescriptions.Select(
+                    p => p.ParameterName));
+
+            return new GeneratedMethodInfo
+            {
+                Parameters = parameters,
+                ParametersWithType = parametersWithTypes
+            };
         }
     }
 }

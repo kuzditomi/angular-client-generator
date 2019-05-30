@@ -57,26 +57,14 @@ namespace AngularClientGenerator.Visitors
             this.ClientBuilder.WriteLine();
         }
 
-        protected override void GenerateMethodFor(ActionDescriptionPart actionDescription)
+        protected override void GenerateMethodFor(ActionDescriptionPart actionDescription, GeneratedMethodInfo generatedMethodInfo)
         {
-            var parametersWithTypes = String.Join(", ",
-                actionDescription.ParameterDescriptions.Select(
-                    p =>
-                    {
-                        var optionalPrefix = p.IsOptional ? "?" : string.Empty;
-                        return $"{p.ParameterName}{optionalPrefix}: {GetNameSpaceAndNameForType(p.Type)}";
-                    }));
-
-            var parameters = String.Join(", ",
-                actionDescription.ParameterDescriptions.Select(
-                    p => p.ParameterName));
-
             // method header
-            this.ClientBuilder.WriteLine("public {0} = ({1}): ng.IPromise<{2}> => {{", actionDescription.Name, parametersWithTypes, GetNameSpaceAndNameForType(actionDescription.ReturnValueDescription.Type));
+            this.ClientBuilder.WriteLine("public {0} = ({1}): ng.IPromise<{2}> => {{", actionDescription.Name, generatedMethodInfo.ParametersWithType, GetNameSpaceAndNameForType(actionDescription.ReturnValueDescription.Type));
 
             // call config
             this.ClientBuilder.IncreaseIndent();
-            this.ClientBuilder.WriteLine("return this.http<{0}>(this.{1}Config({2}))", GetNameSpaceAndNameForType(actionDescription.ReturnValueDescription.Type), actionDescription.Name, parameters);
+            this.ClientBuilder.WriteLine("return this.http<{0}>(this.{1}Config({2}))", GetNameSpaceAndNameForType(actionDescription.ReturnValueDescription.Type), actionDescription.Name, generatedMethodInfo.Parameters);
             this.ClientBuilder.IncreaseIndent();
             this.ClientBuilder.WriteLine(".then(resp => {{");
             this.ClientBuilder.IncreaseIndent();
