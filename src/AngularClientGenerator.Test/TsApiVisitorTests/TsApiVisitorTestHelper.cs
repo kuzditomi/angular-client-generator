@@ -3,6 +3,7 @@ using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.Visitor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,7 +42,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
         {
             var builder = new ClientBuilder(config);
             var apiVisitor = CreateVisitor(config, builder);
-            
+
             apiVisitor.Visit(moduleDescription);
             return apiVisitor.GetContent();
         }
@@ -115,9 +116,15 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             }, config);
         }
 
-        private ApiVisitor CreateVisitor(GeneratorConfig config, ClientBuilder builder)
+        private IApiVisitor CreateVisitor(GeneratorConfig config, ClientBuilder builder)
         {
-            return config.ClientType == ClientType.Angular ? new AngularApiVisitor(config, builder) : new AngularJSTypescriptApiVisitor(config, builder);
+            if (config.ClientType == ClientType.Angular)
+                return new AngularApiVisitor(config, builder);
+
+            if (config.ClientType == ClientType.AngularJsTypeScript)
+                return new AngularJSTypescriptApiVisitor(config, builder);
+
+            throw new NotImplementedException("No implementation given for client type");
         }
     }
 }

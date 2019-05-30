@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AngularClientGenerator.Visitor
 {
-    public class AngularApiVisitor : AngularJSTypescriptApiVisitor
+    public class AngularApiVisitor : TypescriptApiVisitorBase
     {
         private ICollection<string> serviceNames;
 
@@ -56,15 +56,14 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("}}");
         }
 
-        public override void Visit(ActionDescriptionPart actionDescription)
+        protected override void GenerateConfigFor(ActionDescriptionPart actionDescription)
         {
-            this.ClientBuilder.WriteLine();
-            throw new System.NotImplementedException();
+            
         }
 
-        public override void Visit(TypeDescriptionPart typeDescriptionPart)
+        protected override void GenerateMethodFor(ActionDescriptionPart actionDescription)
         {
-            throw new System.NotImplementedException();
+           
         }
 
         private void WriteModuleDefinition(string moduleName)

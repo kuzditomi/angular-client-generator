@@ -7,13 +7,116 @@ using System.Net.Http;
 
 namespace AngularClientGenerator.Visitor
 {
-    public abstract class TypescriptApiVisitor : ApiVisitor
+    public abstract class TypescriptApiVisitorBase : ApiVisitor
     {
         protected readonly List<KeyValuePair<string, Type>> Types = new List<KeyValuePair<string, Type>>();
 
-        protected TypescriptApiVisitor(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
+        protected TypescriptApiVisitorBase(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
         {
         }
+
+        public override void Visit(ActionDescriptionPart actionDescription)
+        {
+            if (this.Config.UseNamespaces && this.Config.NamespaceNamingRule == null)
+                throw new ArgumentNullException("Config.NamespaceNamingRule");
+
+            // visit return value type
+            actionDescription.ReturnValueDescription.Accept(this);
+
+            // visit parameter types
+            foreach (var actionDescriptionParameterDescription in actionDescription.ParameterDescriptions)
+            {
+                actionDescriptionParameterDescription.Accept(this);
+            }
+
+            this.GenerateConfigFor(actionDescription);
+            this.GenerateMethodFor(actionDescription);
+        }
+
+        public override void Visit(TypeDescriptionPart typeDescriptionPart)
+        {
+            if (typeDescriptionPart.Type == typeof(Int64))
+                throw new ArgumentException("Int64(long) is not supported in typescript.", nameof(typeDescriptionPart));
+
+            var generatedName = GetNameForType(typeDescriptionPart.Type);
+            var sameName = this.Types.Where(t => t.Key == generatedName).ToList();
+
+            if (sameName.Any() && !typeDescriptionPart.IsGeneric())
+            {
+                if (sameName.Any(t => t.Value.FullName == typeDescriptionPart.Type.FullName))
+                    return;
+
+                if (!this.Config.UseNamespaces)
+                    throw new FormatException("There are two types with the same name but different fullname. Please use namespaces!");
+
+                if (this.Config.NamespaceNamingRule == null)
+                    throw new ArgumentNullException("Config.NamespaceNamingRule");
+            }
+
+            if (typeDescriptionPart.Type.IsGenericParameter)
+            {
+                return;
+            }
+
+            if (typeDescriptionPart.IsIgnoredType())
+                return;
+
+            if (typeDescriptionPart.IsDictionary())
+            {
+                Type valueType = typeDescriptionPart.Type.GetGenericArguments()[1];
+                this.Visit(new TypeDescriptionPart(valueType));
+                return;
+            }
+
+            if (typeDescriptionPart.Type.IsArray)
+            {
+                var elementType = typeDescriptionPart.Type.GetElementType();
+                this.Visit(new TypeDescriptionPart(elementType));
+                return;
+            }
+
+            if (typeDescriptionPart.IsTask())
+            {
+                return;
+            }
+
+            if (typeDescriptionPart.IsEnumerable() || typeDescriptionPart.IsNullable())
+            {
+                var genericType = typeDescriptionPart.Type.GetGenericArguments()[0];
+                this.Visit(new TypeDescriptionPart(genericType));
+                return;
+            }
+
+            if (typeDescriptionPart.IsGeneric())
+            {
+                var genericarguments = typeDescriptionPart.Type.GetGenericArguments();
+                foreach (var genericargument in genericarguments)
+                {
+                    this.Visit(new TypeDescriptionPart(genericargument));
+                }
+
+                if (sameName.Any())
+                {
+                    return;
+                }
+            }
+
+            this.Types.Add(new KeyValuePair<string, Type>(generatedName, typeDescriptionPart.Type));
+
+            var typeToCheckPropertiesIn = typeDescriptionPart.IsGeneric()
+                ? typeDescriptionPart.Type.GetGenericTypeDefinition()
+                : typeDescriptionPart.Type;
+
+            // visit properties
+            foreach (var propertyInfo in typeToCheckPropertiesIn.GetProperties())
+            {
+                this.Visit(new TypeDescriptionPart(propertyInfo.PropertyType));
+            }
+        }
+
+        protected abstract void GenerateConfigFor(ActionDescriptionPart actionDescription);
+
+        protected abstract void GenerateMethodFor(ActionDescriptionPart actionDescription);
 
         protected void WriteTypes()
         {
