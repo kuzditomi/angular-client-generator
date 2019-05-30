@@ -17,6 +17,7 @@ namespace AngularClientGenerator.Visitors
 
     public abstract class TypescriptApiVisitorBase : ApiVisitorBase
     {
+        protected abstract string ConfigReturnType { get; }
         protected readonly List<KeyValuePair<string, Type>> Types = new List<KeyValuePair<string, Type>>();
 
         protected TypescriptApiVisitorBase(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
@@ -124,7 +125,123 @@ namespace AngularClientGenerator.Visitors
             }
         }
 
-        protected abstract void GenerateConfigFor(ActionDescriptionPart actionDescription);
+        protected virtual void GenerateConfigFor(ActionDescriptionPart actionDescription)
+        {
+            var returnType = this.ConfigReturnType;
+            var needsUrlReplace = actionDescription.UrlTemplate.Contains("{");
+            var hasParameter = actionDescription.ParameterDescriptions.Any();
+            var isPostOrPut = actionDescription.HttpMethod == HttpMethod.Post ||
+                              actionDescription.HttpMethod == HttpMethod.Put;
+
+            var deleteHasComplexParam = actionDescription.HttpMethod == HttpMethod.Delete && actionDescription.ParameterDescriptions.Any(parameterDescription => parameterDescription.IsComplex());
+
+            var shouldUseData = isPostOrPut || deleteHasComplexParam;
+
+            var paramsToReplace = actionDescription.ParameterDescriptions
+                .Where(a => actionDescription.UrlTemplate.Contains("{" + a.ParameterName + "}"))
+                .ToList();
+            var paramsToNotReplace = actionDescription.ParameterDescriptions
+                .Where(a => !actionDescription.UrlTemplate.Contains("{" + a.ParameterName + "}"))
+                .ToList();
+
+            // method header
+            if (hasParameter)
+            {
+                var parameters = string.Join(", ", actionDescription.ParameterDescriptions.Select(p =>
+                {
+                    var optionalPrefix = p.IsOptional ? "?" : string.Empty;
+
+                    return $"{p.ParameterName}{optionalPrefix}: {GetNameSpaceAndNameForType(p.Type)}";
+                }));
+
+                this.ClientBuilder.WriteLine("public {0}Config({1}): {2} {{",
+                    actionDescription.Name,
+                    parameters,
+                    returnType);
+            }
+            else
+            {
+                this.ClientBuilder.WriteLine("public {0}Config(): {1} {{",
+                    actionDescription.Name, returnType);
+            }
+            this.ClientBuilder.IncreaseIndent();
+
+            // method body
+            this.ClientBuilder.WriteLine("return {{");
+            this.ClientBuilder.IncreaseIndent();
+
+            if (needsUrlReplace && !hasParameter)
+                throw new InvalidOperationException($"Needs to replace in url, but no parameters given:{actionDescription.Name}");
+
+            if (needsUrlReplace)
+            {
+                this.ClientBuilder.WriteLine("url: replaceUrl(API_BASE_URL + '{0}', {{", actionDescription.UrlTemplate);
+                this.ClientBuilder.IncreaseIndent();
+
+                foreach (var actionDescriptionParameterDescription in paramsToReplace)
+                {
+                    this.ClientBuilder.WriteLine("{0}: {0},", actionDescriptionParameterDescription.ParameterName);
+                }
+
+                this.ClientBuilder.DecreaseIndent();
+                this.ClientBuilder.WriteLine("}}),", actionDescription.UrlTemplate);
+            }
+            else
+            {
+                this.ClientBuilder.WriteLine("url: API_BASE_URL + '{0}',", actionDescription.UrlTemplate);
+            }
+
+            this.ClientBuilder.WriteLine("method: '{0}',", actionDescription.HttpMethod.ToString().ToUpper());
+
+            if (hasParameter)
+            {
+                if (shouldUseData)
+                {
+                    if (paramsToNotReplace.Count > 1)
+                        throw new ArgumentException($"Error with {actionDescription.UrlTemplate} : More complex type to add in POST/PUT request, please wrap them.");
+
+                    if (paramsToNotReplace.Count == 1)
+                        this.ClientBuilder.WriteLine("data: {0},", paramsToNotReplace.First().ParameterName);
+                }
+                else if (paramsToNotReplace.Any())
+                {
+                    if (paramsToNotReplace.Any(p => p.IsComplex()))
+                    {
+                        if (paramsToNotReplace.Count > 1)
+                            throw new FormatException("Action can have only 1 complex type as param which is not replaced or more simple.");
+
+                        this.ClientBuilder.WriteLine("params: {0},", paramsToNotReplace.First().ParameterName);
+                    }
+                    else
+                    {
+                        this.ClientBuilder.WriteLine("params: {{");
+                        this.ClientBuilder.IncreaseIndent();
+                        foreach (var actionDescriptionParameterDescription in paramsToNotReplace)
+                        {
+                            this.ClientBuilder.WriteLine("{0}: {0},", actionDescriptionParameterDescription.ParameterName);
+                        }
+                        this.ClientBuilder.DecreaseIndent();
+                        this.ClientBuilder.WriteLine("}},");
+                    }
+                }
+            }
+
+            if (deleteHasComplexParam)
+            {
+                this.ClientBuilder.WriteLine("headers: {{");
+                this.ClientBuilder.IncreaseIndent();
+                this.ClientBuilder.WriteLine("'Content-Type': 'application/json',");
+                this.ClientBuilder.DecreaseIndent();
+                this.ClientBuilder.WriteLine("}},");
+            }
+
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}};");
+
+            // method footer
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}}");
+        }
 
         protected abstract void GenerateMethodFor(ActionDescriptionPart actionDescription, GeneratedMethodInfo generatedMethodInfo);
 

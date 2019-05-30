@@ -14,6 +14,8 @@ namespace AngularClientGenerator.Visitors
             this.serviceNames = new List<string>();
         }
 
+        protected override string ConfigReturnType => "HttpRequest";
+
         public override void Visit(ModuleDescriptionPart moduleDescription)
         {
             this.WriteUrlConstants();
@@ -55,11 +57,6 @@ namespace AngularClientGenerator.Visitors
 
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}}");
-        }
-
-        protected override void GenerateConfigFor(ActionDescriptionPart actionDescription)
-        {
-            
         }
 
         protected override void GenerateMethodFor(ActionDescriptionPart actionDescription, GeneratedMethodInfo generatedMethodInfo)
