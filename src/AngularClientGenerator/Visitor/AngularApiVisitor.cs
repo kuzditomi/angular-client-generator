@@ -47,12 +47,18 @@ namespace AngularClientGenerator.Visitor
             this.ClientBuilder.WriteLine("constructor(private http: HttpClient) {{");
             this.ClientBuilder.WriteLine("}}");
 
+            foreach (var actionDescriptionPart in controllerDescription.ActionDescriptionParts)
+            {
+                actionDescriptionPart.Accept(this);
+            }
+
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}}");
         }
 
         public override void Visit(ActionDescriptionPart actionDescription)
         {
+            this.ClientBuilder.WriteLine();
             throw new System.NotImplementedException();
         }
 

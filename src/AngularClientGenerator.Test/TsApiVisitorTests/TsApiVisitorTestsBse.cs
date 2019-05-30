@@ -13,7 +13,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
         private ClientType clientType;
         protected TsApiVisitorTestHelper visitor;
 
-        public TsApiVisitorTestsBase(ClientType clientType)
+        protected TsApiVisitorTestsBase(ClientType clientType)
         {
             this.clientType = clientType;
             this.visitor = new TsApiVisitorTestHelper(clientType);
