@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using AngularClientGenerator.Contracts.Config;
 using AngularClientGenerator.DescriptionParts;
+using AngularClientGenerator.PartBuilders;
+using AngularClientGenerator.Extensions;
 
-namespace AngularClientGenerator.Visitor
+namespace AngularClientGenerator.Visitors
 {
     public class AngularJSTypescriptApiVisitor : TypescriptApiVisitorBase
     {

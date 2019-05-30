@@ -2,7 +2,8 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
-using AngularClientGenerator.Visitor;
+using AngularClientGenerator.Visitors;
+using AngularClientGenerator.PartBuilders;
 
 namespace AngularClientGenerator.Test
 {

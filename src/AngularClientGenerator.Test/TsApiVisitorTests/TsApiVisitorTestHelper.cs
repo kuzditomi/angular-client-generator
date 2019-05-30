@@ -2,7 +2,8 @@
 using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.DescriptionParts;
-using AngularClientGenerator.Visitor;
+using AngularClientGenerator.PartBuilders;
+using AngularClientGenerator.Visitors;
 using System;
 using System.Collections.Generic;
 using System.Linq;

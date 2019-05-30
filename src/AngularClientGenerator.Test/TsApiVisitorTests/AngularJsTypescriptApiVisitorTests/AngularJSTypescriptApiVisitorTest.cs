@@ -5,9 +5,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
 using AngularClientGenerator.DescriptionParts;
-using AngularClientGenerator.Visitor;
+using AngularClientGenerator.Visitors;
 using AngularClientGenerator.Contracts.Descriptors;
 using System.Net.Http;
+using AngularClientGenerator.PartBuilders;
 
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
 {

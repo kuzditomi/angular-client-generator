@@ -1,8 +1,9 @@
 ﻿using AngularClientGenerator.Contracts.Config;
 using AngularClientGenerator.DescriptionParts;
+using AngularClientGenerator.PartBuilders;
 using System.Collections.Generic;
 
-namespace AngularClientGenerator.Visitor
+namespace AngularClientGenerator.Visitors
 {
     public class AngularApiVisitor : TypescriptApiVisitorBase
     {

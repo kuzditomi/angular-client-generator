@@ -6,7 +6,8 @@ using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.Contracts.Exceptions;
 using AngularClientGenerator.DescriptionParts;
-using AngularClientGenerator.Visitor;
+using AngularClientGenerator.PartBuilders;
+using AngularClientGenerator.Visitors;
 
 namespace AngularClientGenerator
 {

@@ -1,7 +1,8 @@
+using AngularClientGenerator.Visitors;
 using System.IO;
 using System.Reflection;
 
-namespace AngularClientGenerator.Visitor
+namespace AngularClientGenerator.PartBuilders.Visitor
 {
     public class StaticPartBuilder
     {

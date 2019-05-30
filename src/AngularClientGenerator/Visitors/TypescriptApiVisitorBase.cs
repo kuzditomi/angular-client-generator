@@ -1,13 +1,15 @@
 ﻿using AngularClientGenerator.Contracts.Config;
 using AngularClientGenerator.DescriptionParts;
+using AngularClientGenerator.PartBuilders;
+using AngularClientGenerator.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 
-namespace AngularClientGenerator.Visitor
+namespace AngularClientGenerator.Visitors
 {
-    public abstract class TypescriptApiVisitorBase : ApiVisitor
+    public abstract class TypescriptApiVisitorBase : ApiVisitorBase
     {
         protected readonly List<KeyValuePair<string, Type>> Types = new List<KeyValuePair<string, Type>>();
 

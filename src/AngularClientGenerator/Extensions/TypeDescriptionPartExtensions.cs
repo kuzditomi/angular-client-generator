@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AngularClientGenerator.DescriptionParts;
 
-namespace AngularClientGenerator.Visitor
+namespace AngularClientGenerator.Extensions
 {
     public static class TypeDescriptionPartExtensions
     {
