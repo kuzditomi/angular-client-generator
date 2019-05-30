@@ -65,7 +65,14 @@ namespace AngularClientGenerator.Visitors
         protected override void GenerateMethodFor(ActionDescriptionPart actionDescription)
         {
             this.ClientBuilder.WriteLine();
-            this.ClientBuilder.WriteLine("public {0} {{", actionDescription.Name);
+            this.ClientBuilder.WriteLine("public {0}(): Observable<void> {{", actionDescription.Name);
+            this.ClientBuilder.IncreaseIndent();
+
+            this.ClientBuilder.WriteLine("const config = this.{0}Config();", actionDescription.Name);
+            this.ClientBuilder.WriteLine();
+            this.ClientBuilder.WriteLine("return this.httpClient.sendRequest(config);");
+
+            this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}}");
         }
 
