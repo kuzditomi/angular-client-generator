@@ -164,7 +164,8 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests
             var config = new GeneratorConfig
             {
                 UseNamespaces = true,
-                NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.TestModels", @namespace)
+                NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.TestModels", @namespace),
+                ClientType = this.clientType
             };
 
             var actionDescriptor = new ActionDescriptor

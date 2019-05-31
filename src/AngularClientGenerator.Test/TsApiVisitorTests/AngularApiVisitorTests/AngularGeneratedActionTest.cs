@@ -13,12 +13,26 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
 
         protected override IEnumerable<string> ExpectedArrayReturnAction()
         {
-            throw new System.NotImplementedException();
+            return new List<string>
+            {
+                "public ArrayReturnAction(): Observable<IMyEmptyTestClass[]> {",
+                "\tconst config = this.ArrayReturnActionConfig();",
+                "",
+                "\treturn this.httpClient.request(config.method, config.url, config);",
+                "}"
+            };
         }
 
         protected override IEnumerable<string> ExpectedGeneratedVoidComplexparamAction()
         {
-            throw new System.NotImplementedException();
+            return new List<string>
+            {
+                "public VoidComplexparamAction(complex: IMyEmptyTestClass): Observable<void> {",
+                "\tconst config = this.VoidComplexparamActionConfig(complex);",
+                "",
+                "\treturn this.httpClient.request(config.method, config.url, config);",
+                "}"
+            };
         }
 
         protected override IEnumerable<string> ExpectedGeneratedVoidParameterlessAction()
@@ -35,22 +49,50 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
 
         protected override IEnumerable<string> ExpectedGeneratedVoidStringparamAction()
         {
-            throw new System.NotImplementedException();
+            return new List<string>
+            {
+                "public VoidStringParamGetAction(stringparameter: string): Observable<void> {",
+                "\tconst config = this.VoidStringParamGetActionConfig(stringparameter);",
+                "",
+                "\treturn this.httpClient.request(config.method, config.url, config);",
+                "}"
+            };
         }
 
         protected override IEnumerable<string> ExpectedGenericTypeReturnAction(string @namespace)
         {
-            throw new System.NotImplementedException();
+            return new List<string>
+            {
+                $"public GenericTypeReturnAction(): Observable<{@namespace}.IGenericTypeClass<number>> {{",
+                "\tconst config = this.GenericTypeReturnActionConfig();",
+                "",
+                "\treturn this.httpClient.request(config.method, config.url, config);",
+                "}"
+            };
         }
 
         protected override IEnumerable<string> ExpectedResponseTypeAttributeReturnAction()
         {
-            throw new System.NotImplementedException();
+            return new List<string>
+            {
+                "public ResponseTypeReturnAction(): Observable<IMyEmptyTestClass> {",
+                "\tconst config = this.ResponseTypeReturnActionConfig();",
+                "",
+                "\treturn this.httpClient.request(config.method, config.url, config);",
+                "}"
+            };
         }
 
         protected override IEnumerable<string> ExpectedStringReturnAction()
         {
-            throw new System.NotImplementedException();
+            return new List<string>
+            {
+                "public StringReturnAction(): Observable<string> {",
+                "\tconst config = this.StringReturnActionConfig();",
+                "",
+                "\treturn this.httpClient.request(config.method, config.url, config);",
+                "}"
+            };
         }
     }
 }
