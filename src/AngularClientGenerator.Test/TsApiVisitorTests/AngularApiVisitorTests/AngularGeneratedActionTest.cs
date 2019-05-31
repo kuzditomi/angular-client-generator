@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using AngularClientGenerator.Contracts;
-using AngularClientGenerator.Contracts.Descriptors;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
@@ -15,24 +11,19 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
         {
         }
 
-        [TestMethod]
-        public override void GeneratedVoidParameterlessActionTest()
+        protected override IEnumerable<string> ExpectedArrayReturnAction()
         {
-            // Arrange
-            var actionDescriptor = new ActionDescriptor
-            {
-                Name = "VoidParameterlessGetAction",
-                HttpMethod = HttpMethod.Get,
-                UrlTemplate = "a",
-                ParameterDescriptors = Enumerable.Empty<ParameterDescriptor>(),
-                ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
-            };
+            throw new System.NotImplementedException();
+        }
 
-            // Act
-            var content = this.visitor.VisitAction(actionDescriptor);
+        protected override IEnumerable<string> ExpectedGeneratedVoidComplexparamAction()
+        {
+            throw new System.NotImplementedException();
+        }
 
-            // Assert
-            var expectedLines = new List<string>
+        protected override IEnumerable<string> ExpectedGeneratedVoidParameterlessAction()
+        {
+            return new List<string>
             {
                 "public VoidParameterlessGetAction(): Observable<void> {",
                 "\tconst config = this.VoidParameterlessGetActionConfig();",
@@ -40,39 +31,26 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
                 "\treturn this.httpClient.request(config.method, config.url, config);",
                 "}"
             };
-            var expectedContent = String.Join(Environment.NewLine, expectedLines);
-
-            Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
         }
 
-        public override void ArrayReturnActionTest(Type arrayType)
+        protected override IEnumerable<string> ExpectedGeneratedVoidStringparamAction()
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
-        public override void GeneratedVoidComplexparamActionTest()
+        protected override IEnumerable<string> ExpectedGenericTypeReturnAction(string @namespace)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
-        public override void GeneratedVoidStringparamActionTest()
+        protected override IEnumerable<string> ExpectedResponseTypeAttributeReturnAction()
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
-        public override void GenericTypeReturnActionTest()
+        protected override IEnumerable<string> ExpectedStringReturnAction()
         {
-            throw new NotImplementedException();
-        }
-
-        public override void ResponseTypeAttributeReturnActionTest()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void StringReturnActionTest()
-        {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
     }
 }

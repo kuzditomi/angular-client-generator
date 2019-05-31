@@ -125,6 +125,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
                 "",
                 "\tconstructor(private httpClient: HttpClient) {",
                 "\t}",
+                "",
                 "}"
             };
             var expectedContent = String.Join(Environment.NewLine, expectedLines);

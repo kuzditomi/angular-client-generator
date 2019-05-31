@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Contracts.Descriptors;
-using AngularClientGenerator.Test.TestModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
@@ -49,197 +47,67 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
             Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
         }
 
-        [TestMethod]
-        public override void GeneratedVoidParameterlessActionTest()
+        protected override IEnumerable<string> ExpectedGeneratedVoidParameterlessAction()
         {
-            var actionDescriptor = new ActionDescriptor
+            return new List<string>
             {
-                Name = "VoidParameterlessGetAction",
-                HttpMethod = HttpMethod.Get,
-                UrlTemplate = "a",
-                ParameterDescriptors = Enumerable.Empty<ParameterDescriptor>(),
-                ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
-            };
-
-            var content = this.visitor.VisitAction(actionDescriptor);
-            var expectedLines = new List<string>
-                {
-                    "public VoidParameterlessGetAction = (): ng.IPromise<void> => {",
-                    "\treturn this.http<void>(this.VoidParameterlessGetActionConfig())",
-                }.Concat(httpThenPart);
-
-            var expectedContent = String.Join(Environment.NewLine, expectedLines);
-
-            Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
+                "public VoidParameterlessGetAction = (): ng.IPromise<void> => {",
+                "\treturn this.http<void>(this.VoidParameterlessGetActionConfig())",
+            }.Concat(httpThenPart);
         }
 
-        [TestMethod]
-        public override void GeneratedVoidStringparamActionTest()
+        protected override IEnumerable<string> ExpectedGeneratedVoidStringparamAction()
         {
-            var actionDescriptor = new ActionDescriptor
-            {
-                Name = "VoidStringParamGetAction",
-                HttpMethod = HttpMethod.Get,
-                UrlTemplate = "a",
-                ParameterDescriptors = new List<ParameterDescriptor> {
-                    new ParameterDescriptor
-                    {
-                        ParameterName = "stringparameter",
-                        ParameterType = typeof(string),
-                        IsOptional = false
-                    }
-                },
-                ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
-            };
-
-            var content = this.visitor.VisitAction(actionDescriptor);
-            var expectedLines = new List<string>
+            return new List<string>
             {
                 "public VoidStringParamGetAction = (stringparameter: string): ng.IPromise<void> => {",
                 "\treturn this.http<void>(this.VoidStringParamGetActionConfig(stringparameter))",
             }.Concat(httpThenPart);
-
-            var expectedContent = String.Join(Environment.NewLine, expectedLines);
-
-            Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
         }
 
-        [TestMethod]
-        public override void GeneratedVoidComplexparamActionTest()
+        protected override IEnumerable<string> ExpectedGeneratedVoidComplexparamAction()
         {
-            var actionDescriptor = new ActionDescriptor
-            {
-                Name = "VoidComplexparamAction",
-                HttpMethod = HttpMethod.Get,
-                UrlTemplate = "a",
-                ParameterDescriptors = new List<ParameterDescriptor> {
-                    new ParameterDescriptor
-                    {
-                        ParameterName = "complex",
-                        ParameterType = typeof(MyEmptyTestClass),
-                        IsOptional = false
-                    }
-                },
-                ReturnValueDescriptor = new TypeDescriptor { Type = typeof(void) }
-            };
-
-            var content = this.visitor.VisitAction(actionDescriptor);
-            var expectedLines = new List<string>
+            return new List<string>
             {
                 "public VoidComplexparamAction = (complex: IMyEmptyTestClass): ng.IPromise<void> => {",
                 "\treturn this.http<void>(this.VoidComplexparamActionConfig(complex))",
             }.Concat(httpThenPart);
-
-            var expectedContent = String.Join(Environment.NewLine, expectedLines);
-
-            Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
         }
 
-        [TestMethod]
-        public override void StringReturnActionTest()
+        protected override IEnumerable<string> ExpectedStringReturnAction()
         {
-            var actionDescriptor = new ActionDescriptor
-            {
-                Name = "StringReturnAction",
-                HttpMethod = HttpMethod.Get,
-                UrlTemplate = "a",
-                ParameterDescriptors = Enumerable.Empty<ParameterDescriptor>(),
-                ReturnValueDescriptor = new TypeDescriptor { Type = typeof(string) }
-            };
-
-            var content = this.visitor.VisitAction(actionDescriptor);
-            var expectedLines = new List<string>
+            return new List<string>
                 {
                     "public StringReturnAction = (): ng.IPromise<string> => {",
                     "\treturn this.http<string>(this.StringReturnActionConfig())",
                 }.Concat(httpThenPart);
-
-            var expectedContent = String.Join(Environment.NewLine, expectedLines);
-
-            Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
         }
 
-        [TestMethod]
-        public override void ResponseTypeAttributeReturnActionTest()
+        protected override IEnumerable<string> ExpectedResponseTypeAttributeReturnAction()
         {
-            var actionDescriptor = new ActionDescriptor
-            {
-                Name = "ResponseTypeReturnAction",
-                HttpMethod = HttpMethod.Get,
-                UrlTemplate = "a",
-                ParameterDescriptors = Enumerable.Empty<ParameterDescriptor>(),
-                ReturnValueDescriptor = new TypeDescriptor { Type = typeof(MyEmptyTestClass) }
-            };
-
-            var content = this.visitor.VisitAction(actionDescriptor);
-            var expectedLines = new List<string>
+            return new List<string>
                 {
                     "public ResponseTypeReturnAction = (): ng.IPromise<IMyEmptyTestClass> => {",
                     "\treturn this.http<IMyEmptyTestClass>(this.ResponseTypeReturnActionConfig())",
                 }.Concat(httpThenPart);
-
-            var expectedContent = String.Join(Environment.NewLine, expectedLines);
-
-            Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
         }
 
-        [DataTestMethod]
-        [DataRow(typeof(IEnumerable<MyEmptyTestClass>))]
-        [DataRow(typeof(List<MyEmptyTestClass>))]
-        [DataRow(typeof(MyEmptyTestClass[]))]
-        public override void ArrayReturnActionTest(Type arrayType)
+        protected override IEnumerable<string> ExpectedArrayReturnAction()
         {
-            var actionDescriptor = new ActionDescriptor
-            {
-                Name = "ArrayReturnAction",
-                HttpMethod = HttpMethod.Get,
-                UrlTemplate = "a",
-                ParameterDescriptors = Enumerable.Empty<ParameterDescriptor>(),
-                ReturnValueDescriptor = new TypeDescriptor { Type = arrayType }
-            };
-
-            var content = this.visitor.VisitAction(actionDescriptor);
-            var expectedLines = new List<string>
+            return new List<string>
                 {
                     "public ArrayReturnAction = (): ng.IPromise<IMyEmptyTestClass[]> => {",
                     "\treturn this.http<IMyEmptyTestClass[]>(this.ArrayReturnActionConfig())",
                 }.Concat(httpThenPart);
-
-            var expectedContent = String.Join(Environment.NewLine, expectedLines);
-
-            Assert.IsTrue(content.Contains(expectedContent), String.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
         }
 
-        [TestMethod]
-        public override void GenericTypeReturnActionTest()
+        protected override IEnumerable<string> ExpectedGenericTypeReturnAction(string @namespace)
         {
-            var @namespace = "Test";
-
-            var config = new GeneratorConfig
-            {
-                UseNamespaces = true,
-                NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.TestModels", @namespace)
-            };
-
-            var actionDescriptor = new ActionDescriptor
-            {
-                Name = "GenericTypeReturnAction",
-                HttpMethod = HttpMethod.Get,
-                UrlTemplate = "a",
-                ParameterDescriptors = Enumerable.Empty<ParameterDescriptor>(),
-                ReturnValueDescriptor = new TypeDescriptor { Type = typeof(GenericTypeClass<int>) }
-            };
-
-            var content = this.visitor.VisitAction(actionDescriptor, config);
-            var expectedLines = new List<string>
+            return new List<string>
                 {
                     $"public GenericTypeReturnAction = (): ng.IPromise<{@namespace}.IGenericTypeClass<number>> => {{",
                     $"\treturn this.http<{@namespace}.IGenericTypeClass<number>>(this.GenericTypeReturnActionConfig())",
                 }.Concat(httpThenPart);
-
-            var expectedContent = string.Join(Environment.NewLine, expectedLines);
-
-            Assert.IsTrue(content.Contains(expectedContent), string.Format("\nExpected: {0}\nGenerated: {1}", expectedContent, content));
         }
     }
 }
