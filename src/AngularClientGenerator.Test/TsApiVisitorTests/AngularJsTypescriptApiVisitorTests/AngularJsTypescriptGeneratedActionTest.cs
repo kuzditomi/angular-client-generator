@@ -213,12 +213,12 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         [TestMethod]
         public override void GenericTypeReturnActionTest()
         {
-            var _namespace = "Test";
+            var @namespace = "Test";
 
             var config = new GeneratorConfig
             {
                 UseNamespaces = true,
-                NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.TestModels", _namespace)
+                NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.Test.TestModels", @namespace)
             };
 
             var actionDescriptor = new ActionDescriptor
@@ -233,8 +233,8 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
             var content = this.visitor.VisitAction(actionDescriptor, config);
             var expectedLines = new List<string>
                 {
-                    $"public GenericTypeReturnAction = (): ng.IPromise<{_namespace}.IGenericTypeClass<number>> => {{",
-                    $"\treturn this.http<{_namespace}.IGenericTypeClass<number>>(this.GenericTypeReturnActionConfig())",
+                    $"public GenericTypeReturnAction = (): ng.IPromise<{@namespace}.IGenericTypeClass<number>> => {{",
+                    $"\treturn this.http<{@namespace}.IGenericTypeClass<number>>(this.GenericTypeReturnActionConfig())",
                 }.Concat(httpThenPart);
 
             var expectedContent = string.Join(Environment.NewLine, expectedLines);

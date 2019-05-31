@@ -112,11 +112,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\build\bundle-generated.js" />
-    <Content Include="app\build\bundle.js" />
-    <Content Include="Gulpfile.js" />
+    <Content Include="angular-example\src\app\app.component.css" />
+    <Content Include="angular-example\src\app\app.component.html" />
+    <Content Include="angular-example\src\favicon.ico" />
+    <Content Include="angular-example\src\index.html" />
+    <Content Include="angular-example\src\karma.conf.js" />
+    <Content Include="angular-example\src\styles.css" />
+    <Content Include="angularjs-example\app\build\bundle-generated.js" />
+    <Content Include="angularjs-example\app\build\bundle.js" />
+    <Content Include="angularjs-example\Gulpfile.js" />
+    <Content Include="index2.html" />
     <Content Include="index.html" />
-    <Content Include="app\lib\angular.min.js" />
+    <Content Include="angularjs-example\app\lib\angular.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -127,9 +134,14 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
-    <Content Include="package.json" />
-    <Content Include="tsconfig.json" />
+    <Content Include="angularjs-example\packages.config" />
+    <Content Include="angularjs-example\package.json" />
+    <Content Include="angularjs-example\tsconfig.json" />
+    <Content Include="angular-example\src\assets\.gitkeep" />
+    <Content Include="angular-example\src\browserslist" />
+    <Content Include="angular-example\src\tsconfig.app.json" />
+    <Content Include="angular-example\src\tsconfig.spec.json" />
+    <Content Include="angular-example\src\tslint.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -138,14 +150,24 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app\generated.ts" />
-    <TypeScriptCompile Include="app\typing\angular.d.ts" />
-    <TypeScriptCompile Include="app\typing\jquery.d.ts" />
-    <TypeScriptCompile Include="app\example-module.ts" />
+    <TypeScriptCompile Include="angular-example\src\app\app.component.spec.ts" />
+    <TypeScriptCompile Include="angular-example\src\app\app.component.ts" />
+    <TypeScriptCompile Include="angular-example\src\app\app.module.ts" />
+    <TypeScriptCompile Include="angular-example\src\app\generated.ts" />
+    <TypeScriptCompile Include="angular-example\src\environments\environment.prod.ts" />
+    <TypeScriptCompile Include="angular-example\src\environments\environment.ts" />
+    <TypeScriptCompile Include="angular-example\src\main.ts" />
+    <TypeScriptCompile Include="angular-example\src\polyfills.ts" />
+    <TypeScriptCompile Include="angular-example\src\test.ts" />
+    <TypeScriptCompile Include="angularjs-example\app\generated.ts" />
+    <TypeScriptCompile Include="angularjs-example\app\typing\angular.d.ts" />
+    <TypeScriptCompile Include="angularjs-example\app\typing\jquery.d.ts" />
+    <TypeScriptCompile Include="angularjs-example\app\example-module.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
