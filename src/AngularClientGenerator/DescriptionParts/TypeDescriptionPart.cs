@@ -1,5 +1,5 @@
 ﻿using System;
-using AngularClientGenerator.Visitor;
+using AngularClientGenerator.Visitors;
 
 namespace AngularClientGenerator.DescriptionParts
 {

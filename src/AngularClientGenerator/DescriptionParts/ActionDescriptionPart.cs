@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using AngularClientGenerator.Contracts.Descriptors;
-using AngularClientGenerator.Visitor;
+using AngularClientGenerator.Visitors;
 
 namespace AngularClientGenerator.DescriptionParts
 {

@@ -6,7 +6,8 @@ using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Contracts.Descriptors;
 using AngularClientGenerator.Contracts.Exceptions;
 using AngularClientGenerator.DescriptionParts;
-using AngularClientGenerator.Visitor;
+using AngularClientGenerator.PartBuilders;
+using AngularClientGenerator.Visitors;
 
 namespace AngularClientGenerator
 {
@@ -28,13 +29,17 @@ namespace AngularClientGenerator
             ValidateConfig();
             var builder = new ClientBuilder(this.Config);
 
-            if (this.Config.Language == Language.TypeScript)
+            if (this.Config.ClientType == ClientType.AngularJsTypeScript)
             {
-                this.Visitor = new AngularJSTypescriptApiVisitor(this.Config, builder);
+                this.Visitor = new AngularJsTypescriptApiVisitor(this.Config, builder);
+            }
+            else if (this.Config.ClientType == ClientType.Angular)
+            {
+                this.Visitor = new AngularApiVisitor(this.Config, builder);
             }
             else
             {
-                throw new NotSupportedException("Requested language is not supported: " + this.Config.Language);
+                throw new NotSupportedException("Requested language is not supported: " + this.Config.ClientType);
             }
 
             var controllerDescriptions = ApiDescriptor.ControllerDescriptors

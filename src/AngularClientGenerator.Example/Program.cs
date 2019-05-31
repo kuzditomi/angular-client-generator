@@ -3,7 +3,7 @@ using System.Web.Http;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Descriptor;
-using AngularClientGenerator.ExampleWebAPI;
+using AngularClientGenerator.ExampleWeb;
 using Microsoft.Owin.Hosting;
 
 namespace AngularClientGenerator.Example
@@ -21,35 +21,45 @@ namespace AngularClientGenerator.Example
                 config.EnsureInitialized();
             }))
             {
-                string destinationPath;
-                if (args.Length > 0 && !string.IsNullOrEmpty(args[0]))
-                {
-                    destinationPath = args[0];
-                }
-                else
-                {
-                    var filename = "generated.ts";
-                    var currentProjectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
-                    destinationPath = Path.Combine(currentProjectPath, @"..\AngularClientGenerator.ExampleWebAPI\app\", filename);
-                }
+                var filename = "generated.ts";
+                var currentProjectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+                var angularJsDestinationPath = Path.Combine(currentProjectPath, @"..\AngularClientGenerator.ExampleWeb\angularjs-example\app\", filename);
+                var angularDestinationPath = Path.Combine(currentProjectPath, @"..\AngularClientGenerator.ExampleWeb\angular-example\src\app\", filename);
 
                 var explorer = config.Services.GetApiExplorer();
                 var descriptor = ApiDescriptorConverter.CreateApiDescriptor(explorer);
-                var generator = new Generator(descriptor)
+
+                // Generate angularjs
+                var angularJSGenerator = new Generator(descriptor)
                 {
                     Config = new GeneratorConfig
                     {
                         ModuleName = "example-generated",
-                        ExportPath = destinationPath,
+                        ExportPath = angularJsDestinationPath,
                         IndentType = IndentType.FourSpace,
-                        Language = Language.TypeScript,
+                        ClientType = ClientType.AngularJsTypeScript,
                         UseNamespaces = true,
                         UrlSuffix = "",
                         NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.", "")
                     }
                 };
+                angularJSGenerator.Generate();
 
-                generator.Generate();
+                // Generate angular
+                var angularGenerator = new Generator(descriptor)
+                {
+                    Config = new GeneratorConfig
+                    {
+                        ModuleName = "ExampleGeneratedModule",
+                        ExportPath = angularDestinationPath,
+                        IndentType = IndentType.FourSpace,
+                        ClientType = ClientType.Angular,
+                        UseNamespaces = true,
+                        UrlSuffix = "",
+                        NamespaceNamingRule = type => type.Namespace.Replace("AngularClientGenerator.", "")
+                    }
+                };
+                angularGenerator.Generate();
             }
         }
     }

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AngularClientGenerator.Example</RootNamespace>
     <AssemblyName>AngularClientGenerator.Example</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
@@ -99,9 +99,9 @@
       <Project>{fb399215-719b-41b6-8703-6ae455340ff4}</Project>
       <Name>AngularClientGenerator.Descriptor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AngularClientGenerator.ExampleWebAPI\AngularClientGenerator.ExampleWebAPI.csproj">
-      <Project>{3ba70b22-6b25-4c7a-a8e8-ba35c58ed54c}</Project>
-      <Name>AngularClientGenerator.ExampleWebAPI</Name>
+    <ProjectReference Include="..\AngularClientGenerator.ExampleWeb\AngularClientGenerator.ExampleWeb.csproj">
+      <Project>{34dd92d1-99e7-4688-a02c-68cd8d462fb3}</Project>
+      <Name>AngularClientGenerator.ExampleWeb</Name>
     </ProjectReference>
     <ProjectReference Include="..\AngularClientGenerator\AngularClientGenerator.csproj">
       <Project>{a0ad4f12-3057-42f5-93e4-b8d4987a8e59}</Project>

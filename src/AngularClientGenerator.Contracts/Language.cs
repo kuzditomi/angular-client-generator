@@ -1,7 +1,8 @@
 ﻿namespace AngularClientGenerator.Contracts
 {
-    public enum Language
+    public enum ClientType
     {
-        TypeScript
+        AngularJsTypeScript = 1,
+        Angular = 2
     }
 }

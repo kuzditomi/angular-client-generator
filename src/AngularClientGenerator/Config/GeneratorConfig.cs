@@ -7,7 +7,7 @@ namespace AngularClientGenerator.Config
     public class GeneratorConfig : IGeneratorConfig, IClientBuilderConfig, IVisitorConfig
     {
         public string ExportPath { get; set; }
-        public Language Language { get; set; }
+        public ClientType ClientType { get; set; }
         public string ModuleName { get; set; }
         public IndentType IndentType { get; set; }
         public bool UseNamespaces { get; set; }
@@ -18,7 +18,7 @@ namespace AngularClientGenerator.Config
         public GeneratorConfig()
         {
             this.ExportPath = "angular-generated-client.ts";
-            this.Language = Language.TypeScript;
+            this.ClientType = ClientType.AngularJsTypeScript;
             this.ModuleName = "mymodule";
             this.IndentType = IndentType.Tab;
             this.UseNamespaces = false;

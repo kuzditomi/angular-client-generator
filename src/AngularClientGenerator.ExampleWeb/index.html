@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Example</title>
+    <meta charset="utf-8" />
+</head>
+<body ng-app="example">
+    <h1>Angularjs with typescript example</h1>
+    <div ng-controller="ExampleController">
+        Message from web api: {{model.Message}}<br />
+    </div>
+
+    <a href="/index2.html">Click to see Angular 2 example</a>
+    <script>
+        window.ApiHost = 'http://localhost:52303/';
+    </script>
+    <script src="angularjs-example/app/lib/angular.min.js"></script>
+    <script src="angularjs-example/app/build/bundle-generated.js"></script>
+    <script src="angularjs-example/app/build/bundle.js"></script>
+</body>
+</html>
