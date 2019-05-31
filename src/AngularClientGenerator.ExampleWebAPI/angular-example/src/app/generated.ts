@@ -34,6 +34,7 @@ export namespace GeneratedAngularClient {
 
         constructor(private httpClient: HttpClient) {
         }
+
         public ExampleMethodConfig(id: number): RequestOptions {
             return {
                 url: replaceUrl(API_BASE_URL + 'api/example/{id}', {

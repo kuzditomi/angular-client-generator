@@ -56,6 +56,7 @@ namespace AngularClientGenerator.Visitors
             this.ClientBuilder.WriteLine();
             this.ClientBuilder.WriteLine("constructor(private httpClient: HttpClient) {{");
             this.ClientBuilder.WriteLine("}}");
+            this.ClientBuilder.WriteLine();
 
             foreach (var actionDescriptionPart in controllerDescription.ActionDescriptionParts)
             {
