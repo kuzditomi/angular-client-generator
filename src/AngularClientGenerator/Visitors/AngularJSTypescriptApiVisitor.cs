@@ -1,18 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Net.Http;
 using System.Reflection;
 using AngularClientGenerator.Contracts.Config;
 using AngularClientGenerator.DescriptionParts;
 using AngularClientGenerator.PartBuilders;
-using AngularClientGenerator.Extensions;
 
 namespace AngularClientGenerator.Visitors
 {
     public class AngularJsTypescriptApiVisitor : TypescriptApiVisitorBase
     {
         protected override string ConfigReturnType => "ng.IRequestConfig";
+        protected override string ConfigReturnClosing => "}};";
 
         public AngularJsTypescriptApiVisitor(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
         {

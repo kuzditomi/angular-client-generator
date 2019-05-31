@@ -15,22 +15,43 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
         }
 
         [TestMethod]
+        public void HeaderCodeTest()
+        {
+            // Act
+            var actualContent = this.visitor.VisitEmptyModule();
+
+            // Assert
+            var expectedLines = new List<string> {
+                "import { Injectable, NgModule } from '@angular/core';",
+                "import { HttpClientModule, HttpClient, HttpErrorResponse } from '@angular/common/http';",
+                "import { Observable, throwError } from 'rxjs';",
+                "import { catchError } from 'rxjs/operators';",
+                "",
+                "type RequestOptions = Parameters<HttpClient[\"request\"]>[\"2\"] & { method: string, url: string };"
+            };
+
+            var expectedContent = String.Join(Environment.NewLine, expectedLines);
+
+            Assert.IsTrue(actualContent.Contains(expectedContent), String.Format("\nHeader imports are not found. Expected: {0}\nGenerated: {1}", expectedContent, actualContent));
+        }
+
+        [TestMethod]
         public void ModuleDefinitionTest()
         {
             // Act
             var actualContent = this.visitor.VisitEmptyModule();
-            
+
             // Assert
             var expectedLines = new List<string> {
-                "@NgModule({",
-                "\tdeclarations: [",
-                "\t],",
-                "\timports: [",
-                "\t\tHttpClientModule,",
-                "\t],",
-                "})",
-                "export class example {",
-                "}"
+                "\t@NgModule({",
+                "\t\tproviders: [",
+                "\t\t],",
+                "\t\timports: [",
+                "\t\t\tHttpClientModule,",
+                "\t\t],",
+                "\t})",
+                "\texport class example {",
+                "\t}"
             };
             var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
@@ -64,17 +85,17 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
 
             // Assert
             var expectedLines = new List<string> {
-                "@NgModule({",
-                "\tdeclarations: [",
-                "\t\tTestAApiService,",
-                "\t\tTestBApiService,",
-                "\t],",
-                "\timports: [",
-                "\t\tHttpClientModule,",
-                "\t],",
-                "})",
-                "export class MyTestModule {",
-                "}"
+                "\t@NgModule({",
+                "\t\tproviders: [",
+                "\t\t\tTestAApiService,",
+                "\t\t\tTestBApiService,",
+                "\t\t],",
+                "\t\timports: [",
+                "\t\t\tHttpClientModule,",
+                "\t\t],",
+                "\t})",
+                "\texport class MyTestModule {",
+                "\t}"
             };
             var expectedContent = String.Join(Environment.NewLine, expectedLines);
 
@@ -96,11 +117,13 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
 
             // Assert
             var expectedLines = new List<string> {
-                "@Injectable()",
+                "@Injectable({",
+                "\tprovidedIn: 'root'",
+                "})",
                 "export class MySuperTestApiService {",
                 "\tapiUrl: string = API_BASE_URL;",
                 "",
-                "\tconstructor(private http: HttpClient) {",
+                "\tconstructor(private httpClient: HttpClient) {",
                 "\t}",
                 "}"
             };

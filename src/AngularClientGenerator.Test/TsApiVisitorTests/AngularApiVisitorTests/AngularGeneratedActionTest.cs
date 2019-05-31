@@ -37,7 +37,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
                 "public VoidParameterlessGetAction(): Observable<void> {",
                 "\tconst config = this.VoidParameterlessGetActionConfig();",
                 "",
-                "\treturn this.httpClient.sendRequest(config);",
+                "\treturn this.httpClient.request(config.method, config.url, config);",
                 "}"
             };
             var expectedContent = String.Join(Environment.NewLine, expectedLines);

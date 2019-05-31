@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ExampleApiService, GeneratedAngularClient } from './generated';
+import { GeneratedAngularClient } from './generated';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
   title = 'Angular example';
   responseMessage: Observable<string>;
 
-  constructor(private client: ExampleApiService){
+  constructor(private client: GeneratedAngularClient.ExampleApiService){
   }
   
   ngOnInit(): void {

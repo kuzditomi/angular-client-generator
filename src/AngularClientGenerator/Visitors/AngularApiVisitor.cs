@@ -14,12 +14,18 @@ namespace AngularClientGenerator.Visitors
             this.serviceNames = new List<string>();
         }
 
-        protected override string ConfigReturnType => "HttpRequest";
+        protected override string ConfigReturnType => "RequestOptions";
+        protected override string ConfigReturnClosing => "}} as RequestOptions;";
 
         public override void Visit(ModuleDescriptionPart moduleDescription)
         {
+            this.WriteImports();
+            this.WriteHelperTypes();
             this.WriteUrlConstants();
             this.WriteUrlReplaceMethod();
+
+            this.ClientBuilder.WriteLine("export namespace GeneratedAngularClient {{");
+            this.ClientBuilder.IncreaseIndent();
 
             foreach (var controllerDescriptionPart in moduleDescription.ControllerDescriptionParts)
             {
@@ -27,10 +33,6 @@ namespace AngularClientGenerator.Visitors
             }
 
             this.WriteModuleDefinition(moduleDescription.Name);
-
-            this.ClientBuilder.WriteLine("export namespace GeneratedAngularClient {{");
-            this.ClientBuilder.IncreaseIndent();
-
             this.WriteTypes();
 
             this.ClientBuilder.DecreaseIndent();
@@ -41,13 +43,18 @@ namespace AngularClientGenerator.Visitors
         {
             this.serviceNames.Add($"{controllerDescription.Name}ApiService");
 
-            this.ClientBuilder.WriteLine("@Injectable()");
+            this.ClientBuilder.WriteLine("@Injectable({{");
+            this.ClientBuilder.IncreaseIndent();
+            this.ClientBuilder.WriteLine("providedIn: 'root'");
+            this.ClientBuilder.DecreaseIndent();
+            this.ClientBuilder.WriteLine("}})");
+
             this.ClientBuilder.WriteLine("export class {0}ApiService {{", controllerDescription.Name);
             this.ClientBuilder.IncreaseIndent();
 
             this.ClientBuilder.WriteLine("apiUrl: string = API_BASE_URL;");
             this.ClientBuilder.WriteLine();
-            this.ClientBuilder.WriteLine("constructor(private http: HttpClient) {{");
+            this.ClientBuilder.WriteLine("constructor(private httpClient: HttpClient) {{");
             this.ClientBuilder.WriteLine("}}");
 
             foreach (var actionDescriptionPart in controllerDescription.ActionDescriptionParts)
@@ -67,7 +74,7 @@ namespace AngularClientGenerator.Visitors
 
             this.ClientBuilder.WriteLine("const config = this.{0}Config({1});", actionDescription.Name, generatedMethodInfo.Parameters);
             this.ClientBuilder.WriteLine();
-            this.ClientBuilder.WriteLine("return this.httpClient.sendRequest(config);");
+            this.ClientBuilder.WriteLine("return this.httpClient.request(config.method, config.url, config);");
 
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}}");
@@ -81,7 +88,7 @@ namespace AngularClientGenerator.Visitors
             this.ClientBuilder.IncreaseIndent();
 
             //services
-            this.ClientBuilder.WriteLine("declarations: [");
+            this.ClientBuilder.WriteLine("providers: [");
             this.ClientBuilder.IncreaseIndent();
 
             foreach (var serviceName in this.serviceNames)
@@ -106,6 +113,20 @@ namespace AngularClientGenerator.Visitors
             this.ClientBuilder.WriteLine("export class {0} {{", moduleName);
             this.ClientBuilder.WriteLine("}}");
             this.ClientBuilder.WriteLine();
+        }
+
+        private void WriteImports()
+        {
+            this.ClientBuilder.WriteLine("import {{ Injectable, NgModule }} from '@angular/core';");
+            this.ClientBuilder.WriteLine("import {{ HttpClientModule, HttpClient, HttpErrorResponse }} from '@angular/common/http';");
+            this.ClientBuilder.WriteLine("import {{ Observable, throwError }} from 'rxjs';");
+            this.ClientBuilder.WriteLine("import {{ catchError }} from 'rxjs/operators';");
+        }
+
+        private void WriteHelperTypes()
+        {
+            this.ClientBuilder.WriteLine();
+            this.ClientBuilder.WriteLine("type RequestOptions = Parameters<HttpClient[\"request\"]>[\"2\"] & {{ method: string, url: string }};");
         }
     }
 }

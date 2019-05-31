@@ -35,7 +35,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                     "\treturn {",
                     "\t\turl: API_BASE_URL + 'api/configtest/void',",
                     "\t\tmethod: 'GET',",
-                    "\t};",
+                    "\t"+this.FormatConfigMethodFooter(),
                     "}"
                 };
 
@@ -81,7 +81,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                     "\t\tparams: {",
                     "\t\t\ttypetestparam: typetestparam,",
                     "\t\t},",
-                    "\t};",
+                    "\t"+this.FormatConfigMethodFooter(),
                     "}"
                 };
 
@@ -133,7 +133,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                     "\t\t\tb: b,",
                     "\t\t\tc: c,",
                     "\t\t},",
-                    "\t};",
+                    "\t"+this.FormatConfigMethodFooter(),
                     "}"
                 };
 
@@ -173,7 +173,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                     "\t\t\tmyparameter: myparameter,",
                     "\t\t}),",
                     $"\t\tmethod: '{httpMethod}',",
-                    "\t};",
+                    "\t"+this.FormatConfigMethodFooter(),
                     "}"
                 };
 
@@ -218,7 +218,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                     "\t\t\tsecond: second,",
                     "\t\t}),",
                     "\t\tmethod: 'GET',",
-                    "\t};",
+                    "\t"+this.FormatConfigMethodFooter(),
                     "}"
                 };
 
@@ -299,7 +299,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                     "\t\t}),",
                     "\t\tmethod: 'PUT',",
                     "\t\tdata: complex,",
-                    "\t};",
+                    "\t"+ this.FormatConfigMethodFooter(),
                     "}"
                 };
 
@@ -343,7 +343,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                     "\t\t}),",
                     "\t\tmethod: 'GET',",
                     "\t\tparams: complex,",
-                    "\t};",
+                    "\t"+this.FormatConfigMethodFooter(),
                     "}"
                 };
 
@@ -471,7 +471,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                     "\t\tparams: {",
                     "\t\t\tparam: param,",
                     "\t\t},",
-                    "\t};",
+                    "\t"+this.FormatConfigMethodFooter(),
                     "}"
                 };
 
@@ -509,7 +509,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                     "\t\tparams: {",
                     "\t\t\tparam: param,",
                     "\t\t},",
-                    "\t};",
+                    "\t"+this.FormatConfigMethodFooter(),
                     "}"
                 };
 
@@ -557,7 +557,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
                     "\t\theaders: {",
                     "\t\t\t'Content-Type': 'application/json',",
                     "\t\t},",
-                    "\t};",
+                    "\t"+this.FormatConfigMethodFooter(),
                     "}"
                 };
 
@@ -567,5 +567,6 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         }
 
         protected abstract string FormatConfigMethodHeader(string methodName, string parameterList);
+        protected abstract string FormatConfigMethodFooter();
     }
 }

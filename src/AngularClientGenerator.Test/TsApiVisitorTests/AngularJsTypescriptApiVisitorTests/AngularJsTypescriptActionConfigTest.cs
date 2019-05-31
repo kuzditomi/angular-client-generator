@@ -14,5 +14,10 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
         {
             return $"public {methodName}({parameterList}): ng.IRequestConfig {{";
         }
+
+        protected override string FormatConfigMethodFooter()
+        {
+            return "};";
+        }
     }
 }

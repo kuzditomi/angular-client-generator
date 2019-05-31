@@ -1,7 +1,8 @@
 ﻿using AngularClientGenerator.Contracts;
+using AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVisitorTests
+namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
 {
     [TestClass]
     public class AngularActionConfigTest : ActionConfigTestBase
@@ -12,7 +13,12 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularJsTypescriptApiVi
 
         protected override string FormatConfigMethodHeader(string methodName, string parameterList)
         {
-            return $"public {methodName}({parameterList}): HttpRequest {{";
+            return $"public {methodName}({parameterList}): RequestOptions {{";
+        }
+
+        protected override string FormatConfigMethodFooter()
+        {
+            return "} as RequestOptions;";
         }
     }
 }

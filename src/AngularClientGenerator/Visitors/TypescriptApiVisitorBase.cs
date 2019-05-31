@@ -18,6 +18,7 @@ namespace AngularClientGenerator.Visitors
     public abstract class TypescriptApiVisitorBase : ApiVisitorBase
     {
         protected abstract string ConfigReturnType { get; }
+        protected abstract string ConfigReturnClosing { get; }
         protected readonly List<KeyValuePair<string, Type>> Types = new List<KeyValuePair<string, Type>>();
 
         protected TypescriptApiVisitorBase(IVisitorConfig config, ClientBuilder builder) : base(config, builder)
@@ -236,7 +237,7 @@ namespace AngularClientGenerator.Visitors
             }
 
             this.ClientBuilder.DecreaseIndent();
-            this.ClientBuilder.WriteLine("}};");
+            this.ClientBuilder.WriteLine(this.ConfigReturnClosing);
 
             // method footer
             this.ClientBuilder.DecreaseIndent();
