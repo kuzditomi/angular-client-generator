@@ -3,7 +3,7 @@ using System.Web.Http;
 using AngularClientGenerator.Config;
 using AngularClientGenerator.Contracts;
 using AngularClientGenerator.Descriptor;
-using AngularClientGenerator.ExampleWebAPI;
+using AngularClientGenerator.ExampleWeb;
 using Microsoft.Owin.Hosting;
 
 namespace AngularClientGenerator.Example
@@ -23,8 +23,8 @@ namespace AngularClientGenerator.Example
             {
                 var filename = "generated.ts";
                 var currentProjectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
-                var angularJsDestinationPath = Path.Combine(currentProjectPath, @"..\AngularClientGenerator.ExampleWebAPI\angularjs-example\app\", filename);
-                var angularDestinationPath = Path.Combine(currentProjectPath, @"..\AngularClientGenerator.ExampleWebAPI\angular-example\src\app\", filename);
+                var angularJsDestinationPath = Path.Combine(currentProjectPath, @"..\AngularClientGenerator.ExampleWeb\angularjs-example\app\", filename);
+                var angularDestinationPath = Path.Combine(currentProjectPath, @"..\AngularClientGenerator.ExampleWeb\angular-example\src\app\", filename);
 
                 var explorer = config.Services.GetApiExplorer();
                 var descriptor = ApiDescriptorConverter.CreateApiDescriptor(explorer);

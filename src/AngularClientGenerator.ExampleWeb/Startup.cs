@@ -6,9 +6,9 @@ using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.StaticFiles;
 using Owin;
 
-[assembly: OwinStartup(typeof(AngularClientGenerator.ExampleWebAPI.Startup))]
+[assembly: OwinStartup(typeof(AngularClientGenerator.ExampleWeb.Startup))]
 
-namespace AngularClientGenerator.ExampleWebAPI
+namespace AngularClientGenerator.ExampleWeb
 {
     public class Startup
     {

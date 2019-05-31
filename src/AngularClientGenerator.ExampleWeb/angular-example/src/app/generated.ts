@@ -44,7 +44,7 @@ export namespace GeneratedAngularClient {
             } as RequestOptions;
         }
 
-        public ExampleMethod(id: number): Observable<ExampleWebAPI.Models.IExampleModel> {
+        public ExampleMethod(id: number): Observable<ExampleWeb.Models.IExampleModel> {
             const config = this.ExampleMethodConfig(id);
 
             return this.httpClient.request(config.method, config.url, config);
@@ -62,11 +62,11 @@ export namespace GeneratedAngularClient {
     export class ExampleGeneratedModule {
     }
 
-    export namespace ExampleWebAPI.Models {
+    export namespace ExampleWeb.Models {
         export interface IExampleModel {
             Message: string;
             Id: number;
-            Color: ExampleWebAPI.Models.Color;
+            Color: ExampleWeb.Models.Color;
         }
 
         export enum Color {

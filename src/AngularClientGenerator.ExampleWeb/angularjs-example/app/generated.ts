@@ -33,8 +33,8 @@ export namespace GeneratedClient {
                 method: 'GET',
             };
         }
-        public ExampleMethod = (id: number): ng.IPromise<ExampleWebAPI.Models.IExampleModel> => {
-            return this.http<ExampleWebAPI.Models.IExampleModel>(this.ExampleMethodConfig(id))
+        public ExampleMethod = (id: number): ng.IPromise<ExampleWeb.Models.IExampleModel> => {
+            return this.http<ExampleWeb.Models.IExampleModel>(this.ExampleMethodConfig(id))
                 .then(resp => {
                     return resp.data;
                 }, resp => {
@@ -49,11 +49,11 @@ export namespace GeneratedClient {
 
     Module.service('ApiExampleService', ApiExampleService);
 
-    export namespace ExampleWebAPI.Models {
+    export namespace ExampleWeb.Models {
         export interface IExampleModel {
             Message: string;
             Id: number;
-            Color: ExampleWebAPI.Models.Color;
+            Color: ExampleWeb.Models.Color;
         }
 
         export enum Color {
@@ -73,7 +73,7 @@ export namespace GeneratedClient {
     export class EnumHelperService {
         [index: string]: any;
         constructor() {
-            this.Register('Color', ExampleWebAPI.Models.Color, {
+            this.Register('Color', ExampleWeb.Models.Color, {
                 Red: 'Red',
                 Green: 'Green',
                 Blue: 'Blue',

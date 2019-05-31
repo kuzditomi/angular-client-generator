@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AngularClientGenerator.Core
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AngularClientGenerator.Core.Descriptor", "AngularClientGenerator.Core.Descriptor\AngularClientGenerator.Core.Descriptor.csproj", "{7A04605D-CE71-4C1E-A287-82FCF7510DB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularClientGenerator.ExampleWeb", "AngularClientGenerator.ExampleWeb\AngularClientGenerator.ExampleWeb.csproj", "{34DD92D1-99E7-4688-A02C-68CD8D462FB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CINetFramework|Any CPU = CINetFramework|Any CPU
@@ -95,6 +97,12 @@ Global
 		{7A04605D-CE71-4C1E-A287-82FCF7510DB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A04605D-CE71-4C1E-A287-82FCF7510DB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A04605D-CE71-4C1E-A287-82FCF7510DB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34DD92D1-99E7-4688-A02C-68CD8D462FB3}.CINetFramework|Any CPU.ActiveCfg = Release|Any CPU
+		{34DD92D1-99E7-4688-A02C-68CD8D462FB3}.CINetFramework|Any CPU.Build.0 = Release|Any CPU
+		{34DD92D1-99E7-4688-A02C-68CD8D462FB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34DD92D1-99E7-4688-A02C-68CD8D462FB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34DD92D1-99E7-4688-A02C-68CD8D462FB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34DD92D1-99E7-4688-A02C-68CD8D462FB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +117,7 @@ Global
 		{CD45C0B9-4BC8-4F7F-9A68-9D0D242FB521} = {5D0E9973-4F81-4262-BA59-1AD0A9506AC9}
 		{E56EEEC7-7FDA-4EA2-93DE-5C03FE953231} = {CD45C0B9-4BC8-4F7F-9A68-9D0D242FB521}
 		{7A04605D-CE71-4C1E-A287-82FCF7510DB3} = {5D0E9973-4F81-4262-BA59-1AD0A9506AC9}
+		{34DD92D1-99E7-4688-A02C-68CD8D462FB3} = {A1479CF1-2366-4051-B588-5BD999AC1C32}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B3E4525-76E2-4681-B088-FE490FB6A462}
