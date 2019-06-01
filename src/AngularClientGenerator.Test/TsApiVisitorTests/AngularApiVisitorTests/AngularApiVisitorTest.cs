@@ -27,7 +27,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
                 "import { Observable, throwError } from 'rxjs';",
                 "import { catchError } from 'rxjs/operators';",
                 "",
-                "type RequestOptions = Parameters<HttpClient[\"request\"]>[\"2\"] & { method: string, url: string };"
+                "type RequestOptions = Parameters<HttpClient['request']>['2'] & { method: string, url: string, params?: any };"
             };
 
             var expectedContent = String.Join(Environment.NewLine, expectedLines);
@@ -118,7 +118,7 @@ namespace AngularClientGenerator.Test.TsApiVisitorTests.AngularApiVisitorTests
             // Assert
             var expectedLines = new List<string> {
                 "@Injectable({",
-                "\tprovidedIn: 'root'",
+                "\tprovidedIn: 'root',",
                 "})",
                 "export class MySuperTestApiService {",
                 "\tapiUrl: string = API_BASE_URL;",

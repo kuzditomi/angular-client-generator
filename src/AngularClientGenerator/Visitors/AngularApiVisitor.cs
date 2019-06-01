@@ -45,7 +45,7 @@ namespace AngularClientGenerator.Visitors
 
             this.ClientBuilder.WriteLine("@Injectable({{");
             this.ClientBuilder.IncreaseIndent();
-            this.ClientBuilder.WriteLine("providedIn: 'root'");
+            this.ClientBuilder.WriteLine("providedIn: 'root',");
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}})");
 
@@ -79,6 +79,7 @@ namespace AngularClientGenerator.Visitors
 
             this.ClientBuilder.DecreaseIndent();
             this.ClientBuilder.WriteLine("}}");
+            this.ClientBuilder.WriteLine();
         }
 
         private void WriteModuleDefinition(string moduleName)
@@ -127,7 +128,7 @@ namespace AngularClientGenerator.Visitors
         private void WriteHelperTypes()
         {
             this.ClientBuilder.WriteLine();
-            this.ClientBuilder.WriteLine("type RequestOptions = Parameters<HttpClient[\"request\"]>[\"2\"] & {{ method: string, url: string }};");
+            this.ClientBuilder.WriteLine("type RequestOptions = Parameters<HttpClient['request']>['2'] & {{ method: string, url: string, params?: any }};");
         }
     }
 }
