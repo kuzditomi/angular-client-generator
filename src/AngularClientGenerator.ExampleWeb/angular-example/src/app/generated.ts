@@ -3,7 +3,7 @@ import { HttpClientModule, HttpClient, HttpErrorResponse } from '@angular/common
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-type RequestOptions = Parameters<HttpClient["request"]>["2"] & { method: string, url: string };
+type RequestOptions = Parameters<HttpClient['request']>['2'] & { method: string, url: string, params?: any };
 
 let addr = window['ApiHost'];
 if (addr.indexOf('ApiHost') !== -1) {
@@ -27,7 +27,7 @@ function replaceUrl(url: string, params: any) {
 
 export namespace GeneratedAngularClient {
     @Injectable({
-        providedIn: 'root'
+        providedIn: 'root',
     })
     export class ExampleApiService {
         apiUrl: string = API_BASE_URL;
@@ -49,6 +49,7 @@ export namespace GeneratedAngularClient {
 
             return this.httpClient.request(config.method, config.url, config);
         }
+
     }
 
     @NgModule({
