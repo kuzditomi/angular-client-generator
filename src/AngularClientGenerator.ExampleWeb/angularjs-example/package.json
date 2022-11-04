@@ -11,7 +11,7 @@
     "license": "ISC",
     "dependencies": {
         "browserify": "13.3.0",
-        "gulp": "3.9.1",
+        "gulp": "4.0.2",
         "gulp-rename": "1.2.2",
         "gulp-util": "3.0.8",
         "tsify": "3.0.0",
